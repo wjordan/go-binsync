@@ -35,8 +35,9 @@ It is a Go library and a CLI. This README is the behavioural specification;
 holds the measurements the design rests on; `docs/DEMO.md` specifies the
 public demo.
 
-**Status: design phase.** Nothing below is implemented yet; the numbers come
-from a prototype of the codec and a benchmark harness (`bench/`).
+**Status: the library and CLI are implemented and the numbers below are
+measured on them.** What is not done: the public demo (`docs/DEMO.md`), and
+the decoder's memory footprint (`docs/DESIGN.md` §11.3).
 
 ---
 
@@ -50,10 +51,10 @@ fetched over a medium-quality link: 20 Mbit/s, 200 ms RTT, 1 % packet loss.
 
 | | Full download | Generic delta (hdiffz) | binsync (Go-aware delta) |
 |---|---:|---:|---:|
-| Bytes sent | 20.6 MB | 2.7 MB | **0.11 MB** |
-| Encode time · peak memory | 9 s · 0.36 GB | 7 s · 0.39 GB | **2.1 s** · 0.65 GB (prototype) |
-| Apply on the target | 0.1 s · 13 MB | 0.1 s · 25 MB | 1.0 s · 0.64 GB (prototype) |
-| Transfer on that link | ≈ 2.4 min (≈ 20 s with 8 parallel ranges) | ≈ 15 s | **≈ 1.2 s** |
+| Bytes sent | 20.6 MB | 2.7 MB | **0.095 MB** |
+| Encode time · peak memory | 9 s · 0.36 GB | 7 s · 0.39 GB | **2.4 s** · 0.90 GB |
+| Apply on the target | 0.1 s · 13 MB | 0.1 s · 25 MB | 0.9 s · 0.92 GB |
+| Transfer on that link | ≈ 2.4 min (≈ 20 s with 8 parallel ranges) | ≈ 15 s | **≈ 1.0 s** |
 
 Bytes are the thing that cannot be optimised away, and they dominate as the
 link degrades: with 1 % loss a single TCP stream carries about 1.2 Mbit/s
@@ -62,16 +63,16 @@ patch a quarter of a minute, while binsync's patch fits in a couple of round
 trips. (binsync fetches full blobs with parallel ranged requests, which
 recovers most of the loss penalty; a small patch simply never pays it.) The
 encoder is faster than the generic tools because it never builds a suffix
-array over the file. What is still the prototype's is memory: encoder and
-decoder hold the old, predicted and new binary in RAM (≈ 7× the file); the
-implementation works section by section to bring that to ≈ 2×.
+array over the file. Memory is the one number that is not yet where it should
+be: the decoder peaks at 7.6× the binary, most of it the prediction's working
+set rather than the file buffers, and getting that to ≈ 2× is the open item
+(`docs/DESIGN.md` §11.3).
 
-The same codec turns a one-line change of a 30 MB binary into a 2 KB patch
-(bsdiff: 150 KB — 68× smaller), and a multi-package edit into 3 KB (bsdiff:
-145 KB). On a
-minor release with thousands of new functions the patch is content-dominated
-and the gain is modest (1.6×) — the right outcome: binsync removes *layout*
-churn, not code.
+The same codec turns a one-line change of a 30 MB binary into a 2.4 KB patch
+(bsdiff: 150 KB — 63× smaller), and a multi-package edit into 2.9 KB (bsdiff:
+145 KB). On a minor release with thousands of new functions the patch is
+content-dominated and the gain is modest (1.6×) — the right outcome: binsync
+removes *layout* churn, not code.
 
 ### 1.1 Why a Go-aware delta
 
@@ -87,9 +88,9 @@ of that because almost no chunk survives; exact-match delta coders (`zstd
 --patch-from`, xdelta3) get to 0.5–1.9 MB but pay for every shifted
 operand; approximate matchers (bsdiff, hdiffz) absorb the shifts and reach
 150–177 KB, at the price of a suffix array over the whole file. binsync sends
-2 KB. For the prometheus release the same ladder reads 18.4–20.6 MB (whole file),
+2.4 KB. For the prometheus release the same ladder reads 18.4–20.6 MB (whole file),
 25.7 MB (chunk store — worse than a fresh archive, because chunks compress
-alone), 8.5–15.2 MB (exact-match), 2.7 MB (bsdiff/hdiffz) and 0.11 MB.
+alone), 8.5–15.2 MB (exact-match), 2.7 MB (bsdiff/hdiffz) and 0.095 MB.
 
 A stripped Go binary still carries the function table, with names and sizes.
 binsync uses it to align the old and new releases *by function name*, predict
@@ -101,10 +102,10 @@ need 9–12× the input in RAM and minutes above 100 MB.
 
 The prediction covers code, data, the pclntab with its pc tables, and the type
 descriptors; what the patch still carries on a real release is mostly the
-changed code itself (about 60 KB of the 112 KB prometheus patch), plus type
-descriptors that are genuinely new and the pc tables of the functions whose
-code changed. Prototype,
-measurements and remaining work: `docs/research/go-aware-transform.md`.
+changed code itself (63 KB of the 121 KB the prometheus prediction gets
+wrong), plus type descriptors that are genuinely new and the pc tables of the
+functions whose code changed. Design and measurements: `docs/DESIGN.md` §3;
+the research behind it: `docs/research/go-aware-transform.md`.
 
 ## 2. Concepts
 

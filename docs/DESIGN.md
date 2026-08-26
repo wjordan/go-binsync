@@ -117,7 +117,7 @@ real new file and emits the correction.
 
 ```
 parse(old)            ELF sections; pclntab (funcs: name, entry, size, pc tables); moduledata
-                      ─ unsupported (non-Go, non-amd64, PIE, not the supported Go release — D14): plain codec §3.7
+                      ─ unsupported (non-Go, non-amd64, PIE, not the supported Go release — D14): plain codec §3.8
 match(old, new)       new function j ↔ old function i by name (exact; then normalised for
                       closure/deferwrap/generic-instantiation numbering; then by content hash)
 layout table          for each new function in order: {same-as-next-old | old index | new name}, Δsize
@@ -136,22 +136,32 @@ predict data          re-lay blocks through the data maps; rewrite absolute poin
 predict type descs    walk the descriptors and itabs from moduledata (Go 1.27: `.go.type`,
                       `typedesclen`/`itaboffset`); rewrite nameOff/typeOff/textOff/ptrToThis and
                       method tables through the same maps — nothing extra is transmitted
-correction            new ⊖ predicted, positionally; inside each changed function pair a local
-                      (window-bounded) approximate match; zstd; split into 8 MiB frames
+correction            new ⊖ predicted, positionally; inside each differing region an exact
+                      local match over the prediction's own bytes there; brotli/zstd (§3.5);
+                      body split into 8 MiB frames
 ```
 
-Measured on the prototype (`bench/gotransform/`, `go-aware-transform.md`
-§10–11). Every Go-aware row was encoded to a patch file, decoded from the old
-binary and byte-verified; layout tables, data maps and stage-1 blobs are
-transmitted and counted (nothing is an oracle input any more):
+Every Go-aware row was encoded to a patch file, decoded from the old binary
+and byte-verified; layout tables, data maps and stage-1 blobs are transmitted
+and counted (nothing is an oracle input). The prototype column is
+`bench/gotransform/` (`go-aware-transform.md` §10–11); **v1** is this
+repository's `delta` package, including its patch header and frame table:
 
-| Pair (toolchain) | bsdiff | hdiffz -p-8 | Go-aware, positional | Factor | Go-aware, hdiffz correction |
+| Pair (toolchain) | bsdiff | hdiffz -p-8 | prototype | **v1** | vs bsdiff |
 |---|---:|---:|---:|---:|---:|
-| one-line (`v1→v2c`, 29.6 MB, Go 1.27) | 150,475 | 176,929 | 2,207 | 68× | 1,930 |
-| +3-byte string (`v1→v2l`, 1.27) | 24,874 | 33,713 | 566 | 44× | – |
-| multi-package (`v1→v4`, 1.27) | 145,205 | 171,760 | 2,733 | 53× | – |
-| `v3→v4` (1.27) | 30,196 | 40,523 | 578 | 52× | – |
-| prometheus 3.13.1→3.13.2, built with Go 1.27 (94 MB) | 2,691,644 | 2,719,152 | **111,552** | **24×** | 94,470 |
+| one-line (`v1→v2c`, 29.6 MB, Go 1.27) | 150,475 | 176,929 | 2,207 | **2,373** | 63× |
+| +3-byte string (`v1→v2l`, 1.27) | 24,874 | 33,713 | 566 | **531** | 47× |
+| multi-package (`v1→v4`, 1.27) | 145,205 | 171,760 | 2,733 | **2,860** | 51× |
+| `v3→v4` (1.27) | 30,196 | 40,523 | 578 | **563** | 54× |
+| prometheus 3.13.1→3.13.2, built with Go 1.27 (94 MB) | 2,691,644 | 2,719,152 | 111,552 | **95,366** | **28×** |
+
+The real pair is 14 % below the prototype and within 1 % of the 94,470 B that
+an hdiffz stage 2 reached (the range §3.4 was aiming for), from an encoder
+with no suffix array and a decoder that applies in place. The synthetic pairs
+move both ways by a hundred bytes or so: the two that grew pay for the
+container (a 120-byte header where the prototype wrote none) and for the
+second stage-1 blob's floor; the two that shrank keep it back on the
+correction.
 
 The official Go 1.26 builds (prometheus 3.13.1→3.13.2: 291,214 B, 9.3×;
 kube-apiserver 1.36.3→1.36.4: 292,972 B, 7.0×) were measured with the
@@ -177,24 +187,44 @@ shifts chosen by majority vote among all pointers into the same symbol
 (which fixed a 5-byte-off shift into the short, repetitive `runtime.gcbits`
 data that had held `v3→v4` at 4.7×).
 
-What is left on prometheus/1.27 (111,552 B = header 116 + layout 11,271 +
-stage 1 20,469 + stage 2 79,696): 62,555 B of genuinely changed `.text`
-(56 % of stage 2), 45,170 B of `.go.type` (two-thirds genuinely new
-descriptors, ~8 KB wrong rewrites, ~4.5 KB names), and 14 KB of pc tables
-belonging to changed functions. A hdiffz stage 2 still beats positional
-runs (94,470 vs 111,552 B) because the changed-code residual is not purely
-positional; the codec's correction is therefore positional runs plus a
-window-bounded local match inside changed regions (§3.3), expected to land
-between the two.
+What is left, on v1's prometheus/1.27 patch. By stream (raw → compressed on
+its own; the patch ships them in one frame, which is why the parts come to
+95,232 B and the file to 95,366 B):
+
+| stream | raw | compressed |
+|---|---:|---:|
+| header | – | 120 |
+| layout | 239,371 | 10,379 |
+| stage 1a (`funcnametab`+`filetab`) | 2,205 | 1,360 |
+| stage 1b (`cutab`+`pctab`+`go:func.*`) | 38,216 | 17,441 |
+| stage 2 (whole file) | 119,493 | 66,052 |
+
+And by where the prediction was wrong — 120,852 bytes of a 93.8 MB file,
+0.13 %:
+
+| section | mispredicted |
+|---|---:|
+| `.text` | 63,179 |
+| `.go.type` | 45,170 |
+| `.gopclntab` | 4,549 |
+| `.rodata` | 3,782 |
+| `.go.func` | 2,568 |
+| `.data`, `.noptrdata`, `.go.buildinfo`, `.go.module`, `.go.fipsinfo` | 1,495 |
+| ELF program and section headers | 109 |
+
+`.text` and `.go.type` are 90 % of it and mostly real change: the 52 new
+functions and the descriptors that came with them. The remainder is the
+open question in §11.1.
 
 Encoder and decoder cost (`/usr/bin/time`, one run each; prometheus/1.27,
-94 MB): Go-aware encode 2.1 s / 654 MB (x86 decoding runs on all cores; the
-profile is 38 % `x86asm`, 30 % content-index build); bsdiff 39–43 s /
-805 MB; hdiffz -p-8 7.4 s / 388 MB (8 threads); full `zstd -19 -T0` 9.4 s /
-364 MB. Go-aware decode 1.0 s / 636 MB — it holds old + predicted + new,
-≈ 7× the file; applying section by section (open question 3) brings that to
-≈ 2× — against bspatch 0.47 s / 192 MB and hpatchz 0.08 s / 25 MB. Wall-clock
-is no longer the encoder's problem; memory is.
+94 MB): v1 encode 2.4 s / 902 MB (x86 decoding runs on all cores; the profile
+is 38 % `x86asm`, 30 % content-index build); bsdiff 39–43 s / 805 MB;
+hdiffz -p-8 7.4 s / 388 MB (8 threads); full `zstd -19 -T0` 9.4 s / 364 MB.
+v1 decode 0.9 s / 921 MB RSS, 714 MB of it live heap — against bspatch 0.47 s
+/ 192 MB and hpatchz 0.08 s / 25 MB. The correction applies in place (§3.4),
+so the decoder holds old + prediction rather than old + prediction + new, but
+7.6× is still far from the ≈ 2× §11.3 wants; the rest is the pclntab work,
+not the buffers. Wall-clock is no longer the encoder's problem; memory is.
 
 Two lessons the prototype carries into the design:
 
@@ -214,51 +244,138 @@ Two lessons the prototype carries into the design:
 Once the layout table is applied the prediction has **exactly** the new
 file's length and structure (every function is at its final entry, unmatched
 functions as zero-filled slots of the right size, tables regenerated at the
-right sizes). The prototype achieves this by construction for `.text` and
-the whole file, and for pclntab on the synthetic pairs only; the design makes
-it unconditional by carrying the sizes of every variable-length pclntab blob
-(and of any new function's pc tables) in the layout table, so that the
-prediction is length-exact even where its *content* is wrong. The correction can therefore be positional: walk predicted and
-new in lockstep, emit `(offset, len, bytes)` runs where they differ. Where a
-run falls inside a changed function whose old body was matched, a local
-matcher over just that function pair (old body relocated vs new body,
-window-bounded, hash-chain) turns an edited function into
-"copy/insert/copy", recovering bsdiff-quality inside the function at
-O(function size) memory. Unmatched (new) functions are sent literally, zstd
-handles the rest.
+right sizes). The layout table carries the size of every variable-length
+pclntab blob and of every function, so the prediction is length-exact even
+where its *content* is wrong — which is what makes the correction positional:
+walk predicted and new in lockstep, emit a region where they differ. Where a
+region falls inside a function whose body genuinely changed, the shifted tail
+is recovered by matching against the prediction's own bytes there (§3.4),
+which is the same "copy/insert/copy" bsdiff would find, at O(region) memory
+and without needing the old body as a second buffer. Unmatched (new)
+functions are sent literally; the compressor handles the rest.
 
 Cost model for a 1 GB binary (600 MB `.text`, ~400 K functions): x86 decode
 ran at 17–29 MB/s per core in the prototype (6 s for vault's 159 MB `.text`)
 and is embarrassingly parallel per function (relocation with 24 goroutines:
 1.6 s on vault); the `.rodata` content-map build is O(n) hashing (13 s for
-95 MB single-threaded, parallelisable). Memory was not measured on the
-prototype; by construction it is old + new + predicted + maps ≈ 3× input
-(*estimate*), versus bsdiff's 8.6–12× measured and a suffix array's 5–8×.
-The encoder is expected to finish a 1 GB pair in well under a minute on a CI
-box (*estimate*; the prototype's own residual step still used bsdiff, which
-dominated its wall time). The decoder does the same prediction work plus
-a sequential pass, so a target applies a patch in seconds; it never needs
-more than ~3× the binary in RAM (v1 keeps whole sections in memory;
-streaming is §11).
+95 MB single-threaded, parallelisable). Measured on the 94 MB pair, the
+encoder is 2.4 s and 9.6× the input in RSS and the decoder 0.9 s and 7.6× in
+live heap (§3.2) — against bsdiff's 8.6–12× and a suffix array's 5–8×, but
+well above the 2–3× this section first estimated, because the working set is
+dominated by the per-function pclntab structures rather than by the file
+buffers (§11.3). Linear extrapolation puts a 1 GB pair at ~25 s of encode,
+which a CI box can afford, and at a decoder footprint no target should be
+asked for; that is the constraint §11.3 has to remove.
 
-### 3.4 Patch container (`.bsz`)
+### 3.4 Correction format (stage 2)
+
+The prototype's stage 2 was purely positional -- runs of `(gap, len, bytes)`
+where the prediction differs from the new file. That is optimal where the
+prediction is right and wasteful inside a function whose code genuinely
+changed: an insertion of five bytes shifts the rest of the function, and a
+positional encoder re-sends all of it. Measured on prometheus/1.27, positional
+runs cost 111,552 B against the 94,470 B an hdiffz stage 2 reaches (§3.2), and
+the gap is entirely inside changed `.text`.
+
+v1 therefore encodes the correction as **positional regions, each written
+whichever of two ways is smaller**:
+
+```
+correction := uvarint newLen, uvarint nRegions, uvarint ctrlLen, uvarint litLen,
+              ctrl[ctrlLen], lit[litLen]                 ← two streams, compressed together
+ctrl       := per region, in output order:
+                uvarint gap        bytes identical to the prediction since the previous region
+                uvarint span<<1|m  length of the region; m = 1 for a match stream, 0 for literals
+                if m: triples until span bytes have been emitted:
+                  uvarint lit      literal bytes taken from the lit stream
+                  uvarint copy     bytes copied from the source cursor
+                  varint  seek     signed move of the source cursor before the copy
+```
+
+Regions are maximal runs of differing bytes, merged when closer than 6 B. A
+region's source window is the *prediction's own bytes* from the region's
+start to `min(256, fileLen - regionEnd)` past its end, so a shifted function
+tail is one `copy`. The window is not transmitted: it follows from the
+region's end and the file's length, which both sides know. Most regions are
+two to four bytes -- a relocation the mapper placed wrongly -- and for those
+the match stream costs more than the bytes themselves, so the mode bit picks
+literals and the encoding degenerates to exactly the prototype's positional
+one. Control varints and literals are separate streams because their
+statistics differ by an order of magnitude.
+
+Two properties matter operationally. The source window starts at the region
+and runs *forward*, into bytes no earlier region has touched, so the decoder
+snapshots it, writes the region in place, and **applies the correction over
+the prediction buffer** rather than holding prediction and output at once
+(§11, memory). And the prediction is length-exact by construction, so `span`
+is the same on both sides and every read and write is bounds-checked against
+one buffer.
+
+Measured on prometheus/1.27: 119,493 B of correction stream for 120,852
+differing bytes, 66,052 B compressed -- against 79,696 B for the prototype's
+purely positional stage 2.
+
+**Stages 1a and 1b use the plain codec (§3.8), not this one.** Both are
+length-changing: 1a is `funcnametab`+`filetab` old → new, and 1b's predicted
+`cutab`/`pctab`/`go:func.*` are padded to the new tables' lengths but never
+truncated, so a release that shrank a table leaves the prediction longer than
+the truth (the decoder is told the target length). More importantly 1b's
+residual is *shifted*, not positional: one pc-value table that changed length
+moves every table after it, which a bounded local window cannot follow. On
+prometheus, encoding stage 1b positionally costs 66,372 B compressed against
+17,441 B for the plain codec (D17).
+
+### 3.5 Compression, and the patch container (`.bsz`)
+
+Payload streams are compressed with the smallest of the candidates the
+encoder is willing to spend time on, and the choice is recorded per frame.
+Measured on the prometheus/1.27 patch's own streams (pure-Go encoders,
+against the `zstd -19` CLI the prototype shelled out to):
+
+| stream | raw | `zstd -19` (CLI) | klauspost zstd best | brotli-11 (`LGWin` 24) |
+|---|---:|---:|---:|---:|
+| layout | 239,379 | 11,271 | 12,885 (+14 %) | **10,388 (−8 %)** |
+| correction | 162,758 | 79,696 | 85,569 (+7 %) | **74,631 (−6 %)** |
+
+Pure-Go zstd is 6–14 % *worse* than the CLI the research numbers were taken
+with; pure-Go brotli at quality 11 is 6–8 % *better*. Since patch bytes are
+the product, v1 uses brotli-11 for streams up to 4 MiB (0.4 s for the
+162 KB stream above; it scales badly, hence the cap) and zstd above that,
+where the stream is content-dominated anyway and speed matters more. Blobs
+are always zstd — they are tens of MB and must stream.
 
 ```
 magic "BSZ1"  u8 transform (0 = plain, 1 = go-amd64-v1)  u8 flags
-u32 header_len; header (CBOR): { from: b3 hash, to: b3 hash, old_size, new_size,
-                                 frames: [ {off, len, zlen, b3} … ] }
-frames: independent zstd frames, each ≤ 8 MiB decompressed, in order:
-  frame 0     layout table, data maps, shift tables, stage-1 pclntab-blob deltas
-  frames 1..n correction runs: varint(gap) varint(len) bytes, in file order
+header: uvarint header_len, then
+        b3 from[32], b3 to[32], uvarint old_size, uvarint new_size,
+        uvarint nframes, per frame: uvarint off, uvarint len, uvarint zlen,
+                                    u8 codec (0 raw, 1 zstd, 2 brotli), b3 hash[32]
+frames: independently decodable, each ≤ 8 MiB decompressed, concatenating in
+        order to the patch body, which for transform 1 is
+          layout (section table, moduledata values, function layout, pclntab
+                  table offsets, data maps, shift tables, pointer overrides),
+          stage-1a delta, stage-1b delta, b3 of the prediction[32],
+          stage-2 correction
 ```
 
-Each frame's BLAKE3 is in the header and the whole patch's hash is in the
-pointer, so a partially fetched patch is verified frame by frame and resumed
-at a frame boundary with a `Range` request. All offsets read from the patch
-are bounds-checked against `old_size`/`new_size`; a malformed patch fails
-verification, it cannot crash the decoder or write outside the output.
+Frames are cut at 8 MiB, not at stream boundaries: a frame costs a 32-byte
+hash and a table entry, and compressing the streams separately came to within
+0.1 % of compressing them together on both the 94 MB pair and the one-line
+one. The prediction's own hash rides in the body so that an encoder and a
+decoder that disagree say so (§3.7) instead of producing a wrong binary and
+relying on the release hash to catch it.
 
-### 3.5 Transform versioning and the decoder that is already deployed
+The header is a bounds-checked varint record rather than the CBOR the
+first draft named: it is the only structure in the system that is not
+already JSON, and 60 lines of varint reader are less surface than a codec
+dependency. Each frame's BLAKE3 is in the header and the whole patch's hash
+is in the pointer, so a partially fetched patch is verified frame by frame
+and resumed at a frame boundary with a `Range` request. All offsets read
+from the patch are bounds-checked against `old_size`/`new_size`; a malformed
+patch fails verification, it cannot crash the decoder or write outside the
+output.
+
+### 3.6 Transform versioning and the decoder that is already deployed
 
 The decoder that applies a patch is **the old binary's** embedded library (or
 the deployed agent). The publisher therefore chooses the transform per patch:
@@ -283,7 +400,7 @@ The codec therefore keys its
 pclntab/moduledata/type-descriptor handling on the Go version from
 `debug/buildinfo`, and **supports exactly one Go release at a time: the
 current stable one (1.27 today; D14)**. A binary built by any other
-toolchain gets the plain codec (§3.7). Each new Go release is enabled only
+toolchain gets the plain codec (§3.8). Each new Go release is enabled only
 after a byte-exact self-prediction check (old → old through the full
 pipeline) on a small corpus built with that release; the previous release is
 kept only for as long as it costs nothing. This trades a wider compatibility
@@ -291,25 +408,61 @@ matrix — one that the prototype showed is real work per Go minor — for a
 codec that is small enough to be reviewed and tested exhaustively; a fleet
 that pins an older Go still updates correctly, just with larger patches.
 
-### 3.6 Determinism and safety
+### 3.7 Determinism and safety
 
 - The prediction uses only the old file plus bytes from the patch; no
-  environment, no clock, no randomness. Encoder and decoder share the code.
-- Any decode failure of an instruction (the prototype hit 9 bytes of AVX2 in
-  30 MB) leaves those bytes unrelocated; the correction fixes them.
+  environment, no clock, no randomness. Encoder and decoder share the code —
+  literally: `encodeGoAMD64` builds its prediction by decoding the layout it
+  just encoded and running the decoder's own functions on it, so the bytes
+  the correction is measured against are the bytes the decoder will produce.
+- Anything that could vary with the machine is a compile-time constant, not a
+  core count: the worker counts in the parallel map build and the parallel
+  relocation are fixed at 24, because a prediction that depends on `GOMAXPROCS`
+  is a prediction two hosts can disagree about.
+- The encoder puts the prediction's BLAKE3 in the patch and the decoder checks
+  it before applying the correction. A mismatch is a clean, named failure —
+  "encoder and decoder disagree, fetch the blob" — rather than a wrong file
+  caught only by the release hash.
+- Enabling a Go release is gated on a byte-exact self-prediction: every corpus
+  binary is run old → old through the whole pipeline and must come out
+  identical, with a correction of at most 64 bytes (`TestSelfPrediction`).
+  That gate is what caught `pcHeader.textStart`, which Go 1.27 leaves zero
+  and the codec was filling in — 8 bytes per patch that no round-trip test
+  would ever have shown, because the correction dutifully fixed them.
+- Any decode failure of an instruction (1,616 undecodable bytes in
+  prometheus's 89 MB of `.text`) leaves those bytes unrelocated; the
+  correction fixes them.
 - The result is written to a temp file and BLAKE3-hashed before it is
   renamed into place; the hash is compared with `to` from the pointer.
 
-### 3.7 Plain codec (transform 0)
+### 3.8 Plain codec (transform 0)
 
 For non-Go, non-amd64, PIE, or otherwise unparseable inputs: a bsdiff-class
-encoder over the whole file using the standard library's `index/suffixarray`
-(SA-IS), zstd-compressed, same container and frames. It is capped at 256 MB
-old-file size (memory ≈ 6× input); above that `publish` publishes the blob
-only and says so. This keeps one simple, pure-Go fallback with predictable
-cost rather than a second tuned encoder. Measured plain-codec sizes: one-line
-60 KB, kube-apiserver 2.1 MB (bsdiff); ours will be within ~20 % of bsdiff
-(*estimate*: same algorithm, different compressor).
+encoder over the whole file — an approximate match extended over the bytes
+around it, so a shifted region costs a control triple and a difference
+stream that is zero wherever the two agree — in the same container and
+frames. Two substitutions against bsdiff proper:
+
+- **No suffix array.** The anchor search uses the same position-ordered
+  content index as the rest of the codec (`delta/internal/lz`). The suffix
+  array is what makes bsdiff need 9–12× the input in RAM and minutes above
+  100 MB; on executables the anchors this index finds are long enough that
+  bsdiff's extension heuristic does the same work from them.
+- **A sparse difference stream.** bsdiff's difference stream is one byte per
+  matched byte and almost all zero — 383 K non-zero bytes in 30 MB on the
+  reference pair — which bzip2's block sort handles beautifully and every LZ
+  compressor handles badly. Carrying the zeros as run headers instead of
+  bytes takes that pair from 315 KB to 170 KB, and drops the decoder's
+  working set for the stream from the size of the file to nothing.
+
+Measured on the one-line pair (29.6 MB): 169,929 B in 2.2 s and 278 MB RSS,
+against bsdiff's 150,475 B in 39–43 s and 805 MB. 13 % more bytes for 18×
+the speed and a third of the memory is the right trade for a fallback; the
+Go-aware codec is what the bytes are supposed to come from.
+
+It is capped at 256 MB old-file size; above that `publish` publishes the blob
+only and says so. The PIE build of the same pair, which the Go-aware codec
+declines, takes this path and lands at 72,681 B.
 
 Not doing: zstd `--patch-from` as a codec (3.5× worse than bsdiff on
 one-line and on kube-apiserver), HDiffPatch (C, cgo), xdelta3 (worst sizes,
@@ -524,21 +677,35 @@ verification failed, 4 no path to head, 5 rolled back.
 ## 7. Library layout
 
 ```
-binsync/delta        Encode(old, new []byte, opts) ([]byte, error); Apply(old, patch, w) error  (§3)
-binsync/delta/gopcln pclntab/moduledata parsing and regeneration (Go ≥ 1.20 format)
-binsync/delta/x86    operand relocation over x/arch/x86asm
-binsync/release      Pointer, Edge, Frame types; Plan(pointer, current) (chain | blob | none);
-                     Install/Revert (§6.2); hash cache keyed by (dev, inode, size, mtime)
-binsync/store        Store interface { Get(key, opts{range, ifNoneMatch}) ; Put(key, r, opts{ifMatch}) }
-                     implementations: s3, https, file, ssh
-binsync/agent        Loop(ctx, Config, Hooks): poll → plan → fetch → apply → install → hooks.Restart → hooks.Check
-binsync/selfupdate   Start/Listen/OnShutdown/Ready/Done built on agent with the exec handoff as Restart
-cmd/binsync          publish, agent, diff, patch
+binsync/delta          Encode(old, new []byte, o Options) ([]byte, error); Apply(old, patch []byte, w io.Writer) error
+                       transform selection, .bsz container and frames (§3.5), plain codec (§3.8)
+binsync/delta/gobin    ELF + pclntab + moduledata parsing for the supported Go release; functab
+                       and findfunctab regeneration; type-descriptor walking (§3.2)
+binsync/delta/x86      operand relocation and content hashing over x/arch/x86asm
+binsync/delta/internal/lz    the one exact-match engine: a content index ordered by position,
+                             plus a (lit, copy, seek) op stream; drives stage 1a, stage 1b,
+                             the stage-2 regions (§3.4) and the plain codec (§3.8)
+binsync/internal/cz    frame compression: raw / zstd / brotli, smallest-wins (§3.5)
+binsync/release        Pointer, Edge, Frame, Blob types; MakePlan(pointer, current)
+                       (chain | blob | none); Installer.Install/Revert and the pending and
+                       failed markers (§6.2, §6.5); hash cache keyed by (dev, inode, size, mtime)
+binsync/store          Store interface { Get(key, opts{range, ifNoneMatch}) ; Put(key, r, opts{ifMatch}) }
+                       file, https, ssh in-package; s3 registered from binsync/store/s3;
+                       StoreSuite is the conformance suite every backend runs
+binsync/agent          Loop(ctx, Config, Hooks): poll → plan → fetch → apply → install → hooks.Restart → hooks.Check
+binsync/selfupdate     Start/Listen/OnShutdown/Ready/Done built on agent with the exec handoff as Restart
+cmd/binsync            publish, agent, diff, patch
 ```
 
+The s3 backend lives in its own package and registers itself in `store`'s
+opener table from its `init`, so a `file://`-only program never links the AWS
+SDK. This replaces the build tag the first draft named: a build tag that
+silently removes a URL scheme the CLI documents is a worse failure mode than
+an import.
+
 Dependencies: `golang.org/x/arch` (x86 decoder), `github.com/klauspost/compress/zstd`,
-`github.com/zeebo/blake3`, AWS SDK v2 (s3 only; behind a build tag so a
-`file://`-only build stays small), `golang.org/x/crypto/ssh`.
+`github.com/andybalholm/brotli`, `github.com/zeebo/blake3`, AWS SDK v2
+(`binsync/store/s3` only), `golang.org/x/crypto/ssh`.
 
 ## 8. Security model
 
@@ -567,16 +734,24 @@ Dependencies: `golang.org/x/arch` (x86 decoder), `github.com/klauspost/compress/
 
 ## 9. Testing strategy
 
-- Unit: codec round-trips on small hand-built ELF fixtures (a few KB) with
-  synthetic pclntabs; pointer planning; install/revert on a temp dir with
-  fault injection between each syscall step; frame verification with
-  corrupted frames. All < 100 ms.
-- Integration (`go test -run Integration`, ≤ 1 s each): `file://` store
-  end-to-end with a tiny Go test server that does a real exec handoff and
-  checks no accept is lost under load (`tableflip`-style test); external
-  agent with a fake `--restart`.
-- Corpus/benchmark (manual, `bench/`): patch sizes and encoder time on the
-  release corpus; must not regress against `go-aware-transform.md` numbers.
+Three tiers, split by what they need and how long they take. 116 test
+functions; `go test ./...` is 1.7 s in total, and no package is over 0.7 s.
+
+- **Unit**, everything in `go test ./...`: codec round-trips over generated
+  byte streams and the corruption of every field of every header; pointer
+  planning; install/revert driven to a stop after each syscall step, with the
+  §6.5 recovery asserted at every stop; the store conformance suite
+  (`store.StoreSuite`) run against every backend; the exec handoff's fd
+  inheritance.
+- **Corpus** (`BINSYNC_CORPUS=<dir> go test ./delta`): the two gates that
+  need real binaries. `TestSelfPrediction` runs every corpus binary old → old
+  through the whole pipeline and requires a byte-identical result and a
+  correction under 64 B — this is what enables a Go release (§3.7).
+  `TestCorpusRoundTrip` encodes and applies every *ordered pair* in the
+  corpus, in both directions and across build flavours, and requires the
+  result to be byte-identical to the target; 32 pairs, 170 s.
+- **Benchmark** (manual, `bench/`): patch sizes and encoder time on the
+  release corpus; must not regress against §3.2.
 
 ## 10. Decisions
 
@@ -595,7 +770,14 @@ Dependencies: `golang.org/x/arch` (x86 decoder), `github.com/klauspost/compress/
 | D11 | `-s -w` required (warning, `--force` to override) | unstripped DWARF makes every patch ≈ full size |
 | D12 | Poll only (no push, no poke) | 304 poll is one RTT; workstation case is served by `file://` at 1 s |
 | D13 | Publish order patch → pointer → blob; blob 404s are retried | the pointer goes live after hundreds of KB, not tens of MB — from a workstation over a lossy link that is ~5 s vs ~2 min (§4.4); steady-state targets never touch the blob |
-| D14 | Go-aware codec supports one Go release at a time (the current stable, 1.27); everything else takes the plain codec | pclntab/type layouts change per minor; one version + a self-prediction gate keeps the codec small and testable (§3.5) |
+| D14 | Go-aware codec supports one Go release at a time (the current stable, 1.27); everything else takes the plain codec | pclntab/type layouts change per minor; one version + a self-prediction gate keeps the codec small and testable (§3.6) |
+| D15 | Correction = positional regions, each written as literals or as a bounded local match, whichever is smaller | recovers the bsdiff-quality bytes inside changed functions that purely positional runs re-send, at O(region) memory, and lets the decoder apply in place (§3.4) |
+| D16 | Payload streams compressed with the smallest of brotli-11 (≤ 4 MiB) and zstd; blobs always zstd | pure-Go zstd is 6–14 % worse than the `zstd -19` the research numbers used, pure-Go brotli-11 is 6–8 % better; patch bytes are the product (§3.5) |
+| D17 | Stages 1a and 1b use the plain codec, not the positional correction | their residual is *shifted*, not positional — one pc table that changed length moves every table after it. Positionally, stage 1b costs 66,372 B on prometheus against 17,441 B (§3.4) |
+| D18 | The source window of a correction region is derived (`min(256, fileLen − end)` past its end), not transmitted | both sides know the region's end and the file's length; a transmitted window is 2–4 varints per region and there are tens of thousands of them (§3.4) |
+| D19 | The patch body is one frame per 8 MiB, not one frame per stream | a frame costs a 32-byte hash and a table entry; the streams compressed separately came within 0.1 % of compressing them together (§3.5) |
+| D20 | The encoder transmits the BLAKE3 of its prediction, and every prediction worker count is a compile-time constant | encoder/decoder divergence becomes a named failure and a blob fallback instead of a wrong file caught by the release hash; a prediction that varies with `GOMAXPROCS` is one two hosts can disagree about (§3.7) |
+| D21 | The prediction fills the bytes no allocated section covers: gaps cleared, `.shstrtab` copied from the old file's tail | the base is a copy of the old file, so every section that moved left stale bytes behind in its gap — 3,780 mispredicted bytes on prometheus, 109 after (§3.2) |
 
 Cut from the first-round design (and why): private signing keys and key
 rotation (D6); the `poke` push endpoint and control socket (D12); inline
@@ -604,31 +786,40 @@ pointer); direct non-chain edges and a K-matrix of patches (chain + blob
 covers skipped releases; publisher cost stays O(1)); multiple channels per
 store (use prefixes); a probation state machine with health windows and
 canary hooks (D8); systemd-notify integration; zstd `--patch-from` as a
-secondary codec (§3.7); most CLI flags (`README.md` §5 lists all that
+secondary codec (§3.8); most CLI flags (`README.md` §5 lists all that
 remain).
 
-## 11. Open questions (to settle during implementation)
+## 11. Open questions
+
+The last question §3.3 asked — whether the local match inside changed regions
+lands nearer the 94,470 B of a hdiffz stage 2 than the 111,552 B of purely
+positional runs — is answered: 95,366 B (§3.2). What remains:
 
 1. **`.go.type` residual.** 45,170 B of the prometheus/1.27 patch is type
    descriptors: ~31.6 KB are genuinely new descriptors (inherent), ~7.9 KB
    are wrong rewrites and ~4.5 KB names. Only the consensus pass has been
-   applied; an anchor pass (descriptor start → symbol) may recover the
-   wrong rewrites. The changed `.text` itself (62,555 B, 56 % of the
-   correction) is the other large item and is real change; the open
-   question there is whether the window-bounded local match (§3.3) gets
-   closer to the 94,470 B a hdiffz stage 2 reaches than to the 111,552 B of
-   positional runs.
+   applied; an anchor pass (descriptor start → symbol) may recover the wrong
+   rewrites. The changed `.text` (63,179 B, 52 % of the mispredicted bytes)
+   is the other large item and is real change.
 2. **arm64** in the Go-aware codec: fixed-width instructions make operand
    relocation *simpler* (ADRP/ADD page+offset pairs, B/BL imm26); needs a Go
    arm64 corpus to validate. Until then arm64 targets get the plain codec.
-3. **Memory.** Encoder (654 MB) and decoder (636 MB) hold old + predicted +
-   new for a 94 MB file, ≈ 7×; apply and encode section by section to reach
-   ≈ 2×. The earlier 5 s kube-apiserver decode (Go 1.26 build) was never
-   profiled.
+3. **Memory — the one open question that is a constraint, not a saving.**
+   Applying the correction in place (§3.4) removed one whole copy of the
+   file, and the decoder still peaks at 714 MB of live heap for a 94 MB
+   binary, 7.6×. The buffers are only 2× of that; the rest is the
+   prediction's own working set, and three items account for most of it:
+   the 110,147 `_func` records rebuilt as individual slices in
+   `predictPcln` (arena-allocate them into one backing array), the
+   position-ordered index over `pctab` and `go:func.*` at 8 bytes per
+   position, and the encoder's habit of holding `old` and `pred` while it
+   also holds `new`. A 1 GB binary at this ratio asks a target for 7.6 GB,
+   which is not a thing a fleet can be asked for; §3.3's ≈ 2× is the target
+   and none of the three fixes changes the format.
 4. **Encoder details.** `.text` is x86-decoded twice (relocation and
-   shift-table derivation; caching saves ~0.3 of 2.1 s). The pointer-override
+   shift-table derivation; caching saves ~0.3 of 2.4 s). The pointer-override
    table costs 5.5 KB of layout for a 26.5 KB net gain and its second
-   consensus round gained nothing on prometheus; the 39 B floor of the
-   second stage-1 blob makes tiny patches slightly larger than before
-   (v1→v2s 425 → 466 B). All cosmetic, all to settle when the codec is
-   written for real.
+   consensus round gained nothing on prometheus. The remaining 109
+   mispredicted bytes of ELF program and section headers could be predicted
+   exactly from the layout, which already carries every section's address,
+   offset and size; it is ~30 lines for ~0.1 % and has not been written.
