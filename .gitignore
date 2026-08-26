@@ -1,0 +1,12 @@
+# benchmark corpora, built binaries, patches: see bench/.gitignore (only logs/ and results/ are kept)
+
+# prototype build outputs
+bench/gotransform/gotransform
+bench/gotransform/gotransform-*
+bench/testsrv/testsrv
+bench/goprobe/goprobe
+*.test
+
+# editor / local agent settings
+.idea/
+.claude/settings.local.json

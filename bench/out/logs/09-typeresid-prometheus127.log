@@ -1,0 +1,65 @@
+  [  0.13s] loaded prometheus (go1.27, 93741283 B) -> prometheus (go1.27, 93769955 B)
+  [  0.15s] match: exact=110090 normalised=0 content=5 unmatched-new=52 unmatched-old=14
+  [  0.25s] content map .rodata
+  [  0.55s] content map .go.type
+  [  0.55s] content map .go.func
+  [  0.56s] content map .noptrdata
+  [  0.58s] content map .data
+  [  0.72s] shift tables
+  datamap .rodata: blocks=229900 matched=229735 ambiguous=46 unmatched=119 shift-changes=86; rle 302 B
+  datamap .go.type: blocks=735529 matched=589725 ambiguous=75843 unmatched=69961 shift-changes=2241; rle 6905 B
+  datamap .go.func: blocks=1700 matched=1699 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=37081 matched=37080 ambiguous=0 unmatched=1 shift-changes=3; rle 17 B
+  datamap .data: blocks=21102 matched=21101 ambiguous=0 unmatched=1 shift-changes=1; rle 11 B
+  shift table .bss: 3 breakpoints from 56100 samples, 11 B raw: @18128:+8 @18912:+16 @47616:+32
+  shift table .noptrbss: 6 breakpoints from 108817 samples, 16 B raw: @118:+2 @180:+4 @760:+0 @1648:+8 @1792:+16 @5696:+0
+  [  0.72s] content maps + shift tables
+  [  1.09s] overrides: pointers=492298 fields=494946 targets=321488 mispredicted=47008 block-fixes=255 overrides=2681 (20725 votes)
+  [  1.10s] layout: 110147 funcs, 20 rec shapes, raw 239379 B, zstd 11271 B
+  [  1.53s] stage 1 (h): pclntab blobs 24478232 -> 24486832 B, delta 100949 B
+  [  1.96s] prediction: 93769955 B (new 93769955 B), insns=10688083 decode-failures=1876, differing bytes=127210 in 20387 runs
+  type descriptors: descriptors=62516 itabs=5337 rewritten nameOff=197353 typeOff=114379 textOff=170045 name.pkgPath=2155 unmapped=11014 (name 0, type 10989, text 25: unmatched-fn 25 outside 0) bad=0
+  stage-2 differing bytes by section: .text=62555(4935 runs) .rodata=3782(953 runs) .gopclntab=7860(3702 runs) .go.type=45170(8199 runs) .go.func=2568(1186 runs) .go.buildinfo=215(15 runs) .go.fipsinfo=32(1 runs) .go.module=36(21 runs) .noptrdata=468(222 runs) .data=744(576 runs)
+  resid no-old-block new+23760 len 1: pred 00 new 08 old 
+  resid no-old-block new+24656 len 1: pred 00 new 08 old 
+  resid no-old-block new+25216 len 1: pred 00 new 08 old 
+  resid no-old-block new+25272 len 1: pred 00 new 08 old 
+  resid no-old-block new+26280 len 1: pred 00 new 08 old 
+  resid no-old-block new+31264 len 1: pred 00 new 08 old 
+  resid no-old-block new+33392 len 1: pred 00 new 08 old 
+  resid no-old-block new+33672 len 1: pred 00 new 08 old 
+  resid no-old-block new+35856 len 1: pred 00 new 08 old 
+  resid no-old-block new+36304 len 1: pred 00 new 08 old 
+  resid no-old-block new+41176 len 1: pred 00 new 08 old 
+  resid desc.tail/unmatched new+45136 len 1: pred 48 new 90 old 70
+  resid desc.tail/unmatched new+45192 len 1: pred 90 new 48 old b8
+  resid no-old-block new+45208 len 1: pred 00 new 08 old 
+  resid no-old-block new+48456 len 1: pred 00 new 08 old 
+  resid no-old-block new+54560 len 1: pred 00 new 08 old 
+  resid desc.tail/unmatched new+55608 len 2: pred c859 new 005a old 28f9
+  resid no-old-block new+56408 len 1: pred 00 new 08 old 
+  resid no-old-block new+63968 len 1: pred 00 new 08 old 
+  resid no-old-block new+66936 len 1: pred 00 new 08 old 
+  resid no-old-block new+76273 len 3: pred 000000 new f57b02 old 
+  resid no-old-block new+76277 len 4: pred 00000000 new f57b0208 old 
+  resid no-old-block new+76288 len 1: pred 00 new 08 old 
+  resid desc.tail/unmatched new+76360 len 3: pred 00f57b new a0127c old 00bf7b
+  resid desc.tail/unmatched new+76364 len 3: pred 00f57b new a0127c old 00bf7b
+  resid desc.tail/unmatched new+76448 len 8: pred a0127c02a0127c02 new 8032280080322800 old a0dc7b02a0dc7b02
+  resid no-old-block new+90032 len 1: pred 00 new 08 old 
+  resid no-old-block new+90200 len 1: pred 00 new 08 old 
+  resid no-old-block new+90256 len 1: pred 00 new 08 old 
+  resid no-old-block new+90312 len 1: pred 00 new 08 old 
+  resid desc.tail/unmatched new+90748 len 2: pred e0fb new 40fc old b8f9
+  resid desc.tail/unmatched new+91404 len 3: pred a0ff3a new 00003b old 78fd3a
+  resid desc.tail/unmatched new+91420 len 1: pred 00 new 60 old 38
+  resid desc.tail/unmatched new+91592 len 2: pred 20b2 new 00ad old 8004
+  resid desc.tail/unmatched new+91596 len 2: pred 20b2 new 00ad old 8004
+  resid no-old-block new+91800 len 9: pred 000000000000000000 new 20b2c70120b2c70108 old 
+  resid no-old-block new+91816 len 1: pred 00 new 08 old 
+  resid desc.tail/unmatched new+92236 len 2: pred a0fc new e0fb old 18fa
+  resid desc.tail/unmatched new+92556 len 1: pred 40 new a0 old 78
+  resid no-old-block new+93920 len 1: pred 00 new 08 old 
+  type-section residual by region/block status (runs, bytes): no-old-block=3450(31656B) desc.tail/unmatched=2216(7891B) other(names/non-typelinked)/unmatched=2241(4495B) itab/unmatched=146(347B) desc.Type+4/unmatched=16(269B) desc.Type+12/unmatched=13(195B) desc.Type+44/unmatched=63(97B) desc.Type+32/unmatched=21(93B) desc.Type+0/unmatched=16(69B) desc.Type+40/unmatched=14(42B) desc.Type+16/unmatched=3(16B)
+  [  2.24s] stage 2 (positional): raw 169493 B, zstd 81287 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt09/p-12.gtp: 193621 B = header 114 + layout 11271 + stage1(h) 100949 + stage2(p) 81287  [encode 2.35s]

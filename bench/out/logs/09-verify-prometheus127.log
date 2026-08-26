@@ -1,0 +1,10 @@
+  stage-2 differing bytes by section: .text=62555(4935 runs) .rodata=3782(953 runs) .gopclntab=4549(2022 runs) .go.type=45170(8199 runs) .go.func=2568(1186 runs) .go.buildinfo=215(15 runs) .go.fipsinfo=32(1 runs) .go.module=36(21 runs) .noptrdata=468(222 runs) .data=744(576 runs)
+  [  1.92s] stage 2 (positional): raw 162758 B, zstd 79696 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/verify/p.gtp: 111552 B = header 116 + layout 11271 + stage1(h) 20469 (1a 1484 + 1b 18985) + stage2(p) 79696  [encode 2.03s]
+ENCODE 2.10 s RSS 654104 KB
+PATCH 111552
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/verify/new.bin: 93769955 B [decode 0.90s]
+DECODE 1.00 s RSS 636084 KB
+CMP_OK
+41ac80f40c6a0dc1
+41ac80f40c6a0dc1

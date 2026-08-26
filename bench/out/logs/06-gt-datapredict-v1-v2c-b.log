@@ -1,0 +1,16 @@
+== datapredict ../out/bin/v1-F2 -> ../out/bin/v2c-F2
+.rodata: 3527449 bytes, 110307 aligned qwords point into the image: text-matched=15931 rodata=94315 noptrdata=5 bss/noptrbss=45 other-section=11
+  pointer rewrite: unchanged-in-new=81196 re-targeted-correctly=29110 mispredicted=1 unmapped=0 (map: blocks=220466 matched=220173 ambiguous=0 unmatched=293 shift-changes=3)
+  baseline old->new:            bsdiff=4211 hdiffz=0 zstd=0 rawdiff=438873 runs=57044
+  blocks re-laid (no ptr fix):  bsdiff=4188 hdiffz=0 zstd=0 rawdiff=30762 runs=29695
+  blocks re-laid + ptr rewrite: bsdiff=481 hdiffz=0 zstd=0 rawdiff=1052 runs=585
+.noptrdata: 454273 bytes, 658 aligned qwords point into the image: text-matched=386 rodata=2 noptrdata=247 data=5 bss/noptrbss=16 other-section=2
+  pointer rewrite: unchanged-in-new=626 re-targeted-correctly=32 mispredicted=0 unmapped=0 (map: blocks=28393 matched=28392 ambiguous=0 unmatched=1 shift-changes=0)
+  baseline old->new:            bsdiff=211 hdiffz=0 zstd=0 rawdiff=57 runs=32
+  blocks re-laid (no ptr fix):  bsdiff=211 hdiffz=0 zstd=0 rawdiff=57 runs=32
+  blocks re-laid + ptr rewrite: bsdiff=142 hdiffz=0 zstd=0 rawdiff=0 runs=0
+.data: 178258 bytes, 8526 aligned qwords point into the image: text-matched=24 rodata=5215 noptrdata=596 data=903 bss/noptrbss=1788
+  pointer rewrite: unchanged-in-new=5627 re-targeted-correctly=2899 mispredicted=0 unmapped=0 (map: blocks=11142 matched=11141 ambiguous=0 unmatched=1 shift-changes=0)
+  baseline old->new:            bsdiff=1120 hdiffz=0 zstd=0 rawdiff=2998 runs=2899
+  blocks re-laid (no ptr fix):  bsdiff=1120 hdiffz=0 zstd=0 rawdiff=2998 runs=2899
+  blocks re-laid + ptr rewrite: bsdiff=142 hdiffz=0 zstd=0 rawdiff=0 runs=0

@@ -1,0 +1,135 @@
+== ../out/corpus/prometheus/3.13.1/prometheus.stripped (97552696 bytes)
+sections (allocated, by address):
+  .note.go.buildid   addr=0x400f78   off=0xf78     size=      100
+  .note.gnu.build-id addr=0x400fdc   off=0xfdc     size=       36
+  .text              addr=0x401000   off=0x1000    size= 42416177
+  .rodata            addr=0x2c75000  off=0x2875000 size= 19352697
+  .gopclntab         addr=0x3ee9c80  off=0x3ae9c80 size= 34612073
+  .typelink          addr=0x5fec000  off=0x5bec000 size=   161404
+  .itablink          addr=0x6013680  off=0x5c13680 size=    42488
+  .go.buildinfo      addr=0x601e000  off=0x5c1e000 size=    23280
+  .go.fipsinfo       addr=0x6023b00  off=0x5c23b00 size=      120
+  .go.module         addr=0x6023b80  off=0x5c23b80 size=      592
+  .noptrdata         addr=0x6023de0  off=0x5c23de0 size=   589921
+  .data              addr=0x60b3e60  off=0x5cb3e60 size=   345650
+  .bss               addr=0x61084a0  off=0x5d08492 size=   253944
+  .noptrbss          addr=0x61464a0  off=0x5d08492 size= 33707456
+pclntab: magic ok, nfunc=113780 nfiles=5319 minLC=1 ptrSize=8 section=34612073 bytes
+  funcnametab    off=       72 len=  9975504
+  cutab          off=  9975576 len=   334768
+  filetab        off= 10310344 len=   360928
+  pctab          off= 10671272 len=  7703016
+  functab+_func  off= 18374288 len= 10858576
+  go:func.*      off= 29232864 len=  5172096
+  findfunctab    off= 34404960 len=   207113
+moduledata: text=0x401000 etext=0x2c74830 minpc=0x401000 maxpc=0x2c74821 types=0x2c75000 etypes=0x3ee9c79 rodata=0x2c75000 gofunc=0x5acab60 findfunctab=0x5fb96e0 epclntab=0x5febfe9 typelinks=40351 itablinks=5311
+functions: 113780; first internal/abi.(*RegArgs).Dump @0x401000; last go:textfipsend @0x2c74820 end=0x2c74821; .text end=0x2c74831 (gap after last func: 16 bytes)
+entry alignment: 113780 on 32-byte boundary, 0 not ([])
+sum of function sizes (entry to next entry): 42416161 = 100.00% of .text
+duplicate names: 33 distinct names with >1 function (examples: map[internal/bytealg.countGenericString:2 reflect.moveMakeFuncArgPtrs:2 runtime.args:2 runtime.badmcall2:2 runtime.morestackc:2 runtime.osinit:2 runtime.osyield:2 runtime.reflectcallmove:2 runtime.schedinit:2 syscall.RawSyscall:2])
+name categories: closure(.funcN)=6388 deferwrap=2257 generic[go.shape]=3768 gowrap=173 linker/cgo/rt0=915 method-value(-fm)=467 type:.eq/.hash=4689
+== ../out/corpus/prometheus/3.13.2/prometheus.stripped (97577304 bytes)
+sections (allocated, by address):
+  .note.go.buildid   addr=0x400f78   off=0xf78     size=      100
+  .note.gnu.build-id addr=0x400fdc   off=0xfdc     size=       36
+  .text              addr=0x401000   off=0x1000    size= 42429777
+  .rodata            addr=0x2c78000  off=0x2878000 size= 19354777
+  .gopclntab         addr=0x3eed4a0  off=0x3aed4a0 size= 34621634
+  .typelink          addr=0x5ff1d80  off=0x5bf1d80 size=   161428
+  .itablink          addr=0x6019420  off=0x5c19420 size=    42512
+  .go.buildinfo      addr=0x6024000  off=0x5c24000 size=    23280
+  .go.fipsinfo       addr=0x6029b00  off=0x5c29b00 size=      120
+  .go.module         addr=0x6029b80  off=0x5c29b80 size=      592
+  .noptrdata         addr=0x6029de0  off=0x5c29de0 size=   589921
+  .data              addr=0x60b9e60  off=0x5cb9e60 size=   345682
+  .bss               addr=0x610e4c0  off=0x5d0e4b2 size=   253944
+  .noptrbss          addr=0x614c4c0  off=0x5d0e4b2 size= 33707456
+pclntab: magic ok, nfunc=113817 nfiles=5321 minLC=1 ptrSize=8 section=34621634 bytes
+  funcnametab    off=       72 len=  9978040
+  cutab          off=  9978112 len=   334808
+  filetab        off= 10312920 len=   361016
+  pctab          off= 10673936 len=  7705392
+  functab+_func  off= 18379328 len= 10862016
+  go:func.*      off= 29241344 len=  5173112
+  findfunctab    off= 34414456 len=   207178
+moduledata: text=0x401000 etext=0x2c77d50 minpc=0x401000 maxpc=0x2c77d41 types=0x2c78000 etypes=0x3eed499 rodata=0x2c78000 gofunc=0x5ad04a0 findfunctab=0x5fbf418 epclntab=0x5ff1d62 typelinks=40357 itablinks=5314
+functions: 113817; first internal/abi.(*RegArgs).Dump @0x401000; last go:textfipsend @0x2c77d40 end=0x2c77d41; .text end=0x2c77d51 (gap after last func: 16 bytes)
+entry alignment: 113817 on 32-byte boundary, 0 not ([])
+sum of function sizes (entry to next entry): 42429761 = 100.00% of .text
+duplicate names: 33 distinct names with >1 function (examples: map[internal/bytealg.countGeneric:2 reflect.callReflect:2 runtime.args:2 runtime.badmcall2:2 runtime.badreflectcall:2 runtime.badsystemstack:2 runtime.goexit1:2 runtime.memmove:2 runtime.write:2 syscall.Syscall:2])
+name categories: closure(.funcN)=6391 deferwrap=2261 generic[go.shape]=3771 gowrap=173 linker/cgo/rt0=915 method-value(-fm)=467 type:.eq/.hash=4689
+== pair ../out/corpus/prometheus/3.13.1/prometheus.stripped -> ../out/corpus/prometheus/3.13.2/prometheus.stripped
+names only in old (18): google.golang.org/grpc/encoding/gzip.reader.Close, google.golang.org/grpc/internal/transport.(*cleanupStream).isTransportResponseFrame, google.golang.org/grpc/internal/transport.(*closeConnection).isTransportResponseFrame, google.golang.org/grpc/internal/transport.(*dataFrame).isTransportResponseFrame, google.golang.org/grpc/internal/transport.(*earlyAbortStream).isTransportResponseFrame, google.golang.org/grpc/internal/transport.(*goAway).isTransportResponseFrame, google.golang.org/grpc/internal/transport.(*headerFrame).isTransportResponseFrame, google.golang.org/grpc/internal/transport.(*incomingGoAway).isTransportResponseFrame, google.golang.org/grpc/internal/transport.(*incomingSettings).isTransportResponseFrame, google.golang.org/grpc/internal/transport.(*incomingWindowUpdate).isTransportResponseFrame, google.golang.org/grpc/internal/transport.(*loopyWriter).headerHandler, google.golang.org/grpc/internal/transport.(*loopyWriter).originateStream, google.golang.org/grpc/internal/transport.(*outFlowControlSizeRequest).isTransportResponseFrame, google.golang.org/grpc/internal/transport.(*outgoingSettings).isTransportResponseFrame, google.golang.org/grpc/internal/transport.(*outgoingWindowUpdate).isTransportResponseFrame, google.golang.org/grpc/internal/transport.(*ping).isTransportResponseFrame, google.golang.org/grpc/internal/transport.(*registerStream).isTransportResponseFrame, google.golang.org/grpc/internal/transport.closeConnection.isTransportResponseFrame
+names only in new (55): github.com/prometheus/prometheus/promql.allocateQueryLogFile, google.golang.org/grpc.(*gzipDecompressor).doWithMaxSize, google.golang.org/grpc.(*gzipDecompressor).doWithMaxSize.func1, google.golang.org/grpc.decompress.deferwrap1, google.golang.org/grpc/encoding/gzip.(*reader).Close.deferwrap1, google.golang.org/grpc/internal/envconfig.goroutineLabelsFromEnv, google.golang.org/grpc/internal/envconfig.goroutineLabelsFromEnv-range1, google.golang.org/grpc/internal/transport.(*ClientStream).finalizeNonGRPCStatus, google.golang.org/grpc/internal/transport.(*ClientStream).handleNonGRPCData, google.golang.org/grpc/internal/transport.(*cleanupStream).isThrottled, google.golang.org/grpc/internal/transport.(*clientHeaders).isThrottled, google.golang.org/grpc/internal/transport.(*closeConnection).isThrottled, google.golang.org/grpc/internal/transport.(*dataFrame).isThrottled, google.golang.org/grpc/internal/transport.(*earlyAbortStream).isThrottled, google.golang.org/grpc/internal/transport.(*goAway).isThrottled, google.golang.org/grpc/internal/transport.(*http2Server).incrMsgSent, google.golang.org/grpc/internal/transport.(*inFlow).onData.deferwrap1, google.golang.org/grpc/internal/transport.(*inFlow).onRead.deferwrap1, google.golang.org/grpc/internal/transport.(*incomingGoAway).isThrottled, google.golang.org/grpc/internal/transport.(*incomingSettings).isThrottled, google.golang.org/grpc/internal/transport.(*incomingWindowUpdate).isThrottled, google.golang.org/grpc/internal/transport.(*loopyWriter).clientHeaderHandler, google.golang.org/grpc/internal/transport.(*loopyWriter).serverHeaderHandler, google.golang.org/grpc/internal/transport.(*loopyWriter).updateStreamAfterWrite, google.golang.org/grpc/internal/transport.(*outFlowControlSizeRequest).isThrottled, google.golang.org/grpc/internal/transport.(*outgoingSettings).isThrottled, google.golang.org/grpc/internal/transport.(*outgoingWindowUpdate).isThrottled, google.golang.org/grpc/internal/transport.(*ping).isThrottled, google.golang.org/grpc/internal/transport.(*registerStream).isThrottled, google.golang.org/grpc/internal/transport.(*serverHeaders).isThrottled, google.golang.org/grpc/internal/transport.(*throttledItem).isThrottled, google.golang.org/grpc/internal/transport.cleanupStream.isThrottled, google.golang.org/grpc/internal/transport.closeConnection.isThrottled, google.golang.org/grpc/internal/transport.earlyAbortStream.isThrottled, google.golang.org/grpc/internal/transport.goAway.isThrottled, google.golang.org/grpc/internal/transport.incomingGoAway.isThrottled, google.golang.org/grpc/internal/transport.incomingSettings.isThrottled, google.golang.org/grpc/internal/transport.incomingWindowUpdate.isThrottled, google.golang.org/grpc/internal/transport.init.0, google.golang.org/grpc/internal/transport.init.0.func1, google.golang.org/grpc/internal/transport.outFlowControlSizeRequest.isThrottled, google.golang.org/grpc/internal/transport.outgoingSettings.isThrottled, google.golang.org/grpc/internal/transport.outgoingWindowUpdate.isThrottled, google.golang.org/grpc/internal/transport.ping.isThrottled, google.golang.org/grpc/internal/transport.registerStream.isThrottled, google.golang.org/grpc/internal/transport.throttledItem.isThrottled, runtime/pprof.Labels, runtime/pprof.Labels.func1, runtime/pprof.SetGoroutineLabels, runtime/pprof.WithLabels, runtime/pprof.mergeLabelSets, runtime/pprof.runtime_setProfLabel, slices.rotateCmpFunc[go.shape.struct { Key string; Value string }], slices.stableCmpFunc[go.shape.struct { Key string; Value string }], slices.symMergeCmpFunc[go.shape.struct { Key string; Value string }]
+match: exact-name=113762 normalised-name=0 size+content=5 unmatched-new=50 unmatched-old=13 (new has 113817, old has 113780)
+matched functions: size changed=28 (old 101472 B -> new 103104 B) moved=111856 bytes-identical=22741 content-changed(after masking PC-rel fields)=80
+size-changed: golang.org/x/text/unicode/norm.compInfo(512->576), golang.org/x/text/unicode/norm.(*formInfo).quickSpan(960->992), golang.org/x/text/unicode/norm.decomposeSegment(1472->1504), golang.org/x/crypto/pkcs12.pbDecrypterFor(768->800), golang.org/x/crypto/pkcs12.verifyMac(544->576), google.golang.org/grpc/internal/envconfig.init(992->1120), google.golang.org/grpc/internal/transport.(*controlBuffer).finish(608->576), google.golang.org/grpc/internal/transport.(*loopyWriter).handle(960->992), google.golang.org/grpc/internal/transport.(*loopyWriter).processData(2656->1824), google.golang.org/grpc/internal/transport.(*inFlow).onData(352->448), google.golang.org/grpc/internal/transport.(*inFlow).onRead(288->352), google.golang.org/grpc/internal/transport.(*serverHandlerTransport).Drain(64->160), google.golang.org/grpc/internal/transport.NewHTTP2Client(10176->10208), google.golang.org/grpc/internal/transport.(*http2Client).NewStream(3584->3552), google.golang.org/grpc/internal/transport.(*http2Client).NewStream.func4(576->544), google.golang.org/grpc/internal/transport.(*http2Client).handleData(1216->1504), google.golang.org/grpc/internal/transport.(*http2Client).operateHeaders(7680->8064), google.golang.org/grpc/internal/transport.NewServerTransport(7232->7264), google.golang.org/grpc/internal/transport.(*http2Server).checkForHeaderListSize(608->576), google.golang.org/grpc/internal/transport.(*http2Server).write(1088->1024), google.golang.org/grpc/internal/transport.(*http2Server).incrMsgRecv(64->96), google.golang.org/grpc.decompress(2400->3360), google.golang.org/grpc.(*Server).handleStream(3680->3456), github.com/prometheus/prometheus/promql.getMMappedFile(1312->1344), github.com/prometheus/prometheus/promql.NewActiveQueryTracker(832->1216), google.golang.org/grpc/encoding/gzip.(*reader).Read(224->96), google.golang.org/grpc/encoding/gzip.(*reader).Close(64->192), main.main(50560->50688)
+  matched by c: new google.golang.org/grpc/internal/transport.throttledItem.isThrottled <- old google.golang.org/grpc/internal/transport.(*incomingSettings).isTransportResponseFrame
+  matched by c: new google.golang.org/grpc/internal/transport.(*clientHeaders).isThrottled <- old google.golang.org/grpc/internal/transport.(*registerStream).isTransportResponseFrame
+  matched by c: new google.golang.org/grpc/internal/transport.(*serverHeaders).isThrottled <- old google.golang.org/grpc/internal/transport.(*earlyAbortStream).isTransportResponseFrame
+  matched by c: new google.golang.org/grpc/internal/transport.(*dataFrame).isThrottled <- old google.golang.org/grpc/internal/transport.(*dataFrame).isTransportResponseFrame
+  matched by c: new google.golang.org/grpc/internal/transport.ping.isThrottled <- old google.golang.org/grpc/internal/transport.(*ping).isTransportResponseFrame
+  unmatched new: runtime/pprof.runtime_setProfLabel (96 B)
+  unmatched new: google.golang.org/grpc/internal/envconfig.goroutineLabelsFromEnv (448 B)
+  unmatched new: google.golang.org/grpc/internal/envconfig.goroutineLabelsFromEnv-range1 (416 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*ClientStream).finalizeNonGRPCStatus (384 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*ClientStream).handleNonGRPCData (416 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*loopyWriter).serverHeaderHandler (384 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*loopyWriter).clientHeaderHandler (416 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*loopyWriter).updateStreamAfterWrite (384 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*inFlow).onData.deferwrap1 (64 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*inFlow).onRead.deferwrap1 (64 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*http2Server).incrMsgSent (96 B)
+  unmatched new: google.golang.org/grpc/internal/transport.init.0 (64 B)
+  unmatched new: google.golang.org/grpc/internal/transport.init.0.func1 (96 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*throttledItem).isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*ping).isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.goAway.isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*goAway).isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.outgoingWindowUpdate.isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*outgoingWindowUpdate).isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.incomingWindowUpdate.isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*incomingWindowUpdate).isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.outgoingSettings.isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*outgoingSettings).isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.incomingSettings.isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*incomingSettings).isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.registerStream.isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*registerStream).isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.cleanupStream.isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*cleanupStream).isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.outFlowControlSizeRequest.isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*outFlowControlSizeRequest).isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.earlyAbortStream.isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*earlyAbortStream).isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.incomingGoAway.isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*incomingGoAway).isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.closeConnection.isThrottled (32 B)
+  unmatched new: google.golang.org/grpc/internal/transport.(*closeConnection).isThrottled (32 B)
+  unmatched new: runtime/pprof.WithLabels (352 B)
+  unmatched new: runtime/pprof.mergeLabelSets (1632 B)
+  unmatched new: runtime/pprof.Labels (1312 B)
+  unmatched new: runtime/pprof.SetGoroutineLabels (128 B)
+  unmatched new: runtime/pprof.Labels.func1 (160 B)
+  unmatched new: slices.stableCmpFunc[go.shape.struct { Key string; Value string }] (1472 B)
+  unmatched new: slices.symMergeCmpFunc[go.shape.struct { Key string; Value string }] (1760 B)
+  unmatched new: slices.rotateCmpFunc[go.shape.struct { Key string; Value string }] (1056 B)
+  unmatched new: google.golang.org/grpc.(*gzipDecompressor).doWithMaxSize (768 B)
+  unmatched new: google.golang.org/grpc.(*gzipDecompressor).doWithMaxSize.func1 (96 B)
+  unmatched new: google.golang.org/grpc.decompress.deferwrap1 (64 B)
+  unmatched new: github.com/prometheus/prometheus/promql.allocateQueryLogFile (256 B)
+  unmatched new: google.golang.org/grpc/encoding/gzip.(*reader).Close.deferwrap1 (64 B)
+  unmatched old: google.golang.org/grpc/internal/transport.(*headerFrame).isTransportResponseFrame (32 B)
+  unmatched old: google.golang.org/grpc/internal/transport.(*cleanupStream).isTransportResponseFrame (32 B)
+  unmatched old: google.golang.org/grpc/internal/transport.(*incomingWindowUpdate).isTransportResponseFrame (32 B)
+  unmatched old: google.golang.org/grpc/internal/transport.(*outgoingWindowUpdate).isTransportResponseFrame (32 B)
+  unmatched old: google.golang.org/grpc/internal/transport.(*outgoingSettings).isTransportResponseFrame (32 B)
+  unmatched old: google.golang.org/grpc/internal/transport.(*incomingGoAway).isTransportResponseFrame (32 B)
+  unmatched old: google.golang.org/grpc/internal/transport.(*goAway).isTransportResponseFrame (32 B)
+  unmatched old: google.golang.org/grpc/internal/transport.(*outFlowControlSizeRequest).isTransportResponseFrame (32 B)
+  unmatched old: google.golang.org/grpc/internal/transport.closeConnection.isTransportResponseFrame (32 B)
+  unmatched old: google.golang.org/grpc/internal/transport.(*loopyWriter).headerHandler (544 B)
+  unmatched old: google.golang.org/grpc/internal/transport.(*loopyWriter).originateStream (288 B)
+  unmatched old: google.golang.org/grpc/internal/transport.(*closeConnection).isTransportResponseFrame (32 B)
+  unmatched old: google.golang.org/grpc/encoding/gzip.reader.Close (96 B)
+layout table: 113817 functions, raw delta encoding 230951 B, zstd -19 1097 B

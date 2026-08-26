@@ -1,0 +1,150 @@
+48 parallel jobs (4 workers), 24 multithreaded jobs, 0 big-pair jobs (serial)
+[   501s] prometheus-3.13.1-3.13.2             bsdiff               28108743 enc=160.15 rss=1167MB dec=1.51 ok=True 
+[   501s] prometheus-3.13.1-3.13.2             hdiffz-m6            27879860 enc=35.29 rss=434MB dec=0.09 ok=True 
+[   501s] prometheus-3.13.1-3.13.2             hdiffz-s64           36544395 enc=20.75 rss=217MB dec=0.16 ok=True 
+[   501s] prometheus-3.13.1-3.13.2             zstd-19              33438259 enc=32.4 rss=669MB dec=0.22 ok=True 
+[   501s] prometheus-3.13.1-3.13.2             xdelta3-9-lzma       37570665 enc=17.64 rss=1342MB dec=0.59 ok=True 
+[   501s] prometheus-3.13.1-3.13.2             full-zstd-19         49598993 enc=12.5 rss=504MB dec=0.09 ok=True 
+[   501s] prometheus-3.13.1-3.13.2-stripped    bsdiff                2714204 enc=54.49 rss=838MB dec=0.51 ok=True 
+[   501s] prometheus-3.13.1-3.13.2-stripped    hdiffz-m6             2732978 enc=15.5 rss=392MB dec=0.1 ok=True 
+[   501s] prometheus-3.13.1-3.13.2-stripped    hdiffz-s64           11390472 enc=15.48 rss=217MB dec=0.11 ok=True 
+[   501s] prometheus-3.13.1-3.13.2-stripped    zstd-19               8279163 enc=29.93 rss=427MB dec=0.14 ok=True 
+[   501s] prometheus-3.13.1-3.13.2-stripped    xdelta3-9-lzma       11256241 enc=10.04 rss=765MB dec=0.46 ok=True 
+[   501s] prometheus-3.13.1-3.13.2-stripped    full-zstd-19         23808116 enc=10.57 rss=362MB dec=0.08 ok=True 
+[   873s] prometheus-3.13.2-3.14.0             bsdiff               36068700 enc=193.12 rss=1167MB dec=2.02 ok=True 
+[   873s] prometheus-3.13.2-3.14.0             hdiffz-m6            34677348 enc=39.1 rss=479MB dec=0.14 ok=True 
+[   873s] prometheus-3.13.2-3.14.0             hdiffz-s64           42108809 enc=22.22 rss=217MB dec=0.16 ok=True 
+[   873s] prometheus-3.13.2-3.14.0             zstd-19              39287096 enc=30.77 rss=681MB dec=0.19 ok=True 
+[   873s] prometheus-3.13.2-3.14.0             xdelta3-9-lzma       42730327 enc=16.62 rss=1339MB dec=0.62 ok=True 
+[   873s] prometheus-3.13.2-3.14.0             full-zstd-19         50819527 enc=11.95 rss=511MB dec=0.16 ok=True 
+[   873s] prometheus-3.13.2-3.14.0-stripped    bsdiff                9808003 enc=80.87 rss=838MB dec=1.07 ok=True 
+[   873s] prometheus-3.13.2-3.14.0-stripped    hdiffz-m6             8599007 enc=20.06 rss=428MB dec=0.1 ok=True 
+[   873s] prometheus-3.13.2-3.14.0-stripped    hdiffz-s64           16225396 enc=17.09 rss=217MB dec=0.15 ok=True 
+[   873s] prometheus-3.13.2-3.14.0-stripped    zstd-19              13425596 enc=33.37 rss=437MB dec=0.17 ok=True 
+[   873s] prometheus-3.13.2-3.14.0-stripped    xdelta3-9-lzma       17343600 enc=12.58 rss=770MB dec=0.51 ok=True 
+[   873s] prometheus-3.13.2-3.14.0-stripped    full-zstd-19         24326673 enc=10.59 rss=449MB dec=0.07 ok=True 
+[   873s] kube-apiserver-1.36.3-1.36.4         bsdiff                2060250 enc=49.64 rss=759MB dec=0.44 ok=True 
+[   873s] kube-apiserver-1.36.3-1.36.4         hdiffz-m6             2366695 enc=15.21 rss=373MB dec=0.09 ok=True 
+[   873s] kube-apiserver-1.36.3-1.36.4         hdiffz-s64           10388211 enc=13.32 rss=217MB dec=0.11 ok=True 
+[   873s] kube-apiserver-1.36.3-1.36.4         zstd-19               7078385 enc=29.5 rss=409MB dec=0.13 ok=True 
+[   873s] kube-apiserver-1.36.3-1.36.4         xdelta3-9-lzma       10044293 enc=9.64 rss=757MB dec=0.38 ok=True 
+[   873s] kube-apiserver-1.36.3-1.36.4         full-zstd-19         19072059 enc=11.29 rss=349MB dec=0.07 ok=True 
+[  1075s] terraform-1.15.8-1.15.9              bsdiff                5427575 enc=85.04 rss=1007MB dec=0.9 ok=True 
+[  1075s] terraform-1.15.8-1.15.9              hdiffz-m6             4918933 enc=19.92 rss=501MB dec=0.12 ok=True 
+[  1075s] terraform-1.15.8-1.15.9              hdiffz-s64           14826573 enc=18.93 rss=217MB dec=0.15 ok=True 
+[  1075s] terraform-1.15.8-1.15.9              zstd-19              11320635 enc=40.85 rss=470MB dec=0.17 ok=True 
+[  1075s] terraform-1.15.8-1.15.9              xdelta3-9-lzma       15065548 enc=15.45 rss=787MB dec=0.55 ok=True 
+[  1075s] terraform-1.15.8-1.15.9              full-zstd-19         25547524 enc=12.65 rss=464MB dec=0.1 ok=True 
+[  1075s] F2.v1-v5                             bsdiff                 470031 enc=9.52 rss=254MB dec=0.18 ok=True 
+[  1075s] F2.v1-v5                             hdiffz-m6              572895 enc=3.07 rss=125MB dec=0.02 ok=True 
+[  1075s] F2.v1-v5                             hdiffz-s64            3445605 enc=3.16 rss=211MB dec=0.09 ok=True 
+[  1075s] F2.v1-v5                             zstd-19               1758395 enc=18.5 rss=159MB dec=0.04 ok=True 
+[  1075s] F2.v1-v5                             xdelta3-9-lzma        2721791 enc=3.41 rss=315MB dec=0.12 ok=True 
+[  1075s] F2.v1-v5                             full-zstd-19          8433714 enc=8.01 rss=121MB dec=0.03 ok=True 
+[  1075s] F2.v4-v5                             bsdiff                 470743 enc=9.45 rss=254MB dec=0.12 ok=True 
+[  1075s] F2.v4-v5                             hdiffz-m6              578505 enc=2.99 rss=125MB dec=0.02 ok=True 
+[  1075s] F2.v4-v5                             hdiffz-s64            3445613 enc=3.3 rss=211MB dec=0.04 ok=True 
+[  1075s] F2.v4-v5                             zstd-19               1755495 enc=17.34 rss=159MB dec=0.05 ok=True 
+[  1075s] F2.v4-v5                             xdelta3-9-lzma        2723865 enc=2.81 rss=315MB dec=0.11 ok=True 
+[  1075s] F2.v4-v5                             full-zstd-19          8433714 enc=7.68 rss=121MB dec=0.03 ok=True 
+[  1139s] prometheus-3.13.1-3.13.2             hdiffz-m6-p8         27879870 enc=17.66 rss=441MB dec=0.11 ok=True 
+[  1248s] prometheus-3.13.1-3.13.2             zstd-19-T0           33438259 enc=32.89 rss=669MB dec=0.2 ok=True 
+[  1285s] prometheus-3.13.1-3.13.2             full-zstd-19-T0      49598993 enc=11.31 rss=584MB dec=0.09 ok=True 
+[  1308s] prometheus-3.13.1-3.13.2-stripped    hdiffz-m6-p8          2730887 enc=7.49 rss=397MB dec=0.06 ok=True 
+[  1424s] prometheus-3.13.1-3.13.2-stripped    zstd-19-T0            8279163 enc=31.78 rss=427MB dec=0.3 ok=True 
+[  1471s] prometheus-3.13.1-3.13.2-stripped    full-zstd-19-T0      23808116 enc=12.39 rss=363MB dec=0.08 ok=True 
+[  1524s] prometheus-3.13.2-3.14.0             hdiffz-m6-p8         34665529 enc=16.91 rss=490MB dec=0.13 ok=True 
+[  1628s] prometheus-3.13.2-3.14.0             zstd-19-T0           39287096 enc=30.51 rss=681MB dec=0.2 ok=True 
+[  1665s] prometheus-3.13.2-3.14.0             full-zstd-19-T0      50819527 enc=10.59 rss=592MB dec=0.14 ok=True 
+[  1700s] prometheus-3.13.2-3.14.0-stripped    hdiffz-m6-p8          8593347 enc=10.72 rss=440MB dec=0.09 ok=True 
+[  1839s] prometheus-3.13.2-3.14.0-stripped    zstd-19-T0           13425596 enc=41.89 rss=438MB dec=0.22 ok=True 
+[  1881s] prometheus-3.13.2-3.14.0-stripped    full-zstd-19-T0      24326673 enc=11.95 rss=449MB dec=0.08 ok=True 
+[  1903s] kube-apiserver-1.36.3-1.36.4         hdiffz-m6-p8          2367788 enc=7.0 rss=377MB dec=0.08 ok=True 
+[  1993s] kube-apiserver-1.36.3-1.36.4         zstd-19-T0            7078385 enc=28.55 rss=409MB dec=0.11 ok=True 
+[  2028s] kube-apiserver-1.36.3-1.36.4         full-zstd-19-T0      19072059 enc=10.99 rss=349MB dec=0.07 ok=True 
+[  2058s] terraform-1.15.8-1.15.9              hdiffz-m6-p8          4913545 enc=9.71 rss=510MB dec=0.08 ok=True 
+[  2159s] terraform-1.15.8-1.15.9              zstd-19-T0           11320635 enc=32.47 rss=470MB dec=0.16 ok=True 
+[  2194s] terraform-1.15.8-1.15.9              full-zstd-19-T0      25547524 enc=10.9 rss=464MB dec=0.09 ok=True 
+[  2199s] F2.v1-v5                             hdiffz-m6-p8           573285 enc=1.5 rss=128MB dec=0.01 ok=True 
+[  2249s] F2.v1-v5                             zstd-19-T0            1758395 enc=14.94 rss=160MB dec=0.03 ok=True 
+[  2273s] F2.v1-v5                             full-zstd-19-T0       8433714 enc=7.71 rss=121MB dec=0.02 ok=True 
+[  2278s] F2.v4-v5                             hdiffz-m6-p8           579001 enc=1.61 rss=129MB dec=0.01 ok=True 
+[  2320s] F2.v4-v5                             zstd-19-T0            1755495 enc=13.56 rss=160MB dec=0.03 ok=True 
+[  2340s] F2.v4-v5                             full-zstd-19-T0       8433714 enc=6.46 rss=121MB dec=0.03 ok=True 
+
+| pair | method | patch B | enc s | enc RSS MB | apply s | apply RSS MB | verified |
+|---|---|---:|---:|---:|---:|---:|---|
+| prometheus-3.13.1-3.13.2 | bsdiff | 28,108,743 | 160.15 | 1167 | 1.51 | 268 | True |
+| prometheus-3.13.1-3.13.2 | hdiffz-m6 | 27,879,860 | 35.29 | 435 | 0.09 | 27 | True |
+| prometheus-3.13.1-3.13.2 | hdiffz-s64 | 36,544,395 | 20.75 | 217 | 0.16 | 27 | True |
+| prometheus-3.13.1-3.13.2 | zstd-19 | 33,438,259 | 32.40 | 670 | 0.22 | 264 | True |
+| prometheus-3.13.1-3.13.2 | xdelta3-9-lzma | 37,570,665 | 17.64 | 1342 | 0.59 | 192 | True |
+| prometheus-3.13.1-3.13.2 | full-zstd-19 | 49,598,993 | 12.50 | 505 | 0.09 | 13 | True |
+| prometheus-3.13.1-3.13.2-stripped | bsdiff | 2,714,204 | 54.49 | 839 | 0.51 | 195 | True |
+| prometheus-3.13.1-3.13.2-stripped | hdiffz-m6 | 2,732,978 | 15.50 | 392 | 0.10 | 26 | True |
+| prometheus-3.13.1-3.13.2-stripped | hdiffz-s64 | 11,390,472 | 15.48 | 217 | 0.11 | 27 | True |
+| prometheus-3.13.1-3.13.2-stripped | zstd-19 | 8,279,163 | 29.93 | 428 | 0.14 | 190 | True |
+| prometheus-3.13.1-3.13.2-stripped | xdelta3-9-lzma | 11,256,241 | 10.04 | 766 | 0.46 | 124 | True |
+| prometheus-3.13.1-3.13.2-stripped | full-zstd-19 | 23,808,116 | 10.57 | 363 | 0.08 | 13 | True |
+| prometheus-3.13.2-3.14.0 | bsdiff | 36,068,700 | 193.12 | 1168 | 2.02 | 277 | True |
+| prometheus-3.13.2-3.14.0 | hdiffz-m6 | 34,677,348 | 39.10 | 479 | 0.14 | 27 | True |
+| prometheus-3.13.2-3.14.0 | hdiffz-s64 | 42,108,809 | 22.22 | 218 | 0.16 | 27 | True |
+| prometheus-3.13.2-3.14.0 | zstd-19 | 39,287,096 | 30.77 | 682 | 0.19 | 269 | True |
+| prometheus-3.13.2-3.14.0 | xdelta3-9-lzma | 42,730,327 | 16.62 | 1339 | 0.62 | 187 | True |
+| prometheus-3.13.2-3.14.0 | full-zstd-19 | 50,819,527 | 11.95 | 512 | 0.16 | 13 | True |
+| prometheus-3.13.2-3.14.0-stripped | bsdiff | 9,808,003 | 80.87 | 839 | 1.07 | 203 | True |
+| prometheus-3.13.2-3.14.0-stripped | hdiffz-m6 | 8,599,007 | 20.06 | 428 | 0.10 | 27 | True |
+| prometheus-3.13.2-3.14.0-stripped | hdiffz-s64 | 16,225,396 | 17.09 | 218 | 0.15 | 28 | True |
+| prometheus-3.13.2-3.14.0-stripped | zstd-19 | 13,425,596 | 33.37 | 438 | 0.17 | 196 | True |
+| prometheus-3.13.2-3.14.0-stripped | xdelta3-9-lzma | 17,343,600 | 12.58 | 770 | 0.51 | 130 | True |
+| prometheus-3.13.2-3.14.0-stripped | full-zstd-19 | 24,326,673 | 10.59 | 449 | 0.07 | 13 | True |
+| kube-apiserver-1.36.3-1.36.4 | bsdiff | 2,060,250 | 49.64 | 760 | 0.44 | 175 | True |
+| kube-apiserver-1.36.3-1.36.4 | hdiffz-m6 | 2,366,695 | 15.21 | 373 | 0.09 | 23 | True |
+| kube-apiserver-1.36.3-1.36.4 | hdiffz-s64 | 10,388,211 | 13.32 | 218 | 0.11 | 27 | True |
+| kube-apiserver-1.36.3-1.36.4 | zstd-19 | 7,078,385 | 29.50 | 410 | 0.13 | 173 | True |
+| kube-apiserver-1.36.3-1.36.4 | xdelta3-9-lzma | 10,044,293 | 9.64 | 757 | 0.38 | 117 | True |
+| kube-apiserver-1.36.3-1.36.4 | full-zstd-19 | 19,072,059 | 11.29 | 349 | 0.07 | 13 | True |
+| terraform-1.15.8-1.15.9 | bsdiff | 5,427,575 | 85.04 | 1008 | 0.90 | 236 | True |
+| terraform-1.15.8-1.15.9 | hdiffz-m6 | 4,918,933 | 19.92 | 502 | 0.12 | 26 | True |
+| terraform-1.15.8-1.15.9 | hdiffz-s64 | 14,826,573 | 18.93 | 218 | 0.15 | 28 | True |
+| terraform-1.15.8-1.15.9 | zstd-19 | 11,320,635 | 40.85 | 471 | 0.17 | 228 | True |
+| terraform-1.15.8-1.15.9 | xdelta3-9-lzma | 15,065,548 | 15.45 | 787 | 0.55 | 146 | True |
+| terraform-1.15.8-1.15.9 | full-zstd-19 | 25,547,524 | 12.65 | 465 | 0.10 | 13 | True |
+| F2.v1-v5 | bsdiff | 470,031 | 9.52 | 255 | 0.18 | 62 | True |
+| F2.v1-v5 | hdiffz-m6 | 572,895 | 3.07 | 126 | 0.02 | 13 | True |
+| F2.v1-v5 | hdiffz-s64 | 3,445,605 | 3.16 | 211 | 0.09 | 23 | True |
+| F2.v1-v5 | zstd-19 | 1,758,395 | 18.50 | 160 | 0.04 | 60 | True |
+| F2.v1-v5 | xdelta3-9-lzma | 2,721,791 | 3.41 | 316 | 0.12 | 52 | True |
+| F2.v1-v5 | full-zstd-19 | 8,433,714 | 8.01 | 121 | 0.03 | 12 | True |
+| F2.v4-v5 | bsdiff | 470,743 | 9.45 | 255 | 0.12 | 62 | True |
+| F2.v4-v5 | hdiffz-m6 | 578,505 | 2.99 | 126 | 0.02 | 13 | True |
+| F2.v4-v5 | hdiffz-s64 | 3,445,613 | 3.30 | 211 | 0.04 | 23 | True |
+| F2.v4-v5 | zstd-19 | 1,755,495 | 17.34 | 160 | 0.05 | 61 | True |
+| F2.v4-v5 | xdelta3-9-lzma | 2,723,865 | 2.81 | 316 | 0.11 | 52 | True |
+| F2.v4-v5 | full-zstd-19 | 8,433,714 | 7.68 | 121 | 0.03 | 12 | True |
+| prometheus-3.13.1-3.13.2 | hdiffz-m6-p8 | 27,879,870 | 17.66 | 442 | 0.11 | 27 | True |
+| prometheus-3.13.1-3.13.2 | zstd-19-T0 | 33,438,259 | 32.89 | 670 | 0.20 | 263 | True |
+| prometheus-3.13.1-3.13.2 | full-zstd-19-T0 | 49,598,993 | 11.31 | 585 | 0.09 | 13 | True |
+| prometheus-3.13.1-3.13.2-stripped | hdiffz-m6-p8 | 2,730,887 | 7.49 | 398 | 0.06 | 26 | True |
+| prometheus-3.13.1-3.13.2-stripped | zstd-19-T0 | 8,279,163 | 31.78 | 428 | 0.30 | 191 | True |
+| prometheus-3.13.1-3.13.2-stripped | full-zstd-19-T0 | 23,808,116 | 12.39 | 363 | 0.08 | 13 | True |
+| prometheus-3.13.2-3.14.0 | hdiffz-m6-p8 | 34,665,529 | 16.91 | 491 | 0.13 | 26 | True |
+| prometheus-3.13.2-3.14.0 | zstd-19-T0 | 39,287,096 | 30.51 | 682 | 0.20 | 269 | True |
+| prometheus-3.13.2-3.14.0 | full-zstd-19-T0 | 50,819,527 | 10.59 | 592 | 0.14 | 13 | True |
+| prometheus-3.13.2-3.14.0-stripped | hdiffz-m6-p8 | 8,593,347 | 10.72 | 440 | 0.09 | 26 | True |
+| prometheus-3.13.2-3.14.0-stripped | zstd-19-T0 | 13,425,596 | 41.89 | 438 | 0.22 | 195 | True |
+| prometheus-3.13.2-3.14.0-stripped | full-zstd-19-T0 | 24,326,673 | 11.95 | 450 | 0.08 | 13 | True |
+| kube-apiserver-1.36.3-1.36.4 | hdiffz-m6-p8 | 2,367,788 | 7.00 | 378 | 0.08 | 23 | True |
+| kube-apiserver-1.36.3-1.36.4 | zstd-19-T0 | 7,078,385 | 28.55 | 409 | 0.11 | 172 | True |
+| kube-apiserver-1.36.3-1.36.4 | full-zstd-19-T0 | 19,072,059 | 10.99 | 349 | 0.07 | 12 | True |
+| terraform-1.15.8-1.15.9 | hdiffz-m6-p8 | 4,913,545 | 9.71 | 510 | 0.08 | 26 | True |
+| terraform-1.15.8-1.15.9 | zstd-19-T0 | 11,320,635 | 32.47 | 471 | 0.16 | 228 | True |
+| terraform-1.15.8-1.15.9 | full-zstd-19-T0 | 25,547,524 | 10.90 | 465 | 0.09 | 12 | True |
+| F2.v1-v5 | hdiffz-m6-p8 | 573,285 | 1.50 | 129 | 0.01 | 13 | True |
+| F2.v1-v5 | zstd-19-T0 | 1,758,395 | 14.94 | 160 | 0.03 | 60 | True |
+| F2.v1-v5 | full-zstd-19-T0 | 8,433,714 | 7.71 | 121 | 0.02 | 12 | True |
+| F2.v4-v5 | hdiffz-m6-p8 | 579,001 | 1.61 | 129 | 0.01 | 13 | True |
+| F2.v4-v5 | zstd-19-T0 | 1,755,495 | 13.56 | 160 | 0.03 | 60 | True |
+| F2.v4-v5 | full-zstd-19-T0 | 8,433,714 | 6.46 | 121 | 0.03 | 12 | True |
+
+wrote /home/will/Code/binsync/bench/out/results/scale-small.json (72 records)

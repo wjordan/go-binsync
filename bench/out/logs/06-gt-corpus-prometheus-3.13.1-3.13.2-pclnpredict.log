@@ -1,0 +1,28 @@
+== pclnpredict ../out/corpus/prometheus/3.13.1/prometheus.stripped -> ../out/corpus/prometheus/3.13.2/prometheus.stripped
+findfunctab regeneration for prometheus.stripped: 207113 bytes, identical=true
+findfunctab regeneration for prometheus.stripped: 207178 bytes, identical=true
+self-prediction self: len 34612073 vs 34612073, differing bytes=0 runs=0
+self-prediction self-rebuild: len 34612073 vs 34612073, differing bytes=0 runs=0
+self-prediction self-oracle: len 34612073 vs 34612073, differing bytes=0 runs=0
+self-prediction self-oracle-names: len 34612073 vs 34612073, differing bytes=0 runs=0
+region              newsize    rawdiff       runs     bsdiff     hdiffz       zstd
+funcnametab         9978040    9441672     349065       1398       1065          0
+cutab                334808     176298      63305      16161      20296          0
+filetab              361016     335101      14241        523        511          0
+pctab               7705392    7127414     311036      13986      12411          0
+functab+_func      10862016    7971978    1943757     844606     778909          0
+go:func.*           5173112    2098178     827560      58063      59396          0
+findfunctab          207178     121840      18314      75371      59432          0
+BASELINE old.gopclntab -> new.gopclntab: bsdiff=1036118 hdiffz=938925 zstd=0 rawdiff=27925818 runs=3549704
+V1 functab/entryOff relayout only (names appended, old pctab/funcdata offsets):
+    bsdiff=407213 hdiffz=458964 zstd=0 rawdiff=27715017 runs=3590271 (pred len 34618938 vs new 34621634)
+V2 V1 + funcnametab rebuilt in layout order:
+    bsdiff=403207 hdiffz=451874 zstd=0 rawdiff=27099465 runs=3548273 (pred len 34617882 vs new 34621634)
+V3 V2 + NEW pctab/go:func.* given, old offsets re-based via content map:
+    bsdiff=53504 hdiffz=67043 zstd=0 rawdiff=26302805 runs=3470107 (pred len 34621282 vs new 34621634)
+V4 NEW funcnametab/cutab/filetab/pctab/go:func.* given (own deltas); nameOff by lookup, other offsets re-based:
+    bsdiff=11643 hdiffz=14982 zstd=0 rawdiff=7914662 runs=2001969 (pred len 34621762 vs new 34621634)
+V3 total = V3 residual + pctab delta + go:func.* delta: bsdiff 53504+13986+58063=125553 hdiffz 67043+12411+59396=138850 zstd 0+0+0=0
+V4 total = V4 residual + funcnametab + cutab + filetab + pctab + go:func.* deltas: bsdiff 11643+1398+16161+523+13986+58063=101774 hdiffz 108661 zstd 0
+V4 residual by region (differing bytes at same offset, new layout): funcnametab=0 cutab=0 filetab=0 pctab=0 functab+_func=6062072 go:func.*=1667233 findfunctab=185228
+pctab map: blocks=481439 matched=480574 ambiguous=3 unmatched=862 shift-changes=214; go:func.* map: blocks=323256 matched=322796 ambiguous=0 unmatched=460 shift-changes=58

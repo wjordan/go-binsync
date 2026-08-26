@@ -1,0 +1,12 @@
+panic: skeleton: blobs are 0 bytes, layout implies 14940496
+
+goroutine 1 [running]:
+main.must(...)
+	/home/will/Code/binsync/bench/gotransform/measure.go:172
+main.cmdEncode({0x3d9dba7801a0, 0x4, 0x4})
+	/home/will/Code/binsync/bench/gotransform/codec.go:311 +0x2ca7
+main.main()
+	/home/will/Code/binsync/bench/gotransform/main.go:55 +0x18d
+cutab: pred 344632 new 344632 hdiffz 1466 B; differing bytes: 135354
+pctab: pred 7822368 new 7822368 hdiffz 14367 B; differing bytes: 7222176
+gofunc: pred 6773496 new 6773496 hdiffz 3410 B; differing bytes: 2003182

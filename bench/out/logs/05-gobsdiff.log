@@ -1,0 +1,3 @@
+go-bsdiff: patch=69589 B encode=9.00s decode=0.05s roundtrip=true sys=623 MB heap_peak~=616 MB
+wall_9.13_s_maxrss_553440_KB
+exit=0

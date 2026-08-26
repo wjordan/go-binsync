@@ -1,0 +1,18 @@
+== sectdiff ../out/corpus/vault/2.0.3/vault.stripped -> ../out/corpus/vault/2.0.4/vault.stripped
+WARN: bsdiff [/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt/sd-vault.stripped-vault.stripped-.text.old /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt/sd-vault.stripped-vault.stripped-.text.new /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt/sd-vault.stripped-vault.stripped-.text.bsdiff]: signal: terminated: 
+WARN: bsdiff [/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt/sd-vault.stripped-vault.stripped-whole.old /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt/sd-vault.stripped-vault.stripped-whole.new /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt/sd-vault.stripped-vault.stripped-whole.bsdiff]: signal: terminated: 
+section                  size    rawdiff       runs     bsdiff     hdiffz       zstd
+.note.go.buildid          100         79          5        238        114        105
+.note.gnu.build-id         36         20          1        192         50         40
+.text               159148337  150221698    4410556         -1    3887504   17842275
+.rodata              94992985   70432704    6463469    2674593    3192050    7330226
+.gopclntab          135404350  113604239   12779582    4889537    4124406    9906307
+.typelink              857692     618248     164039     504649     437895     431506
+.itablink              148704      54502      18563      19811      33868      24503
+.go.buildinfo           48624      18529        303       1372       1154        911
+.go.fipsinfo              120         59          9        255        102         99
+.go.module                592        128         51        295        203        177
+.noptrdata            1398305    1023300     125937       6603       6443      10333
+.data                 1758882     463177     153366     108233      83087      98070
+SUM(sections)                  186214985   19705325    8205778    7879372   17802277
+WHOLE FILE          393769576  344107127   22573225         -1   11752681   36507981  (bsdiff 244.4s hdiffz 112.3s zstd 80.3s)

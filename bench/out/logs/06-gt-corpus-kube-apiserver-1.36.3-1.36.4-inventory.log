@@ -1,0 +1,129 @@
+== ../out/corpus/kube-apiserver/1.36.3/kube-apiserver (88387746 bytes)
+sections (allocated, by address):
+  .note.go.buildid   addr=0x400f78   off=0xf78     size=      100
+  .note.gnu.build-id addr=0x400fdc   off=0xfdc     size=       36
+  .text              addr=0x401000   off=0x1000    size= 42289201
+  .rodata            addr=0x2c56000  off=0x2856000 size= 12649465
+  .gopclntab         addr=0x3866400  off=0x3466400 size= 32403861
+  .typelink          addr=0x574d5a0  off=0x534d5a0 size=   119404
+  .itablink          addr=0x576a820  off=0x536a820 size=    42784
+  .go.buildinfo      addr=0x5775000  off=0x5375000 size=     5872
+  .go.fipsinfo       addr=0x5776700  off=0x5376700 size=      120
+  .go.module         addr=0x5776780  off=0x5376780 size=      592
+  .noptrdata         addr=0x57769e0  off=0x53769e0 size=   579329
+  .data              addr=0x5804100  off=0x5404100 size=   287730
+  .bss               addr=0x584a500  off=0x544a500 size=   212312
+  .noptrbss          addr=0x587e260  off=0x547e260 size= 33691072
+pclntab: magic ok, nfunc=105507 nfiles=5175 minLC=1 ptrSize=8 section=32403861 bytes
+  funcnametab    off=       72 len=  8799800
+  cutab          off=  8799872 len=  1323976
+  filetab        off= 10123848 len=   284880
+  pctab          off= 10408728 len=  7242880
+  functab+_func  off= 17651608 len= 10061888
+  go:func.*      off= 27713504 len=  4483864
+  findfunctab    off= 32197368 len=   206493
+moduledata: text=0x401000 etext=0x2c55830 minpc=0x401000 maxpc=0x2c55821 types=0x2c56000 etypes=0x38663f9 rodata=0x2c56000 gofunc=0x52d43e0 findfunctab=0x571aef8 epclntab=0x574d595 typelinks=29851 itablinks=5348
+functions: 105507; first internal/cpu.Initialize @0x401000; last go:textfipsend @0x2c55820 end=0x2c55821; .text end=0x2c55831 (gap after last func: 16 bytes)
+entry alignment: 105507 on 32-byte boundary, 0 not ([])
+sum of function sizes (entry to next entry): 42289185 = 100.00% of .text
+duplicate names: 32 distinct names with >1 function (examples: map[internal/bytealg.countGeneric:2 internal/bytealg.countGenericString:2 reflect.callReflect:2 runtime.args:2 runtime.asmcgocall:2 runtime.badmcall2:2 runtime.badmorestackgsignal:2 runtime.debugCallCheck:2 runtime.debugCallWrap:2 syscall.RawSyscall:2])
+name categories: closure(.funcN)=10267 deferwrap=1845 generic[go.shape]=1665 gowrap=222 linker/cgo/rt0=941 method-value(-fm)=569 type:.eq/.hash=2710
+== ../out/corpus/kube-apiserver/1.36.4/kube-apiserver (88436898 bytes)
+sections (allocated, by address):
+  .note.go.buildid   addr=0x400f78   off=0xf78     size=      100
+  .note.gnu.build-id addr=0x400fdc   off=0xfdc     size=       36
+  .text              addr=0x401000   off=0x1000    size= 42306417
+  .rodata            addr=0x2c5a000  off=0x285a000 size= 12657529
+  .gopclntab         addr=0x386c380  off=0x346c380 size= 32425872
+  .typelink          addr=0x5758b20  off=0x5358b20 size=   119464
+  .itablink          addr=0x5775de0  off=0x5375de0 size=    42816
+  .go.buildinfo      addr=0x5781000  off=0x5381000 size=     5872
+  .go.fipsinfo       addr=0x5782700  off=0x5382700 size=      120
+  .go.module         addr=0x5782780  off=0x5382780 size=      592
+  .noptrdata         addr=0x57829e0  off=0x53829e0 size=   579361
+  .data              addr=0x5810120  off=0x5410120 size=   287922
+  .bss               addr=0x58565e0  off=0x54565e0 size=   212312
+  .noptrbss          addr=0x588a340  off=0x548a340 size= 33691072
+pclntab: magic ok, nfunc=105555 nfiles=5182 minLC=1 ptrSize=8 section=32425872 bytes
+  funcnametab    off=       72 len=  8803640
+  cutab          off=  8803712 len=  1324112
+  filetab        off= 10127824 len=   285208
+  pctab          off= 10413032 len=  7253240
+  functab+_func  off= 17666272 len= 10066552
+  go:func.*      off= 27732832 len=  4486464
+  findfunctab    off= 32219296 len=   206576
+moduledata: text=0x401000 etext=0x2c59b70 minpc=0x401000 maxpc=0x2c59b61 types=0x2c5a000 etypes=0x386c379 rodata=0x2c5a000 gofunc=0x52deee0 findfunctab=0x5726420 epclntab=0x5758b10 typelinks=29866 itablinks=5352
+functions: 105555; first internal/cpu.Initialize @0x401000; last go:textfipsend @0x2c59b60 end=0x2c59b61; .text end=0x2c59b71 (gap after last func: 16 bytes)
+entry alignment: 105555 on 32-byte boundary, 0 not ([])
+sum of function sizes (entry to next entry): 42306401 = 100.00% of .text
+duplicate names: 32 distinct names with >1 function (examples: map[reflect.callReflect:2 runtime.args:2 runtime.badmcall:2 runtime.badsystemstack:2 runtime.check:2 runtime.debugCallCheck:2 runtime.mstart0:2 runtime.newstack:2 runtime.reflectcall:2 runtime.write:2])
+name categories: closure(.funcN)=10270 deferwrap=1845 generic[go.shape]=1666 gowrap=222 linker/cgo/rt0=941 method-value(-fm)=569 type:.eq/.hash=2712
+== pair ../out/corpus/kube-apiserver/1.36.3/kube-apiserver -> ../out/corpus/kube-apiserver/1.36.4/kube-apiserver
+names only in old (25): golang.org/x/crypto/hkdf.(*hkdf).Read, golang.org/x/net/http2.(*ClientConn).CanTakeNewRequest, golang.org/x/net/http2.(*ClientConn).CanTakeNewRequest.deferwrap1, golang.org/x/net/http2.(*ClientConn).Ping, golang.org/x/net/http2.(*ClientConn).Ping.func1, golang.org/x/net/http2.(*ClientConn).Ping.func1.deferwrap1, golang.org/x/net/http2.(*ClientConn).ReserveNewRequest, golang.org/x/net/http2.(*ClientConn).ReserveNewRequest.deferwrap1, golang.org/x/net/http2.(*ClientConn).SetDoNotReuse, golang.org/x/net/http2.(*ClientConn).SetDoNotReuse.deferwrap1, golang.org/x/net/http2.(*ClientConn).Shutdown.func1, golang.org/x/net/http2.(*ClientConn).Shutdown.func1.deferwrap1, golang.org/x/net/http2.(*ClientConn).roundTrip, golang.org/x/net/http2.(*ClientConn).roundTrip.func3, golang.org/x/net/http2.(*ClientConn).roundTrip.gowrap1, golang.org/x/net/http2.(*Transport).NewClientConn, golang.org/x/net/http2.(*Transport).RoundTripOpt, golang.org/x/net/http2.ConfigureServer, golang.org/x/net/http2.ConfigureServer.func1, golang.org/x/net/http2.ConfigureServer.func2, golang.org/x/net/http2.ConfigureServer.func3, golang.org/x/net/http2.ConfigureServer.func4, golang.org/x/net/http2.ConfigureServer.func4.(*Logger).Print.1, golang.org/x/net/http2.ConfigureServer.func4.Print.2, golang.org/x/net/http2.ConfigureServer.func4.gowrap1
+names only in new (73): crypto/internal/fips140/pbkdf2.Key[go.shape.*uint8], crypto/internal/fips140/pbkdf2.init.0, crypto/internal/fips140/pbkdf2.init.0.func1, crypto/internal/fips140/pbkdf2.setServiceIndicator, golang.org/x/crypto/hkdf.(*hkdfReader).Read, golang.org/x/net/http2.(*ClientConn).canTakeNewRequest, golang.org/x/net/http2.(*ClientConn).canTakeNewRequest.deferwrap1, golang.org/x/net/http2.(*ClientConn).internalRoundTrip, golang.org/x/net/http2.(*ClientConn).internalRoundTrip.func3, golang.org/x/net/http2.(*ClientConn).internalRoundTrip.gowrap1, golang.org/x/net/http2.(*ClientConn).ping, golang.org/x/net/http2.(*ClientConn).ping.func1, golang.org/x/net/http2.(*ClientConn).ping.func1.deferwrap1, golang.org/x/net/http2.(*ClientConn).reserveNewRequest, golang.org/x/net/http2.(*ClientConn).reserveNewRequest.deferwrap1, golang.org/x/net/http2.(*ClientConn).setDoNotReuse, golang.org/x/net/http2.(*ClientConn).setDoNotReuse.deferwrap1, golang.org/x/net/http2.(*ClientConn).shutdown, golang.org/x/net/http2.(*ClientConn).shutdown.func1, golang.org/x/net/http2.(*ClientConn).shutdown.func1.deferwrap1, golang.org/x/net/http2.(*MetaHeadersFrame).rfc9218Priority, golang.org/x/net/http2.(*PriorityUpdateFrame).Header, golang.org/x/net/http2.(*PriorityUpdateFrame).String, golang.org/x/net/http2.(*PriorityUpdateFrame).invalidate, golang.org/x/net/http2.(*Transport).closeIdleConnections, golang.org/x/net/http2.(*Transport).connPool, golang.org/x/net/http2.(*Transport).newUserClientConn, golang.org/x/net/http2.(*Transport).roundTripOpt, golang.org/x/net/http2.(*Transport).roundTripViaPool, golang.org/x/net/http2.(*noDialH2RoundTripper).closeIdleConnections, golang.org/x/net/http2.(*priorityWriteSchedulerRFC9218).AdjustStream, golang.org/x/net/http2.(*priorityWriteSchedulerRFC9218).CloseStream, golang.org/x/net/http2.(*priorityWriteSchedulerRFC9218).OpenStream, golang.org/x/net/http2.(*priorityWriteSchedulerRFC9218).Pop, golang.org/x/net/http2.(*priorityWriteSchedulerRFC9218).Push, golang.org/x/net/http2.(*serverConn).processPriorityUpdate, golang.org/x/net/http2.PriorityUpdateFrame.Header, golang.org/x/net/http2.PriorityUpdateFrame.String, golang.org/x/net/http2.configureServer, golang.org/x/net/http2.configureServer.func1, golang.org/x/net/http2.configureServer.func2, golang.org/x/net/http2.configureServer.func3, golang.org/x/net/http2.configureServer.func4, golang.org/x/net/http2.configureServer.func4.(*Logger).Print.1, golang.org/x/net/http2.configureServer.func4.Print.2, golang.org/x/net/http2.configureServer.func4.gowrap1, golang.org/x/net/http2.noDialH2RoundTripper.closeIdleConnections, golang.org/x/net/http2.parsePriorityUpdateFrame, golang.org/x/net/http2.parseRFC9218Priority, golang.org/x/net/http2.parseRFC9218Priority.func1, golang.org/x/net/internal/httpsfv.ParseDictionary, golang.org/x/net/internal/httpsfv.ParseInteger, golang.org/x/net/internal/httpsfv.consumeBareInnerList, golang.org/x/net/internal/httpsfv.consumeBareItem, golang.org/x/net/internal/httpsfv.consumeByteSequence, golang.org/x/net/internal/httpsfv.consumeDate, golang.org/x/net/internal/httpsfv.consumeDisplayString, golang.org/x/net/internal/httpsfv.consumeDisplayString.func1, golang.org/x/net/internal/httpsfv.consumeIntegerOrDecimal, golang.org/x/net/internal/httpsfv.consumeKey, golang.org/x/net/internal/httpsfv.consumeParameter, golang.org/x/net/internal/httpsfv.consumeString, golang.org/x/net/internal/httpsfv.consumeToken, golang.org/x/net/internal/httpsfv.decOctetHex, golang.org/x/net/internal/httpsfv.isTChar, k8s.io/dynamic-resource-allocation/structured/internal/experimental.(*PoolID).String, k8s.io/dynamic-resource-allocation/structured/internal/experimental.PoolID.String, k8s.io/dynamic-resource-allocation/structured/internal/incubating.(*PoolID).String, k8s.io/dynamic-resource-allocation/structured/internal/incubating.PoolID.String, k8s.io/dynamic-resource-allocation/structured/internal/stable.(*PoolID).String, k8s.io/dynamic-resource-allocation/structured/internal/stable.PoolID.String, type:.eq.golang.org/x/net/http2.PriorityUpdateFrame, type:.eq.golang.org/x/net/http2.transportInternal
+match: exact-name=105482 normalised-name=0 size+content=24 unmatched-new=49 unmatched-old=1 (new has 105555, old has 105507)
+matched functions: size changed=32 (old 31200 B -> new 32544 B) moved=90292 bytes-identical=20049 content-changed(after masking PC-rel fields)=88
+size-changed: golang.org/x/text/unicode/norm.compInfo(512->576), golang.org/x/net/idna.(*Profile).process(2752->2656), golang.org/x/net/idna.(*Profile).validateLabel(1120->1056), golang.org/x/net/internal/httpcommon.NewServerRequest(1760->1856), golang.org/x/net/http2.map.init.2(576->640), golang.org/x/net/http2.(*ClientConn).Shutdown(512->96), golang.org/x/net/http2.(*Server).serveConn(3680->3744), golang.org/x/net/http2.(*serverConn).serve(4128->4288), golang.org/x/net/http2.(*serverConn).processFrame(1088->1120), golang.org/x/net/http2.(*serverConn).processHeaders(1792->2144), golang.org/x/net/http2.(*serverConn).upgradeRequest(576->672), golang.org/x/net/http2.(*serverConn).processPriority(256->384), golang.org/x/net/http2.(*serverConn).newStream(864->992), golang.org/x/net/http2.(*serverConn).startPush.func1(1408->1504), golang.org/x/net/http2.(*Transport).dialClientConn(320->288), golang.org/x/net/http2.(*clientConnReadLoop).cleanup(1472->1344), golang.org/x/net/http2.(*clientConnReadLoop).cleanup.func1(128->64), golang.org/x/net/http2.(*clientConnReadLoop).processGoAway(480->416), golang.org/x/net/http2.noDialH2RoundTripper.RoundTrip(256->224), golang.org/x/net/http2.(*Transport).CloseIdleConnections(224->64), golang.org/x/net/http2.shouldRetryRequest(928->768), golang.org/x/net/http2.(*noDialH2RoundTripper).CloseIdleConnections(32->64), golang.org/x/text/cases.elUpper(1632->1664), golang.org/x/net/html.unescapeEntity(1952->896), golang.org/x/net/html.unescape(288->1536), golang.org/x/net/html.(*Tokenizer).readMarkupDeclaration(256->288), golang.org/x/net/html.(*Tokenizer).readDoctype(224->320), golang.org/x/net/html.(*Tokenizer).readCDATA(288->384), golang.org/x/net/html.(*Tokenizer).readTag(448->864), golang.org/x/net/html.(*Tokenizer).TagName(192->320), golang.org/x/net/html.(*Tokenizer).TagAttr(448->608), golang.org/x/net/html.NewTokenizerFragment(608->704)
+  matched by c: new golang.org/x/net/http2.configureServer <- old golang.org/x/net/http2.ConfigureServer
+  matched by c: new golang.org/x/net/http2.configureServer.func4 <- old golang.org/x/net/http2.ConfigureServer.func4
+  matched by c: new golang.org/x/net/http2.configureServer.func4.gowrap1 <- old golang.org/x/net/http2.ConfigureServer.func4.gowrap1
+  matched by c: new golang.org/x/net/http2.configureServer.func4.Print.2 <- old golang.org/x/net/http2.ConfigureServer.func4.Print.2
+  matched by c: new golang.org/x/net/http2.configureServer.func4.(*Logger).Print.1 <- old golang.org/x/net/http2.ConfigureServer.func4.(*Logger).Print.1
+  matched by c: new golang.org/x/net/http2.configureServer.func3 <- old golang.org/x/net/http2.ConfigureServer.func3
+  matched by c: new golang.org/x/net/http2.configureServer.func2 <- old golang.org/x/net/http2.ConfigureServer.func2
+  matched by c: new golang.org/x/net/http2.(*Transport).newUserClientConn <- old golang.org/x/net/http2.(*Transport).NewClientConn
+  matched by c: new golang.org/x/net/http2.(*ClientConn).setDoNotReuse <- old golang.org/x/net/http2.(*ClientConn).SetDoNotReuse
+  matched by c: new golang.org/x/net/http2.(*ClientConn).setDoNotReuse.deferwrap1 <- old golang.org/x/net/http2.(*ClientConn).SetDoNotReuse.deferwrap1
+  matched by c: new golang.org/x/net/http2.(*ClientConn).canTakeNewRequest <- old golang.org/x/net/http2.(*ClientConn).CanTakeNewRequest
+  matched by c: new golang.org/x/net/http2.(*ClientConn).canTakeNewRequest.deferwrap1 <- old golang.org/x/net/http2.(*ClientConn).CanTakeNewRequest.deferwrap1
+  unmatched new: golang.org/x/net/internal/httpsfv.isTChar (160 B)
+  unmatched new: golang.org/x/net/internal/httpsfv.decOctetHex (128 B)
+  unmatched new: golang.org/x/net/internal/httpsfv.consumeBareInnerList (544 B)
+  unmatched new: golang.org/x/net/internal/httpsfv.ParseDictionary (608 B)
+  unmatched new: golang.org/x/net/internal/httpsfv.consumeParameter (480 B)
+  unmatched new: golang.org/x/net/internal/httpsfv.consumeKey (192 B)
+  unmatched new: golang.org/x/net/internal/httpsfv.consumeIntegerOrDecimal (384 B)
+  unmatched new: golang.org/x/net/internal/httpsfv.ParseInteger (160 B)
+  unmatched new: golang.org/x/net/internal/httpsfv.consumeString (224 B)
+  unmatched new: golang.org/x/net/internal/httpsfv.consumeToken (288 B)
+  unmatched new: golang.org/x/net/internal/httpsfv.consumeByteSequence (224 B)
+  unmatched new: golang.org/x/net/internal/httpsfv.consumeDate (288 B)
+  unmatched new: golang.org/x/net/internal/httpsfv.consumeDisplayString (608 B)
+  unmatched new: golang.org/x/net/internal/httpsfv.consumeDisplayString.func1 (448 B)
+  unmatched new: golang.org/x/net/internal/httpsfv.consumeBareItem (352 B)
+  unmatched new: golang.org/x/net/http2.parseRFC9218Priority (288 B)
+  unmatched new: golang.org/x/net/http2.parseRFC9218Priority.func1 (288 B)
+  unmatched new: golang.org/x/net/http2.parsePriorityUpdateFrame (576 B)
+  unmatched new: golang.org/x/net/http2.(*MetaHeadersFrame).rfc9218Priority (672 B)
+  unmatched new: golang.org/x/net/http2.(*serverConn).processPriorityUpdate (320 B)
+  unmatched new: golang.org/x/net/http2.(*Transport).connPool (128 B)
+  unmatched new: golang.org/x/net/http2.(*Transport).roundTripOpt (288 B)
+  unmatched new: golang.org/x/net/http2.(*Transport).closeIdleConnections (160 B)
+  unmatched new: golang.org/x/net/http2.(*ClientConn).shutdown (512 B)
+  unmatched new: golang.org/x/net/http2.(*Transport).roundTripViaPool (1504 B)
+  unmatched new: golang.org/x/net/http2.(*priorityWriteSchedulerRFC9218).OpenStream (896 B)
+  unmatched new: golang.org/x/net/http2.(*priorityWriteSchedulerRFC9218).CloseStream (672 B)
+  unmatched new: golang.org/x/net/http2.(*priorityWriteSchedulerRFC9218).AdjustStream (896 B)
+  unmatched new: golang.org/x/net/http2.(*priorityWriteSchedulerRFC9218).Push (864 B)
+  unmatched new: golang.org/x/net/http2.(*priorityWriteSchedulerRFC9218).Pop (704 B)
+  unmatched new: type:.eq.golang.org/x/net/http2.PriorityUpdateFrame (160 B)
+  unmatched new: type:.eq.golang.org/x/net/http2.transportInternal (160 B)
+  unmatched new: golang.org/x/net/http2.PriorityUpdateFrame.Header (128 B)
+  unmatched new: golang.org/x/net/http2.(*PriorityUpdateFrame).Header (96 B)
+  unmatched new: golang.org/x/net/http2.PriorityUpdateFrame.String (192 B)
+  unmatched new: golang.org/x/net/http2.(*PriorityUpdateFrame).String (96 B)
+  unmatched new: golang.org/x/net/http2.(*PriorityUpdateFrame).invalidate (32 B)
+  unmatched new: golang.org/x/net/http2.noDialH2RoundTripper.closeIdleConnections (64 B)
+  unmatched new: golang.org/x/net/http2.(*noDialH2RoundTripper).closeIdleConnections (32 B)
+  unmatched new: k8s.io/dynamic-resource-allocation/structured/internal/experimental.PoolID.String (160 B)
+  unmatched new: k8s.io/dynamic-resource-allocation/structured/internal/experimental.(*PoolID).String (160 B)
+  unmatched new: k8s.io/dynamic-resource-allocation/structured/internal/incubating.PoolID.String (160 B)
+  unmatched new: k8s.io/dynamic-resource-allocation/structured/internal/incubating.(*PoolID).String (160 B)
+  unmatched new: k8s.io/dynamic-resource-allocation/structured/internal/stable.PoolID.String (160 B)
+  unmatched new: k8s.io/dynamic-resource-allocation/structured/internal/stable.(*PoolID).String (160 B)
+  unmatched new: crypto/internal/fips140/pbkdf2.init.0 (64 B)
+  unmatched new: crypto/internal/fips140/pbkdf2.setServiceIndicator (128 B)
+  unmatched new: crypto/internal/fips140/pbkdf2.init.0.func1 (256 B)
+  unmatched new: crypto/internal/fips140/pbkdf2.Key[go.shape.*uint8] (1472 B)
+  unmatched old: golang.org/x/net/http2.(*Transport).RoundTripOpt (1824 B)
+layout table: 105555 functions, raw delta encoding 214004 B, zstd -19 1106 B

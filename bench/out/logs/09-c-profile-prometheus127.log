@@ -1,0 +1,60 @@
+=== final encoder, cpuprofile (Wed Aug 26 14:57:40 PDT 2026)
+  [  0.12s] loaded prometheus (go1.27, 93741283 B) -> prometheus (go1.27, 93769955 B)
+  [  0.14s] match: exact=110090 normalised=0 content=5 unmatched-new=52 unmatched-old=14
+  [  0.24s] content map .rodata
+  [  0.56s] content map .go.type
+  [  0.56s] content map .go.func
+  [  0.58s] content map .noptrdata
+  [  0.59s] content map .data
+  [  0.73s] shift tables
+  datamap .rodata: blocks=229900 matched=229735 ambiguous=46 unmatched=119 shift-changes=86; rle 302 B
+  datamap .go.type: blocks=735529 matched=589725 ambiguous=75843 unmatched=69961 shift-changes=2241; rle 6905 B
+  datamap .go.func: blocks=1700 matched=1699 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=37081 matched=37080 ambiguous=0 unmatched=1 shift-changes=3; rle 17 B
+  datamap .data: blocks=21102 matched=21101 ambiguous=0 unmatched=1 shift-changes=1; rle 11 B
+  shift table .bss: 3 breakpoints from 56100 samples, 11 B raw: @18128:+8 @18912:+16 @47616:+32
+  shift table .noptrbss: 6 breakpoints from 108817 samples, 16 B raw: @118:+2 @180:+4 @760:+0 @1648:+8 @1792:+16 @5696:+0
+  [  0.74s] content maps + shift tables
+  [  1.14s] overrides: pointers=492298 fields=494946 targets=321488 mispredicted=47008 block-fixes=255 overrides=2681 (20725 votes)
+  [  1.15s] layout: 110147 funcs, 20 rec shapes, raw 239379 B, zstd 11271 B
+  [  1.21s] stage 1a (h): funcnametab+filetab 9543840 -> 9546336 B, delta 1484 B
+  [  1.51s] stage 1b (h): cutab+pctab+go:func.* predicted 14940496 -> 14940496 B, delta 18985 B; pc tables=241951 (dedup 0) funcdata syms=77276 inline nameOff=183592 stackobj gcdata=19046 wrapinfo=283 cutab entries=73253 mapped=71508
+  [  1.93s] prediction: 93769955 B (new 93769955 B), insns=10688083 decode-failures=1876, differing bytes=123899 in 18707 runs
+  type descriptors: descriptors=62516 itabs=5337 rewritten nameOff=197353 typeOff=114379 textOff=170045 name.pkgPath=2155 unmapped=11014 (name 0, type 10989, text 25: unmatched-fn 25 outside 0) bad=0
+  stage-2 differing bytes by section: .text=62555(4935 runs) .rodata=3782(953 runs) .gopclntab=4549(2022 runs) .go.type=45170(8199 runs) .go.func=2568(1186 runs) .go.buildinfo=215(15 runs) .go.fipsinfo=32(1 runs) .go.module=36(21 runs) .noptrdata=468(222 runs) .data=744(576 runs)
+  [  2.03s] stage 2 (positional): raw 162758 B, zstd 79696 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/p.gtp: 111552 B = header 116 + layout 11271 + stage1(h) 20469 (1a 1484 + 1b 18985) + stage2(p) 79696  [encode 2.13s]
+File: gotransform-dev
+Build ID: 302956d570ceeba55aad5dcd4908160c96b30b5f
+Type: cpu
+Time: 2026-08-26 14:57:40 PDT
+Duration: 2.13s, Total samples = 10.48s (491.20%)
+Showing nodes accounting for 8.93s, 85.21% of 10.48s total
+Dropped 180 nodes (cum <= 0.05s)
+Showing top 25 nodes out of 90
+      flat  flat%   sum%        cum   cum%
+     3.81s 36.35% 36.35%      4.04s 38.55%  golang.org/x/arch/x86/x86asm.decode1
+     0.86s  8.21% 44.56%      0.94s  8.97%  slices.partitionCmpFunc[go.shape.struct { main.h uint32; main.p uint32 }]
+     0.71s  6.77% 51.34%      0.77s  7.35%  main.buildWinIndex.func1.1
+     0.45s  4.29% 55.63%      0.51s  4.87%  slices.partialInsertionSortCmpFunc[go.shape.struct { main.h uint32; main.p uint32 }]
+     0.45s  4.29% 59.92%      0.50s  4.77%  sort.Search (inline)
+     0.43s  4.10% 64.03%      0.48s  4.58%  slices.insertionSortCmpFunc[go.shape.struct { main.h uint32; main.p uint32 }] (inline)
+     0.21s  2.00% 66.03%      0.21s  2.00%  main.buildWinIndex.func2.1
+     0.20s  1.91% 67.94%      0.20s  1.91%  runtime.memmove
+     0.18s  1.72% 69.66%      2.43s 23.19%  main.relocateBytes
+     0.17s  1.62% 71.28%      0.35s  3.34%  runtime.tryDeferToSpanScan
+     0.15s  1.43% 72.71%      0.15s  1.43%  runtime.(*mspan).base
+     0.14s  1.34% 74.05%      0.14s  1.34%  runtime.spanClass.sizeclass (inline)
+     0.13s  1.24% 75.29%      0.21s  2.00%  main.buildWinIndex
+     0.12s  1.15% 76.43%      2.24s 21.37%  main.deriveShiftTables.func2
+     0.11s  1.05% 77.48%      0.11s  1.05%  crypto/internal/fips140/sha256.blockSHANI
+     0.11s  1.05% 78.53%      4.15s 39.60%  golang.org/x/arch/x86/x86asm.Decode (inline)
+     0.11s  1.05% 79.58%      0.11s  1.05%  internal/runtime/maps.ctrlGroup.matchH2 (inline)
+     0.11s  1.05% 80.63%      0.11s  1.05%  runtime.memclrNoHeapPointers
+     0.09s  0.86% 81.49%      0.53s  5.06%  main.(*winIndex).lookup
+     0.08s  0.76% 82.25%      0.08s  0.76%  memeqbody
+     0.08s  0.76% 83.02%      2.11s 20.13%  slices.pdqsortCmpFunc[go.shape.struct { main.h uint32; main.p uint32 }]
+     0.06s  0.57% 83.59%      0.06s  0.57%  internal/runtime/maps.memHashAES
+     0.06s  0.57% 84.16%      0.06s  0.57%  main.collectVotes.func2
+     0.06s  0.57% 84.73%      0.06s  0.57%  main.selected (inline)
+     0.05s  0.48% 85.21%      0.08s  0.76%  internal/reflectlite.typedmemmove

@@ -1,0 +1,2 @@
+suffixarray.New: input=29561097 B build=2.33s heap_delta=118.3 MB sys=165.0 MB (lookups net/http=3463)
+wall_2.36_s_maxrss_147544_KB

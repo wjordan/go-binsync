@@ -1,0 +1,62 @@
+0 parallel jobs (4 workers), 0 multithreaded jobs, 28 big-pair jobs (serial)
+[   451s] cockroach-26.2.4-26.2.5              bsdiff               67624518 enc=447.18 rss=2799MB dec=3.65 ok=True 
+[   554s] cockroach-26.2.4-26.2.5              hdiffz-m6            67792784 enc=102.67 rss=1007MB dec=0.2 ok=True 
+[   584s] cockroach-26.2.4-26.2.5              hdiffz-m6-p8         67827098 enc=29.99 rss=1017MB dec=0.21 ok=True 
+[   638s] cockroach-26.2.4-26.2.5              hdiffz-s64           88406171 enc=52.97 rss=220MB dec=0.38 ok=True 
+[   685s] cockroach-26.2.4-26.2.5              zstd-19-T0           82710339 enc=46.56 rss=1375MB dec=0.49 ok=True 
+[   734s] cockroach-26.2.4-26.2.5              xdelta3-9-lzma       86462021 enc=47.55 rss=2546MB dec=1.27 ok=True 
+[   753s] cockroach-26.2.4-26.2.5              full-zstd-19-T0     119699162 enc=18.06 rss=1237MB dec=0.24 ok=True 
+[   904s] cockroach-26.2.4-26.2.5-stripped     bsdiff                8588309 enc=150.24 rss=1976MB dec=1.23 ok=True 
+[   948s] cockroach-26.2.4-26.2.5-stripped     hdiffz-m6             9455199 enc=43.47 rss=901MB dec=0.22 ok=True 
+[   975s] cockroach-26.2.4-26.2.5-stripped     hdiffz-m6-p8          9457347 enc=25.96 rss=909MB dec=0.18 ok=True 
+[  1012s] cockroach-26.2.4-26.2.5-stripped     hdiffz-s64           29454522 enc=37.21 rss=221MB dec=0.27 ok=True 
+[  1053s] cockroach-26.2.4-26.2.5-stripped     zstd-19-T0           23782446 enc=40.41 rss=927MB dec=0.34 ok=True 
+[  1094s] cockroach-26.2.4-26.2.5-stripped     xdelta3-9-lzma       29435656 enc=40.04 rss=1406MB dec=0.99 ok=True 
+[  1112s] cockroach-26.2.4-26.2.5-stripped     full-zstd-19-T0      58377272 enc=17.59 rss=845MB dec=0.19 ok=True 
+[  1952s] vault-2.0.3-2.0.4                    bsdiff                    ERR enc=- rss=0MB dec=- ok=- encode rc=-999: TIMEOUT after 840s
+[  2114s] vault-2.0.3-2.0.4                    hdiffz-m6            91132633 enc=161.01 rss=1695MB dec=0.34 ok=True 
+[  2160s] vault-2.0.3-2.0.4                    hdiffz-m6-p8         91148620 enc=45.93 rss=1708MB dec=0.35 ok=True 
+[  2245s] vault-2.0.3-2.0.4                    hdiffz-s64          119765773 enc=83.47 rss=224MB dec=0.45 ok=True 
+[  2283s] vault-2.0.3-2.0.4                    zstd-19-T0          115826792 enc=37.68 rss=2397MB dec=0.69 ok=True 
+[  2343s] vault-2.0.3-2.0.4                    xdelta3-9-lzma      126749351 enc=57.58 rss=4796MB dec=2.15 ok=True 
+[  2367s] vault-2.0.3-2.0.4                    full-zstd-19-T0     149329950 enc=23.04 rss=1595MB dec=0.3 ok=True 
+[  2636s] vault-2.0.3-2.0.4-stripped           bsdiff               12108972 enc=267.19 rss=3375MB dec=2.04 ok=True 
+[  2707s] vault-2.0.3-2.0.4-stripped           hdiffz-m6            11752681 enc=70.03 rss=1528MB dec=0.28 ok=True 
+[  2743s] vault-2.0.3-2.0.4-stripped           hdiffz-m6-p8         11787185 enc=36.05 rss=1537MB dec=0.23 ok=True 
+[  2814s] vault-2.0.3-2.0.4-stripped           hdiffz-s64           40451947 enc=70.68 rss=224MB dec=0.37 ok=True 
+[  2851s] vault-2.0.3-2.0.4-stripped           zstd-19-T0           36507981 enc=36.01 rss=1548MB dec=0.6 ok=True 
+[  2908s] vault-2.0.3-2.0.4-stripped           xdelta3-9-lzma       44822809 enc=54.58 rss=2586MB dec=1.79 ok=True 
+[  2927s] vault-2.0.3-2.0.4-stripped           full-zstd-19-T0      67677354 enc=18.36 rss=1413MB dec=0.26 ok=True 
+
+| pair | method | patch B | enc s | enc RSS MB | apply s | apply RSS MB | verified |
+|---|---|---:|---:|---:|---:|---:|---|
+| cockroach-26.2.4-26.2.5 | bsdiff | 67,624,518 | 447.18 | 2799 | 3.65 | 632 | True |
+| cockroach-26.2.4-26.2.5 | hdiffz-m6 | 67,792,784 | 102.67 | 1007 | 0.20 | 27 | True |
+| cockroach-26.2.4-26.2.5 | hdiffz-m6-p8 | 67,827,098 | 29.99 | 1018 | 0.21 | 26 | True |
+| cockroach-26.2.4-26.2.5 | hdiffz-s64 | 88,406,171 | 52.97 | 221 | 0.38 | 28 | True |
+| cockroach-26.2.4-26.2.5 | zstd-19-T0 | 82,710,339 | 46.56 | 1375 | 0.49 | 626 | True |
+| cockroach-26.2.4-26.2.5 | xdelta3-9-lzma | 86,462,021 | 47.55 | 2547 | 1.27 | 373 | True |
+| cockroach-26.2.4-26.2.5 | full-zstd-19-T0 | 119,699,162 | 18.06 | 1237 | 0.24 | 13 | True |
+| cockroach-26.2.4-26.2.5-stripped | bsdiff | 8,588,309 | 150.24 | 1977 | 1.23 | 449 | True |
+| cockroach-26.2.4-26.2.5-stripped | hdiffz-m6 | 9,455,199 | 43.47 | 901 | 0.22 | 27 | True |
+| cockroach-26.2.4-26.2.5-stripped | hdiffz-m6-p8 | 9,457,347 | 25.96 | 909 | 0.18 | 26 | True |
+| cockroach-26.2.4-26.2.5-stripped | hdiffz-s64 | 29,454,522 | 37.21 | 221 | 0.27 | 27 | True |
+| cockroach-26.2.4-26.2.5-stripped | zstd-19-T0 | 23,782,446 | 40.41 | 927 | 0.34 | 442 | True |
+| cockroach-26.2.4-26.2.5-stripped | xdelta3-9-lzma | 29,435,656 | 40.04 | 1407 | 0.99 | 257 | True |
+| cockroach-26.2.4-26.2.5-stripped | full-zstd-19-T0 | 58,377,272 | 17.59 | 845 | 0.19 | 13 | True |
+| vault-2.0.3-2.0.4 | bsdiff | ERROR | | | | | encode rc=-999: TIMEOUT after 840s |
+| vault-2.0.3-2.0.4 | hdiffz-m6 | 91,132,633 | 161.01 | 1696 | 0.34 | 27 | True |
+| vault-2.0.3-2.0.4 | hdiffz-m6-p8 | 91,148,620 | 45.93 | 1709 | 0.35 | 27 | True |
+| vault-2.0.3-2.0.4 | hdiffz-s64 | 119,765,773 | 83.47 | 224 | 0.45 | 28 | True |
+| vault-2.0.3-2.0.4 | zstd-19-T0 | 115,826,792 | 37.68 | 2398 | 0.69 | 1029 | True |
+| vault-2.0.3-2.0.4 | xdelta3-9-lzma | 126,749,351 | 57.58 | 4797 | 2.15 | 578 | True |
+| vault-2.0.3-2.0.4 | full-zstd-19-T0 | 149,329,950 | 23.04 | 1595 | 0.30 | 13 | True |
+| vault-2.0.3-2.0.4-stripped | bsdiff | 12,108,972 | 267.19 | 3376 | 2.04 | 762 | True |
+| vault-2.0.3-2.0.4-stripped | hdiffz-m6 | 11,752,681 | 70.03 | 1529 | 0.28 | 27 | True |
+| vault-2.0.3-2.0.4-stripped | hdiffz-m6-p8 | 11,787,185 | 36.05 | 1538 | 0.23 | 26 | True |
+| vault-2.0.3-2.0.4-stripped | hdiffz-s64 | 40,451,947 | 70.68 | 225 | 0.37 | 28 | True |
+| vault-2.0.3-2.0.4-stripped | zstd-19-T0 | 36,507,981 | 36.01 | 1548 | 0.60 | 754 | True |
+| vault-2.0.3-2.0.4-stripped | xdelta3-9-lzma | 44,822,809 | 54.58 | 2587 | 1.79 | 412 | True |
+| vault-2.0.3-2.0.4-stripped | full-zstd-19-T0 | 67,677,354 | 18.36 | 1414 | 0.26 | 13 | True |
+
+wrote /home/will/Code/binsync/bench/out/results/scale-big.json (28 records)

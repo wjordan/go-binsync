@@ -1,0 +1,16 @@
+== datapredict ../out/corpus/terraform/1.15.8/terraform -> ../out/corpus/terraform/1.15.9/terraform
+.rodata: 22668857 bytes, 456166 aligned qwords point into the image: text-matched=51972 text-unmatched=18 rodata=403674 noptrdata=12 data=1 bss/noptrbss=2 other-section=487
+  pointer rewrite: unchanged-in-new=6043 re-targeted-correctly=423995 mispredicted=30268 unmapped=18 (map: blocks=1416804 matched=946084 ambiguous=5271 unmatched=465449 shift-changes=7267)
+  baseline old->new:            bsdiff=1407168 hdiffz=1231306 zstd=0 rawdiff=16061735 runs=2404130
+  blocks re-laid (no ptr fix):  bsdiff=1513158 hdiffz=1334180 zstd=0 rawdiff=3828348 runs=1357085
+  blocks re-laid + ptr rewrite: bsdiff=1172460 hdiffz=975920 zstd=0 rawdiff=2586632 runs=940092
+.noptrdata: 1743361 bytes, 2396 aligned qwords point into the image: text-matched=1564 text-nofunc=2 rodata=24 noptrdata=776 data=2 bss/noptrbss=3 other-section=25
+  pointer rewrite: unchanged-in-new=233 re-targeted-correctly=1191 mispredicted=1192 unmapped=0 (map: blocks=108961 matched=93596 ambiguous=115 unmatched=15250 shift-changes=853)
+  baseline old->new:            bsdiff=5636 hdiffz=5900 zstd=0 rawdiff=1614203 runs=47732
+  blocks re-laid (no ptr fix):  bsdiff=26639 hdiffz=25325 zstd=0 rawdiff=50453 runs=3693
+  blocks re-laid + ptr rewrite: bsdiff=23492 hdiffz=22122 zstd=0 rawdiff=47045 runs=2725
+.data: 616618 bytes, 29203 aligned qwords point into the image: text-matched=94 rodata=18160 noptrdata=1491 data=2079 bss/noptrbss=7372 other-section=7
+  pointer rewrite: unchanged-in-new=107 re-targeted-correctly=18252 mispredicted=10951 unmapped=0 (map: blocks=38539 matched=36109 ambiguous=2032 unmatched=398 shift-changes=194)
+  baseline old->new:            bsdiff=45623 hdiffz=31203 zstd=0 rawdiff=252172 runs=68894
+  blocks re-laid (no ptr fix):  bsdiff=39699 hdiffz=31669 zstd=0 rawdiff=95380 runs=32501
+  blocks re-laid + ptr rewrite: bsdiff=14252 hdiffz=14203 zstd=0 rawdiff=32573 runs=15463

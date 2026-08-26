@@ -1,0 +1,22 @@
+== predict .text ../out/corpus/kube-apiserver/1.36.3/kube-apiserver -> ../out/corpus/kube-apiserver/1.36.4/kube-apiserver
+match: exact=105482 normalised=0 content=24 unmatched-new=49 unmatched-old=1
+layout table: raw 214004 B, zstd 1106 B
+x86asm decode of old .text: 10586382 insns, 1788 failures, 1.536s => 27.5 MB/s single-thread
+datamap .rodata (block 16, masked pointers=317988): blocks=790592 matched=593691 ambiguous=4696 unmatched=192205 shift-changes=1507
+datamap .noptrdata (block 16, masked pointers=2454): blocks=36209 matched=36203 ambiguous=5 unmatched=1 shift-changes=13
+datamap .data (block 16, masked pointers=14868): blocks=17984 matched=17961 ambiguous=21 unmatched=2 shift-changes=13
+datamap build time: 1.232s
+shift table .bss: 0 breakpoints from 67340 samples, 0 B raw:
+shift table .noptrbss: 0 breakpoints from 120094 samples, 0 B raw:
+shift tables raw total: 0 B
+BASELINE old.text -> new.text: bsdiff=1016241 hdiffz=1075802 zstd=0 rawdiff=34764961 runs=1096485 (bsdiff 19.7s hdiffz 6.7s zstd 0.0s)
+P0 layout-copy (no relocation)     bsdiff=1016518 hdiffz=1075542 zstd=0 rawdiff=2377152 runs=1114121  predict-time=0.13s
+P1 reloc, M=section-identity       bsdiff=503417 hdiffz=548773 zstd=0 rawdiff=887458 runs=412581  predict-time=0.40s
+    insns=10585312 decode-failures=1788 refs: text-self=868833 text-matched=613558 text-unmatched=3 rodata=410551 noptrdata=1341 data=56088 bss/noptrbss=187634 other-section=37 outside-image=275
+P2 reloc, M=content-map+bss-shift  bsdiff=32465 hdiffz=36925 zstd=0 rawdiff=54851 runs=9731  predict-time=0.40s
+    insns=10585312 decode-failures=1788 refs: text-self=868833 text-matched=613558 text-unmatched=3 rodata=410551 noptrdata=1341 data=56088 bss/noptrbss=187634 other-section=37 outside-image=275
+residual breakdown (P2): total differing bytes in functions=54851: changed-function content=28697, new functions=16913, mispredicted refs: text-matched=11 text-unmatched=6 rodata=9135 noptrdata=2 data=87, non-reference bytes in unchanged functions=0, outside functions=0
+functions with residual differences: 2683; top: golang.org/x/net/http2.(*serverConn).serve=3284 golang.org/x/net/idna.(*Profile).process=2449 golang.org/x/net/http2.(*Server).serveConn=2302 golang.org/x/net/html.unescape=1529 golang.org/x/net/http2.(*serverConn).processHeaders=1507 golang.org/x/net/http2.(*serverConn).startPush.func1=1288 golang.org/x/text/cases.elUpper=1245 golang.org/x/net/http2.(*clientConnReadLoop).cleanup=1238 golang.org/x/net/idna.(*Profile).validateLabel=982 golang.org/x/net/http2.(*serverConn).newStream=921 golang.org/x/net/html.unescapeEntity=866 k8s.io/apiserver/pkg/server.(*SecureServingInfo).Serve=862 golang.org/x/net/html.(*Tokenizer).readTag=817 golang.org/x/net/http2.(*clientConnReadLoop).processSettingsNoWrite.func1=702 golang.org/x/net/http2.shouldRetryRequest=660
+changed functions (content differs after masking PC-rel fields, or new): 137, old 108800 B -> new 127840 B; delta of just those: bsdiff=22532 hdiffz=21117 zstd=0 rawdiff=80321 runs=2313; new bytes alone zstd=46438
+  changed: expandAVX512_2, expandAVX512_3, expandAVX512_4, expandAVX512_6, expandAVX512_8, expandAVX512_10, expandAVX512_12, expandAVX512_14, expandAVX512_16, expandAVX512_18, expandAVX512_20, expandAVX512_22, expandAVX512_24, expandAVX512_26, expandAVX512_28, expandAVX512_30, expandAVX512_32, expandAVX512_36, expandAVX512_40, expandAVX512_44
+invertibility: relocating NEW->OLD layout: 2868 matched functions differ from OLD, of which 88 have changed content; unchanged-content mismatches: [internal/cpu.doinit internal/runtime/cgroup.FindCPUCgroup internal/runtime/cgroup.FindCPUMountPoint internal/runtime/exithook.Run runtime.chansend runtime.chanrecv runtime.debugCallWrap runtime.debugCallWrap.func1 runtime.debugCallWrap1 runtime.memclrNoHeapPointersChunked]; residual bsdiff=19826 hdiffz=29432 zstd=0 rawdiff=38983 runs=9927

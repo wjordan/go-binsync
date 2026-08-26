@@ -1,0 +1,129 @@
+## v1-F2 -> v2l-F2
+old=29,561,097 B new=29,561,097 B; section layout identical: True
+comparison mode: raw file offsets
+
+total differing bytes: 396,119 (1.340% of old)
+differing runs (byte-exact): 41,987; merged with gap<=8: 23,033; gap<=64: 14,031
+differing run length: median 1 B, mean 9.4 B, max 923 B
+largest contiguous unchanged region: 10,614,303 B
+  fraction of file in unchanged runs >=    4 KiB:  69.51%  (20,547,785 B)
+  fraction of file in unchanged runs >=   16 KiB:  59.39%  (17,556,947 B)
+  fraction of file in unchanged runs >=   64 KiB:  53.80%  (15,905,328 B)
+  fraction of file in unchanged runs >=  256 KiB:  53.46%  (15,804,172 B)
+  fraction of file in unchanged runs >= 1024 KiB:  51.91%  (15,344,988 B)
+
+| section | size | differing bytes | % differing | runs (byte-exact) | runs (gap<=8) |
+|---|---:|---:|---:|---:|---:|
+| .note.go.buildid | 100 | 80 | 80.000% | 4 | 1 |
+| .note.gnu.build-id | 36 | 20 | 55.556% | 1 | 1 |
+| .text | 14,781,841 | 20,315 | 0.137% | 20,002 | 19,996 |
+| .rodata | 3,527,449 | 374,537 | 10.618% | 20,869 | 1,924 |
+| .gopclntab | 10,541,954 | 0 | 0.000% | 0 | 0 |
+| .rela.plt | 1,056 | 0 | 0.000% | 0 | 0 |
+| .dynstr | 714 | 0 | 0.000% | 0 | 0 |
+| .dynsym | 1,176 | 0 | 0.000% | 0 | 0 |
+| .typelink | 38,272 | 0 | 0.000% | 0 | 0 |
+| .itablink | 16,600 | 0 | 0.000% | 0 | 0 |
+| .go.buildinfo | 4,128 | 0 | 0.000% | 0 | 0 |
+| .go.fipsinfo | 120 | 32 | 26.667% | 1 | 1 |
+| .go.module | 592 | 0 | 0.000% | 0 | 0 |
+| .noptrdata | 454,273 | 0 | 0.000% | 0 | 0 |
+| .data | 178,258 | 1,135 | 0.637% | 1,110 | 1,110 |
+| .shstrtab | 265 | 0 | 0.000% | 0 | 0 |
+
+.text differing runs categorised by instruction at run start (20,002 runs):
+    20,002  same-insn-displacement/target-changed
+
+20 sampled .text differing runs (evenly spaced):
+  0x4031fe len=1   old=fc               new=ff               [same-insn-displacement/target-changed]
+      old: lea 0x10d10fc(%rip),%rbx
+      new: lea 0x10d10ff(%rip),%rbx
+  0x479719 len=1   old=93               new=96               [same-insn-displacement/target-changed]
+      old: lea 0x1063a93(%rip),%rax
+      new: lea 0x1063a96(%rip),%rax
+  0x5d917b len=1   old=68               new=6b               [same-insn-displacement/target-changed]
+      old: lea 0xeef568(%rip),%rax
+      new: lea 0xeef56b(%rip),%rax
+  0x6910d0 len=1   old=11               new=14               [same-insn-displacement/target-changed]
+      old: lea 0xe45211(%rip),%rcx
+      new: lea 0xe45214(%rip),%rcx
+  0x787d10 len=1   old=ca               new=cd               [same-insn-displacement/target-changed]
+      old: lea 0xd6b3ca(%rip),%rcx
+      new: lea 0xd6b3cd(%rip),%rcx
+  0x88b377 len=1   old=6a               new=6d               [same-insn-displacement/target-changed]
+      old: lea 0xc3cf6a(%rip),%rcx
+      new: lea 0xc3cf6d(%rip),%rcx
+  0x966b81 len=1   old=6e               new=71               [same-insn-displacement/target-changed]
+      old: lea 0xb81d6e(%rip),%rax
+      new: lea 0xb81d71(%rip),%rax
+  0x9bcfbd len=1   old=10               new=13               [same-insn-displacement/target-changed]
+      old: lea 0xb11b10(%rip),%rax
+      new: lea 0xb11b13(%rip),%rax
+  0xa1821d len=1   old=fc               new=ff               [same-insn-displacement/target-changed]
+      old: lea 0xab5efc(%rip),%rcx
+      new: lea 0xab5eff(%rip),%rcx
+  0xa6d4c1 len=1   old=58               new=5b               [same-insn-displacement/target-changed]
+      old: lea 0xa60c58(%rip),%rax
+      new: lea 0xa60c5b(%rip),%rax
+  0xad7f8f len=1   old=f8               new=fb               [same-insn-displacement/target-changed]
+      old: lea 0x9ec1f8(%rip),%rcx
+      new: lea 0x9ec1fb(%rip),%rcx
+  0xb4dd3a len=1   old=8d               new=90               [same-insn-displacement/target-changed]
+      old: lea 0x97c38d(%rip),%rdi
+      new: lea 0x97c390(%rip),%rdi
+  0xba5742 len=1   old=cf               new=d2               [same-insn-displacement/target-changed]
+      old: lea 0x93d2cf(%rip),%rcx
+      new: lea 0x93d2d2(%rip),%rcx
+  0xbf68db len=1   old=10               new=13               [same-insn-displacement/target-changed]
+      old: lea 0x8da510(%rip),%rax
+      new: lea 0x8da513(%rip),%rax
+  0xc83af5 len=1   old=df               new=e2               [same-insn-displacement/target-changed]
+      old: lea 0x840edf(%rip),%rax
+      new: lea 0x840ee2(%rip),%rax
+  0xcdd497 len=1   old=38               new=3b               [same-insn-displacement/target-changed]
+      old: lea 0x7fdb38(%rip),%rcx
+      new: lea 0x7fdb3b(%rip),%rcx
+  0xd6b011 len=1   old=be               new=c1               [same-insn-displacement/target-changed]
+      old: lea 0x76ffbe(%rip),%rcx
+      new: lea 0x76ffc1(%rip),%rcx
+  0xe6c8f2 len=1   old=65               new=68               [same-insn-displacement/target-changed]
+      old: lea 0x65e365(%rip),%rbx
+      new: lea 0x65e368(%rip),%rbx
+  0x1107687 len=1   old=31               new=34               [same-insn-displacement/target-changed]
+      old: lea 0x3d4c31(%rip),%rax
+      new: lea 0x3d4c34(%rip),%rax
+  0x1219717 len=1   old=c2               new=c5               [same-insn-displacement/target-changed]
+      old: lea 0x2b2ec2(%rip),%r8
+      new: lea 0x2b2ec5(%rip),%r8
+
+objdump --start-address cross-check for 3 samples:
+  v1-F2:
+    4031f9:	31 c0                	xor    %eax,%eax
+    4031fb:	48 8d 1d fc 10 0d 01 	lea    0x10d10fc(%rip),%rbx        # 14d42fe <sysconf@plt+0x2ba29e>
+    403202:	48 89 cf             	mov    %rcx,%rdi
+    403205:	be 00 04 00 00       	mov    $0x400,%esi
+  v2l-F2:
+    4031f9:	31 c0                	xor    %eax,%eax
+    4031fb:	48 8d 1d ff 10 0d 01 	lea    0x10d10ff(%rip),%rbx        # 14d4301 <sysconf@plt+0x2ba2a1>
+    403202:	48 89 cf             	mov    %rcx,%rdi
+    403205:	be 00 04 00 00       	mov    $0x400,%esi
+  v1-F2:
+    966b7d:	c3                   	ret
+    966b7e:	48 8d 05 6e 1d b8 00 	lea    0xb81d6e(%rip),%rax        # 14e88f3 <sysconf@plt+0x2ce893>
+    966b85:	bb 29 00 00 00       	mov    $0x29,%ebx
+    966b8a:	31 c9                	xor    %ecx,%ecx
+  v2l-F2:
+    966b7d:	c3                   	ret
+    966b7e:	48 8d 05 71 1d b8 00 	lea    0xb81d71(%rip),%rax        # 14e88f6 <sysconf@plt+0x2ce896>
+    966b85:	bb 29 00 00 00       	mov    $0x29,%ebx
+    966b8a:	31 c9                	xor    %ecx,%ecx
+  v1-F2:
+    ba5737:	48 c7 40 08 25 00 00 	movq   $0x25,0x8(%rax)
+    ba573e:	00
+    ba573f:	48 8d 0d cf d2 93 00 	lea    0x93d2cf(%rip),%rcx        # 14e2a15 <sysconf@plt+0x2c89b5>
+    ba5746:	48 89 08             	mov    %rcx,(%rax)
+  v2l-F2:
+    ba5737:	48 c7 40 08 25 00 00 	movq   $0x25,0x8(%rax)
+    ba573e:	00
+    ba573f:	48 8d 0d d2 d2 93 00 	lea    0x93d2d2(%rip),%rcx        # 14e2a18 <sysconf@plt+0x2c89b8>
+    ba5746:	48 89 08             	mov    %rcx,(%rax)

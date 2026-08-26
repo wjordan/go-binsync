@@ -1,0 +1,525 @@
+[
+ {
+  "label": "cockroach-26.2.4-26.2.5",
+  "method": "bsdiff",
+  "old_bytes": 326021464,
+  "new_bytes": 326116488,
+  "enc_cmd": "bsdiff /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.5/cockroach /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.bsdiff.patch",
+  "dec_cmd": "bspatch /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.bsdiff.out /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.bsdiff.patch",
+  "reps": 1,
+  "patch_bytes": 67624518,
+  "enc_s": 447.18,
+  "enc_s_all": [
+   447.18
+  ],
+  "enc_rss_kb": 2866268,
+  "dec_s": 3.65,
+  "dec_rss_kb": 646836,
+  "verified": true,
+  "wall_s": 450.9982793331146
+ },
+ {
+  "label": "cockroach-26.2.4-26.2.5",
+  "method": "hdiffz-m6",
+  "old_bytes": 326021464,
+  "new_bytes": 326116488,
+  "enc_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hdiffz -m-6 -SD -d -f -p-1 -c-zstd-21-24 /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.5/cockroach /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.hdiffz-m6.patch",
+  "dec_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hpatchz -f -p-1 /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.hdiffz-m6.patch /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.hdiffz-m6.out",
+  "reps": 1,
+  "patch_bytes": 67792784,
+  "enc_s": 102.67,
+  "enc_s_all": [
+   102.67
+  ],
+  "enc_rss_kb": 1031516,
+  "dec_s": 0.2,
+  "dec_rss_kb": 27256,
+  "verified": true,
+  "wall_s": 103.0347809791565
+ },
+ {
+  "label": "cockroach-26.2.4-26.2.5",
+  "method": "hdiffz-m6-p8",
+  "old_bytes": 326021464,
+  "new_bytes": 326116488,
+  "enc_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hdiffz -m-6 -SD -d -f -p-8 -c-zstd-21-24 /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.5/cockroach /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.hdiffz-m6-p8.patch",
+  "dec_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hpatchz -f -p-8 /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.hdiffz-m6-p8.patch /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.hdiffz-m6-p8.out",
+  "reps": 1,
+  "patch_bytes": 67827098,
+  "enc_s": 29.99,
+  "enc_s_all": [
+   29.99
+  ],
+  "enc_rss_kb": 1042388,
+  "dec_s": 0.21,
+  "dec_rss_kb": 26464,
+  "verified": true,
+  "wall_s": 30.374333143234253
+ },
+ {
+  "label": "cockroach-26.2.4-26.2.5",
+  "method": "hdiffz-s64",
+  "old_bytes": 326021464,
+  "new_bytes": 326116488,
+  "enc_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hdiffz -s-64 -SD -d -f -p-1 -c-zstd-21-24 /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.5/cockroach /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.hdiffz-s64.patch",
+  "dec_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hpatchz -f -p-1 /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.hdiffz-s64.patch /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.hdiffz-s64.out",
+  "reps": 1,
+  "patch_bytes": 88406171,
+  "enc_s": 52.97,
+  "enc_s_all": [
+   52.97
+  ],
+  "enc_rss_kb": 226056,
+  "dec_s": 0.38,
+  "dec_rss_kb": 28168,
+  "verified": true,
+  "wall_s": 53.52128577232361
+ },
+ {
+  "label": "cockroach-26.2.4-26.2.5",
+  "method": "zstd-19-T0",
+  "old_bytes": 326021464,
+  "new_bytes": 326116488,
+  "enc_cmd": "zstd -q -f -19 -T0 --long=29 --memory=576MB --patch-from=/home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.5/cockroach -o /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.zstd-19-T0.patch",
+  "dec_cmd": "zstd -q -f -d --long=29 --memory=576MB --patch-from=/home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.zstd-19-T0.patch -o /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.zstd-19-T0.out",
+  "reps": 1,
+  "patch_bytes": 82710339,
+  "enc_s": 46.56,
+  "enc_s_all": [
+   46.56
+  ],
+  "enc_rss_kb": 1408208,
+  "dec_s": 0.49,
+  "dec_rss_kb": 641308,
+  "verified": true,
+  "wall_s": 47.234057903289795
+ },
+ {
+  "label": "cockroach-26.2.4-26.2.5",
+  "method": "xdelta3-9-lzma",
+  "old_bytes": 326021464,
+  "new_bytes": 326116488,
+  "enc_cmd": "xdelta3 -f -e -9 -S lzma -B 326116488 -W 16777216 -s /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.5/cockroach /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.xdelta3-9-lzma.patch",
+  "dec_cmd": "xdelta3 -f -d -B 326116488 -s /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.xdelta3-9-lzma.patch /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.xdelta3-9-lzma.out",
+  "reps": 1,
+  "patch_bytes": 86462021,
+  "enc_s": 47.55,
+  "enc_s_all": [
+   47.55
+  ],
+  "enc_rss_kb": 2608112,
+  "dec_s": 1.27,
+  "dec_rss_kb": 381976,
+  "verified": true,
+  "wall_s": 48.981379985809326
+ },
+ {
+  "label": "cockroach-26.2.4-26.2.5",
+  "method": "full-zstd-19-T0",
+  "old_bytes": 326021464,
+  "new_bytes": 326116488,
+  "enc_cmd": "zstd -q -f -19 -T0 /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.5/cockroach -o /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.full-zstd-19-T0.patch",
+  "dec_cmd": "zstd -q -f -d /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.full-zstd-19-T0.patch -o /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5.full-zstd-19-T0.out",
+  "reps": 1,
+  "patch_bytes": 119699162,
+  "enc_s": 18.06,
+  "enc_s_all": [
+   18.06
+  ],
+  "enc_rss_kb": 1267020,
+  "dec_s": 0.24,
+  "dec_rss_kb": 13528,
+  "verified": true,
+  "wall_s": 18.471009731292725
+ },
+ {
+  "label": "cockroach-26.2.4-26.2.5-stripped",
+  "method": "bsdiff",
+  "old_bytes": 230243816,
+  "new_bytes": 230309064,
+  "enc_cmd": "bsdiff /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach.stripped /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.5/cockroach.stripped /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.bsdiff.patch",
+  "dec_cmd": "bspatch /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach.stripped /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.bsdiff.out /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.bsdiff.patch",
+  "reps": 1,
+  "patch_bytes": 8588309,
+  "enc_s": 150.24,
+  "enc_s_all": [
+   150.24
+  ],
+  "enc_rss_kb": 2023992,
+  "dec_s": 1.23,
+  "dec_rss_kb": 459636,
+  "verified": true,
+  "wall_s": 151.5845980644226
+ },
+ {
+  "label": "cockroach-26.2.4-26.2.5-stripped",
+  "method": "hdiffz-m6",
+  "old_bytes": 230243816,
+  "new_bytes": 230309064,
+  "enc_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hdiffz -m-6 -SD -d -f -p-1 -c-zstd-21-24 /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach.stripped /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.5/cockroach.stripped /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.hdiffz-m6.patch",
+  "dec_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hpatchz -f -p-1 /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach.stripped /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.hdiffz-m6.patch /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.hdiffz-m6.out",
+  "reps": 1,
+  "patch_bytes": 9455199,
+  "enc_s": 43.47,
+  "enc_s_all": [
+   43.47
+  ],
+  "enc_rss_kb": 922880,
+  "dec_s": 0.22,
+  "dec_rss_kb": 27424,
+  "verified": true,
+  "wall_s": 43.83926773071289
+ },
+ {
+  "label": "cockroach-26.2.4-26.2.5-stripped",
+  "method": "hdiffz-m6-p8",
+  "old_bytes": 230243816,
+  "new_bytes": 230309064,
+  "enc_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hdiffz -m-6 -SD -d -f -p-8 -c-zstd-21-24 /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach.stripped /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.5/cockroach.stripped /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.hdiffz-m6-p8.patch",
+  "dec_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hpatchz -f -p-8 /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach.stripped /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.hdiffz-m6-p8.patch /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.hdiffz-m6-p8.out",
+  "reps": 1,
+  "patch_bytes": 9457347,
+  "enc_s": 25.96,
+  "enc_s_all": [
+   25.96
+  ],
+  "enc_rss_kb": 931004,
+  "dec_s": 0.18,
+  "dec_rss_kb": 27060,
+  "verified": true,
+  "wall_s": 26.283501386642456
+ },
+ {
+  "label": "cockroach-26.2.4-26.2.5-stripped",
+  "method": "hdiffz-s64",
+  "old_bytes": 230243816,
+  "new_bytes": 230309064,
+  "enc_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hdiffz -s-64 -SD -d -f -p-1 -c-zstd-21-24 /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach.stripped /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.5/cockroach.stripped /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.hdiffz-s64.patch",
+  "dec_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hpatchz -f -p-1 /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach.stripped /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.hdiffz-s64.patch /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.hdiffz-s64.out",
+  "reps": 1,
+  "patch_bytes": 29454522,
+  "enc_s": 37.21,
+  "enc_s_all": [
+   37.21
+  ],
+  "enc_rss_kb": 226628,
+  "dec_s": 0.27,
+  "dec_rss_kb": 27940,
+  "verified": true,
+  "wall_s": 37.59297299385071
+ },
+ {
+  "label": "cockroach-26.2.4-26.2.5-stripped",
+  "method": "zstd-19-T0",
+  "old_bytes": 230243816,
+  "new_bytes": 230309064,
+  "enc_cmd": "zstd -q -f -19 -T0 --long=28 --memory=320MB --patch-from=/home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach.stripped /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.5/cockroach.stripped -o /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.zstd-19-T0.patch",
+  "dec_cmd": "zstd -q -f -d --long=28 --memory=320MB --patch-from=/home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach.stripped /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.zstd-19-T0.patch -o /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.zstd-19-T0.out",
+  "reps": 1,
+  "patch_bytes": 23782446,
+  "enc_s": 40.41,
+  "enc_s_all": [
+   40.41
+  ],
+  "enc_rss_kb": 949500,
+  "dec_s": 0.34,
+  "dec_rss_kb": 452988,
+  "verified": true,
+  "wall_s": 40.86796188354492
+ },
+ {
+  "label": "cockroach-26.2.4-26.2.5-stripped",
+  "method": "xdelta3-9-lzma",
+  "old_bytes": 230243816,
+  "new_bytes": 230309064,
+  "enc_cmd": "xdelta3 -f -e -9 -S lzma -B 230309064 -W 16777216 -s /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach.stripped /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.5/cockroach.stripped /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.xdelta3-9-lzma.patch",
+  "dec_cmd": "xdelta3 -f -d -B 230309064 -s /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach.stripped /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.xdelta3-9-lzma.patch /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.xdelta3-9-lzma.out",
+  "reps": 1,
+  "patch_bytes": 29435656,
+  "enc_s": 40.04,
+  "enc_s_all": [
+   40.04
+  ],
+  "enc_rss_kb": 1440740,
+  "dec_s": 0.99,
+  "dec_rss_kb": 262788,
+  "verified": true,
+  "wall_s": 41.14562773704529
+ },
+ {
+  "label": "cockroach-26.2.4-26.2.5-stripped",
+  "method": "full-zstd-19-T0",
+  "old_bytes": 230243816,
+  "new_bytes": 230309064,
+  "enc_cmd": "zstd -q -f -19 -T0 /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.5/cockroach.stripped -o /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.full-zstd-19-T0.patch",
+  "dec_cmd": "zstd -q -f -d /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.full-zstd-19-T0.patch -o /home/will/Code/binsync/bench/out/patches-scale/cockroach-26.2.4-26.2.5-stripped.full-zstd-19-T0.out",
+  "reps": 1,
+  "patch_bytes": 58377272,
+  "enc_s": 17.59,
+  "enc_s_all": [
+   17.59
+  ],
+  "enc_rss_kb": 865624,
+  "dec_s": 0.19,
+  "dec_rss_kb": 13048,
+  "verified": true,
+  "wall_s": 17.890936613082886
+ },
+ {
+  "label": "vault-2.0.3-2.0.4",
+  "method": "bsdiff",
+  "old_bytes": 536903029,
+  "new_bytes": 537754780,
+  "enc_cmd": "bsdiff /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault /home/will/Code/binsync/bench/out/corpus/vault/2.0.4/vault /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.bsdiff.patch",
+  "dec_cmd": "bspatch /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.bsdiff.out /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.bsdiff.patch",
+  "reps": 1,
+  "error": "encode rc=-999: TIMEOUT after 840s"
+ },
+ {
+  "label": "vault-2.0.3-2.0.4",
+  "method": "hdiffz-m6",
+  "old_bytes": 536903029,
+  "new_bytes": 537754780,
+  "enc_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hdiffz -m-6 -SD -d -f -p-1 -c-zstd-21-24 /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault /home/will/Code/binsync/bench/out/corpus/vault/2.0.4/vault /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.hdiffz-m6.patch",
+  "dec_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hpatchz -f -p-1 /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.hdiffz-m6.patch /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.hdiffz-m6.out",
+  "reps": 1,
+  "patch_bytes": 91132633,
+  "enc_s": 161.01,
+  "enc_s_all": [
+   161.01
+  ],
+  "enc_rss_kb": 1736580,
+  "dec_s": 0.34,
+  "dec_rss_kb": 27408,
+  "verified": true,
+  "wall_s": 161.5688099861145
+ },
+ {
+  "label": "vault-2.0.3-2.0.4",
+  "method": "hdiffz-m6-p8",
+  "old_bytes": 536903029,
+  "new_bytes": 537754780,
+  "enc_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hdiffz -m-6 -SD -d -f -p-8 -c-zstd-21-24 /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault /home/will/Code/binsync/bench/out/corpus/vault/2.0.4/vault /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.hdiffz-m6-p8.patch",
+  "dec_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hpatchz -f -p-8 /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.hdiffz-m6-p8.patch /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.hdiffz-m6-p8.out",
+  "reps": 1,
+  "patch_bytes": 91148620,
+  "enc_s": 45.93,
+  "enc_s_all": [
+   45.93
+  ],
+  "enc_rss_kb": 1749548,
+  "dec_s": 0.35,
+  "dec_rss_kb": 27396,
+  "verified": true,
+  "wall_s": 46.506797313690186
+ },
+ {
+  "label": "vault-2.0.3-2.0.4",
+  "method": "hdiffz-s64",
+  "old_bytes": 536903029,
+  "new_bytes": 537754780,
+  "enc_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hdiffz -s-64 -SD -d -f -p-1 -c-zstd-21-24 /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault /home/will/Code/binsync/bench/out/corpus/vault/2.0.4/vault /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.hdiffz-s64.patch",
+  "dec_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hpatchz -f -p-1 /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.hdiffz-s64.patch /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.hdiffz-s64.out",
+  "reps": 1,
+  "patch_bytes": 119765773,
+  "enc_s": 83.47,
+  "enc_s_all": [
+   83.47
+  ],
+  "enc_rss_kb": 229480,
+  "dec_s": 0.45,
+  "dec_rss_kb": 28644,
+  "verified": true,
+  "wall_s": 84.1363627910614
+ },
+ {
+  "label": "vault-2.0.3-2.0.4",
+  "method": "zstd-19-T0",
+  "old_bytes": 536903029,
+  "new_bytes": 537754780,
+  "enc_cmd": "zstd -q -f -19 -T0 --long=30 --memory=1088MB --patch-from=/home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault /home/will/Code/binsync/bench/out/corpus/vault/2.0.4/vault -o /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.zstd-19-T0.patch",
+  "dec_cmd": "zstd -q -f -d --long=30 --memory=1088MB --patch-from=/home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.zstd-19-T0.patch -o /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.zstd-19-T0.out",
+  "reps": 1,
+  "patch_bytes": 115826792,
+  "enc_s": 37.68,
+  "enc_s_all": [
+   37.68
+  ],
+  "enc_rss_kb": 2455124,
+  "dec_s": 0.69,
+  "dec_rss_kb": 1053500,
+  "verified": true,
+  "wall_s": 38.5833797454834
+ },
+ {
+  "label": "vault-2.0.3-2.0.4",
+  "method": "xdelta3-9-lzma",
+  "old_bytes": 536903029,
+  "new_bytes": 537754780,
+  "enc_cmd": "xdelta3 -f -e -9 -S lzma -B 537754780 -W 16777216 -s /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault /home/will/Code/binsync/bench/out/corpus/vault/2.0.4/vault /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.xdelta3-9-lzma.patch",
+  "dec_cmd": "xdelta3 -f -d -B 537754780 -s /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.xdelta3-9-lzma.patch /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.xdelta3-9-lzma.out",
+  "reps": 1,
+  "patch_bytes": 126749351,
+  "enc_s": 57.58,
+  "enc_s_all": [
+   57.58
+  ],
+  "enc_rss_kb": 4911756,
+  "dec_s": 2.15,
+  "dec_rss_kb": 591840,
+  "verified": true,
+  "wall_s": 59.9466769695282
+ },
+ {
+  "label": "vault-2.0.3-2.0.4",
+  "method": "full-zstd-19-T0",
+  "old_bytes": 536903029,
+  "new_bytes": 537754780,
+  "enc_cmd": "zstd -q -f -19 -T0 /home/will/Code/binsync/bench/out/corpus/vault/2.0.4/vault -o /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.full-zstd-19-T0.patch",
+  "dec_cmd": "zstd -q -f -d /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.full-zstd-19-T0.patch -o /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4.full-zstd-19-T0.out",
+  "reps": 1,
+  "patch_bytes": 149329950,
+  "enc_s": 23.04,
+  "enc_s_all": [
+   23.04
+  ],
+  "enc_rss_kb": 1633356,
+  "dec_s": 0.3,
+  "dec_rss_kb": 13480,
+  "verified": true,
+  "wall_s": 23.550419807434082
+ },
+ {
+  "label": "vault-2.0.3-2.0.4-stripped",
+  "method": "bsdiff",
+  "old_bytes": 393175304,
+  "new_bytes": 393769576,
+  "enc_cmd": "bsdiff /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault.stripped /home/will/Code/binsync/bench/out/corpus/vault/2.0.4/vault.stripped /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.bsdiff.patch",
+  "dec_cmd": "bspatch /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault.stripped /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.bsdiff.out /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.bsdiff.patch",
+  "reps": 1,
+  "patch_bytes": 12108972,
+  "enc_s": 267.19,
+  "enc_s_all": [
+   267.19
+  ],
+  "enc_rss_kb": 3456568,
+  "dec_s": 2.04,
+  "dec_rss_kb": 780404,
+  "verified": true,
+  "wall_s": 269.3982045650482
+ },
+ {
+  "label": "vault-2.0.3-2.0.4-stripped",
+  "method": "hdiffz-m6",
+  "old_bytes": 393175304,
+  "new_bytes": 393769576,
+  "enc_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hdiffz -m-6 -SD -d -f -p-1 -c-zstd-21-24 /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault.stripped /home/will/Code/binsync/bench/out/corpus/vault/2.0.4/vault.stripped /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.hdiffz-m6.patch",
+  "dec_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hpatchz -f -p-1 /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault.stripped /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.hdiffz-m6.patch /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.hdiffz-m6.out",
+  "reps": 1,
+  "patch_bytes": 11752681,
+  "enc_s": 70.03,
+  "enc_s_all": [
+   70.03
+  ],
+  "enc_rss_kb": 1565648,
+  "dec_s": 0.28,
+  "dec_rss_kb": 27184,
+  "verified": true,
+  "wall_s": 70.50058197975159
+ },
+ {
+  "label": "vault-2.0.3-2.0.4-stripped",
+  "method": "hdiffz-m6-p8",
+  "old_bytes": 393175304,
+  "new_bytes": 393769576,
+  "enc_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hdiffz -m-6 -SD -d -f -p-8 -c-zstd-21-24 /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault.stripped /home/will/Code/binsync/bench/out/corpus/vault/2.0.4/vault.stripped /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.hdiffz-m6-p8.patch",
+  "dec_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hpatchz -f -p-8 /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault.stripped /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.hdiffz-m6-p8.patch /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.hdiffz-m6-p8.out",
+  "reps": 1,
+  "patch_bytes": 11787185,
+  "enc_s": 36.05,
+  "enc_s_all": [
+   36.05
+  ],
+  "enc_rss_kb": 1574480,
+  "dec_s": 0.23,
+  "dec_rss_kb": 26944,
+  "verified": true,
+  "wall_s": 36.456135272979736
+ },
+ {
+  "label": "vault-2.0.3-2.0.4-stripped",
+  "method": "hdiffz-s64",
+  "old_bytes": 393175304,
+  "new_bytes": 393769576,
+  "enc_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hdiffz -s-64 -SD -d -f -p-1 -c-zstd-21-24 /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault.stripped /home/will/Code/binsync/bench/out/corpus/vault/2.0.4/vault.stripped /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.hdiffz-s64.patch",
+  "dec_cmd": "/home/will/Code/binsync/bench/out/tools/HDiffPatch/hpatchz -f -p-1 /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault.stripped /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.hdiffz-s64.patch /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.hdiffz-s64.out",
+  "reps": 1,
+  "patch_bytes": 40451947,
+  "enc_s": 70.68,
+  "enc_s_all": [
+   70.68
+  ],
+  "enc_rss_kb": 230176,
+  "dec_s": 0.37,
+  "dec_rss_kb": 28916,
+  "verified": true,
+  "wall_s": 71.2134599685669
+ },
+ {
+  "label": "vault-2.0.3-2.0.4-stripped",
+  "method": "zstd-19-T0",
+  "old_bytes": 393175304,
+  "new_bytes": 393769576,
+  "enc_cmd": "zstd -q -f -19 -T0 --long=29 --memory=576MB --patch-from=/home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault.stripped /home/will/Code/binsync/bench/out/corpus/vault/2.0.4/vault.stripped -o /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.zstd-19-T0.patch",
+  "dec_cmd": "zstd -q -f -d --long=29 --memory=576MB --patch-from=/home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault.stripped /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.zstd-19-T0.patch -o /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.zstd-19-T0.out",
+  "reps": 1,
+  "patch_bytes": 36507981,
+  "enc_s": 36.01,
+  "enc_s_all": [
+   36.01
+  ],
+  "enc_rss_kb": 1585664,
+  "dec_s": 0.6,
+  "dec_rss_kb": 772028,
+  "verified": true,
+  "wall_s": 36.77979755401611
+ },
+ {
+  "label": "vault-2.0.3-2.0.4-stripped",
+  "method": "xdelta3-9-lzma",
+  "old_bytes": 393175304,
+  "new_bytes": 393769576,
+  "enc_cmd": "xdelta3 -f -e -9 -S lzma -B 393769576 -W 16777216 -s /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault.stripped /home/will/Code/binsync/bench/out/corpus/vault/2.0.4/vault.stripped /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.xdelta3-9-lzma.patch",
+  "dec_cmd": "xdelta3 -f -d -B 393769576 -s /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault.stripped /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.xdelta3-9-lzma.patch /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.xdelta3-9-lzma.out",
+  "reps": 1,
+  "patch_bytes": 44822809,
+  "enc_s": 54.58,
+  "enc_s_all": [
+   54.58
+  ],
+  "enc_rss_kb": 2648744,
+  "dec_s": 1.79,
+  "dec_rss_kb": 421884,
+  "verified": true,
+  "wall_s": 56.545379638671875
+ },
+ {
+  "label": "vault-2.0.3-2.0.4-stripped",
+  "method": "full-zstd-19-T0",
+  "old_bytes": 393175304,
+  "new_bytes": 393769576,
+  "enc_cmd": "zstd -q -f -19 -T0 /home/will/Code/binsync/bench/out/corpus/vault/2.0.4/vault.stripped -o /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.full-zstd-19-T0.patch",
+  "dec_cmd": "zstd -q -f -d /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.full-zstd-19-T0.patch -o /home/will/Code/binsync/bench/out/patches-scale/vault-2.0.3-2.0.4-stripped.full-zstd-19-T0.out",
+  "reps": 1,
+  "patch_bytes": 67677354,
+  "enc_s": 18.36,
+  "enc_s_all": [
+   18.36
+  ],
+  "enc_rss_kb": 1447748,
+  "dec_s": 0.26,
+  "dec_rss_kb": 12816,
+  "verified": true,
+  "wall_s": 18.807394981384277
+ }
+]

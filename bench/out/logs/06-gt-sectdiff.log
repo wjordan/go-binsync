@@ -1,0 +1,196 @@
+== sectdiff ../out/bin/v1-F2 -> ../out/bin/v2c-F2
+section                  size    rawdiff       runs     bsdiff     hdiffz       zstd
+.note.go.buildid          100         80          4        239        114        105
+.note.gnu.build-id         36         20          1        190         50         40
+.interp                    28          0          0          0          0          0
+.text                14782033     460280      46603      39961      50999      90285
+.plt                      720         81         46        152         76        127
+.rodata               3527449     438873      57044       4211       5203      32431
+.gopclntab           10542035    3068037     858149      14259      16358      86139
+.rela                      24          0          0          0          0          0
+.rela.plt                1056          0          0          0          0          0
+.gnu.version_r             96          0          0          0          0          0
+.gnu.version               98          0          0          0          0          0
+.hash                     232          0          0          0          0          0
+.dynstr                   714          0          0          0          0          0
+.dynsym                  1176          0          0          0          0          0
+.typelink               38272          0          0          0          0          0
+.itablink               16600          0          0          0          0          0
+.go.buildinfo            4128          0          0          0          0          0
+.go.fipsinfo              120         35          3        201         68         64
+.dynamic                  304         12          7        154         61         49
+.got.plt                  376         76         44        212         80         62
+.go.module                592         17         13        171         82         61
+.got                        8          0          0          0          0          0
+.noptrdata             454273         57         32        211        142        191
+.data                  178258       2998       2899       1120       1797       4093
+SUM(sections)                    3970566     964845      61081      75030     213647
+WHOLE FILE           29561097    4000728     977070      60478      75305     213124  (bsdiff 6.8s hdiffz 1.8s zstd 14.8s)
+== sectdiff ../out/bin/v1-F2 -> ../out/bin/v2l-F2
+section                  size    rawdiff       runs     bsdiff     hdiffz       zstd
+.note.go.buildid          100         80          4        239        114        105
+.note.gnu.build-id         36         20          1        193         50         40
+.interp                    28          0          0          0          0          0
+.text                14781841      20315      20002      22152      30880      49003
+.plt                      720          0          0          0          0          0
+.rodata               3527449     374537      20869       1229       1214       3255
+.gopclntab           10541954          0          0          0          0          0
+.rela                      24          0          0          0          0          0
+.rela.plt                1056          0          0          0          0          0
+.gnu.version_r             96          0          0          0          0          0
+.gnu.version               98          0          0          0          0          0
+.hash                     232          0          0          0          0          0
+.dynstr                   714          0          0          0          0          0
+.dynsym                  1176          0          0          0          0          0
+.typelink               38272          0          0          0          0          0
+.itablink               16600          0          0          0          0          0
+.go.buildinfo            4128          0          0          0          0          0
+.go.fipsinfo              120         32          1        199         62         57
+.dynamic                  304          0          0          0          0          0
+.got.plt                  376          0          0          0          0          0
+.go.module                592          0          0          0          0          0
+.got                        8          0          0          0          0          0
+.noptrdata             454273          0          0          0          0          0
+.data                  178258       1135       1110        807        796       1919
+SUM(sections)                     396119      41987      24819      33116      54379
+WHOLE FILE           29561097     396119      41987      24322      32899      55648  (bsdiff 6.3s hdiffz 0.6s zstd 14.3s)
+== sectdiff ../out/bin/v1-F2 -> ../out/bin/v2p-F2
+section                  size    rawdiff       runs     bsdiff     hdiffz       zstd
+.note.go.buildid          100         76          8        240        114        105
+.note.gnu.build-id         36         19          2        188         50         40
+.interp                    28          0          0          0          0          0
+.text                14781969     427932      16365       9327      11183      19173
+.plt                      720         73         46        153         75        128
+.rodata               3527449       2837       2031       2096       2931       4846
+.gopclntab           10542051    6094850    1116024       4541       4876      16329
+.rela                      24          0          0          0          0          0
+.rela.plt                1056          0          0          0          0          0
+.gnu.version_r             96          0          0          0          0          0
+.gnu.version               98          0          0          0          0          0
+.hash                     232          0          0          0          0          0
+.dynstr                   714          0          0          0          0          0
+.dynsym                  1176          0          0          0          0          0
+.typelink               38272          0          0          0          0          0
+.itablink               16600          0          0          0          0          0
+.go.buildinfo            4128          0          0          0          0          0
+.go.fipsinfo              120         35          3        200         68         64
+.dynamic                  304         13          7        152         62         48
+.got.plt                  376         65         44        204         76         51
+.go.module                592         24         16        175         92         70
+.got                        8          0          0          0          0          0
+.noptrdata             454273         51         32        212        143        184
+.data                  178258         28         27        215        127        112
+SUM(sections)                    6526003    1134605      17703      19797      41150
+WHOLE FILE           29561097    6555756    1146747      16141      19230      41040  (bsdiff 6.6s hdiffz 0.2s zstd 12.3s)
+== sectdiff ../out/bin/v1-F2 -> ../out/bin/v3-F2
+section                  size    rawdiff       runs     bsdiff     hdiffz       zstd
+.note.go.buildid          100         78          6        239        114        105
+.note.gnu.build-id         36         20          1        188         50         40
+.interp                    28          0          0          0          0          0
+.text                14782161     462455      46402      41221      51761      91765
+.plt                      720         92         46        151         73        122
+.rodata               3527449     439194      57057       4975       6042      32890
+.gopclntab           10542147    6392643    1067176      16464      19523      96240
+.rela                      24          0          0          0          0          0
+.rela.plt                1056          0          0          0          0          0
+.gnu.version_r             96          0          0          0          0          0
+.gnu.version               98          0          0          0          0          0
+.hash                     232          0          0          0          0          0
+.dynstr                   714          0          0          0          0          0
+.dynsym                  1176          0          0          0          0          0
+.typelink               38272          0          0          0          0          0
+.itablink               16600          0          0          0          0          0
+.go.buildinfo            4128          0          0          0          0          0
+.go.fipsinfo              120         35          4        202         70         65
+.dynamic                  304         14          7        152         63         49
+.got.plt                  376         88         44        231         84         70
+.go.module                592         28         18        186        100         75
+.got                        8          0          0          0          0          0
+.noptrdata             454273         64         32        206        133        190
+.data                  178258       3000       2900       1169       1829       4099
+SUM(sections)                    7297711    1173693      65384      79842     225710
+WHOLE FILE           29561097    7328398    1185827      64902      79879     224693  (bsdiff 6.4s hdiffz 1.9s zstd 14.5s)
+== sectdiff ../out/bin/v1-F2 -> ../out/bin/v4-F2
+section                  size    rawdiff       runs     bsdiff     hdiffz       zstd
+.note.go.buildid          100         77          7        240        114        105
+.note.gnu.build-id         36         20          1        196         50         40
+.interp                    28          0          0          0          0          0
+.text                14782161     463023      46402      43203      53799      94709
+.plt                      720         92         46        151         73        122
+.rodata               3527449     447536      52909       4887       5650      33024
+.gopclntab           10542147    6392629    1067175      16152      19174      95915
+.rela                      24          0          0          0          0          0
+.rela.plt                1056          0          0          0          0          0
+.gnu.version_r             96          0          0          0          0          0
+.gnu.version               98          0          0          0          0          0
+.hash                     232          0          0          0          0          0
+.dynstr                   714          0          0          0          0          0
+.dynsym                  1176          0          0          0          0          0
+.typelink               38272          0          0          0          0          0
+.itablink               16600          0          0          0          0          0
+.go.buildinfo            4128          0          0          0          0          0
+.go.fipsinfo              120         35          4        202         70         65
+.dynamic                  304         14          7        152         63         49
+.got.plt                  376         88         44        231         84         70
+.go.module                592         28         18        186        100         75
+.got                        8          0          0          0          0          0
+.noptrdata             454273         64         32        206        133        190
+.data                  178258       3027       2900       1235       1895       4157
+SUM(sections)                    7306633    1169545      67041      81205     228521
+WHOLE FILE           29561097    7337320    1181679      66541      80796     228024  (bsdiff 6.5s hdiffz 1.6s zstd 16.0s)
+== sectdiff ../out/bin/v3-F2 -> ../out/bin/v4-F2
+section                  size    rawdiff       runs     bsdiff     hdiffz       zstd
+.note.go.buildid          100         79          5        240        114        105
+.note.gnu.build-id         36         20          1        196         50         40
+.interp                    28          0          0          0          0          0
+.text                14782161      25288      24686      25788      35205      61048
+.plt                      720          0          0          0          0          0
+.rodata               3527449     402784      25870       1955       2709       7382
+.gopclntab           10542147        689        674        852        831       2194
+.rela                      24          0          0          0          0          0
+.rela.plt                1056          0          0          0          0          0
+.gnu.version_r             96          0          0          0          0          0
+.gnu.version               98          0          0          0          0          0
+.hash                     232          0          0          0          0          0
+.dynstr                   714          0          0          0          0          0
+.dynsym                  1176          0          0          0          0          0
+.typelink               38272          0          0          0          0          0
+.itablink               16600          0          0          0          0          0
+.go.buildinfo            4128          0          0          0          0          0
+.go.fipsinfo              120         32          1        196         62         57
+.dynamic                  304          0          0          0          0          0
+.got.plt                  376          0          0          0          0          0
+.go.module                592          0          0          0          0          0
+.got                        8          0          0          0          0          0
+.noptrdata             454273          0          0          0          0          0
+.data                  178258       1783       1756        776        740       2674
+SUM(sections)                     430675      52993      30003      39711      73500
+WHOLE FILE           29561097     430675      52993      29439      39230      73074  (bsdiff 7.0s hdiffz 0.8s zstd 14.3s)
+== sectdiff ../out/bin/v1-F2 -> ../out/bin/v2s-F2
+section                  size    rawdiff       runs     bsdiff     hdiffz       zstd
+.note.go.buildid          100         78          6        246        114        105
+.note.gnu.build-id         36         20          1        185         50         40
+.interp                    28          0          0          0          0          0
+.text                14781841          0          0          0          0          0
+.plt                      720          0          0          0          0          0
+.rodata               3527449          5          1        170         49        486
+.gopclntab           10541954          0          0          0          0          0
+.rela                      24          0          0          0          0          0
+.rela.plt                1056          0          0          0          0          0
+.gnu.version_r             96          0          0          0          0          0
+.gnu.version               98          0          0          0          0          0
+.hash                     232          0          0          0          0          0
+.dynstr                   714          0          0          0          0          0
+.dynsym                  1176          0          0          0          0          0
+.typelink               38272          0          0          0          0          0
+.itablink               16600          0          0          0          0          0
+.go.buildinfo            4128          0          0          0          0          0
+.go.fipsinfo              120          0          0          0          0          0
+.dynamic                  304          0          0          0          0          0
+.got.plt                  376          0          0          0          0          0
+.go.module                592          0          0          0          0          0
+.got                        8          0          0          0          0          0
+.noptrdata             454273          0          0          0          0          0
+.data                  178258          0          0          0          0          0
+SUM(sections)                        103          8        601        213        631
+WHOLE FILE           29561097        103          8        347        163       3684  (bsdiff 5.8s hdiffz 0.1s zstd 11.1s)

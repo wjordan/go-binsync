@@ -1,0 +1,22 @@
+  [  0.04s] loaded v1-F2 (go1.27, 29995271 B) -> v1-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  datamap .rodata: blocks=49196 matched=49195 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .go.type: blocks=169423 matched=169422 ambiguous=0 unmatched=1 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9286 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39228 samples, 0 B raw:
+  [  1.62s] content maps + shift tables
+  [  1.62s] layout: 32652 funcs, 0 rec shapes, raw 66046 B, zstd 610 B
+  [  1.66s] stage 1 (h): pclntab blobs 7532184 -> 7532184 B, delta 39 B
+  [  2.16s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=0 in 0 runs
+  stage-2 differing bytes by section:
+  [  2.18s] stage 2 (positional): raw 4 B, zstd 17 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/self127.gtp: 776 B = header 110 + layout 610 + stage1(h) 39 + stage2(p) 17  [encode 2.21s]
+  [  0.04s] loaded old (go1.27) and patch: 776 B, layout 66046 B
+  [  0.07s] stage 1 applied: 7532184 B of pclntab blobs; skeleton 32652 funcs
+  [  0.58s] prediction: 29995271 B, hash verified
+  [  0.62s] stage 2 (p) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/self127.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/self127.out: 29995271 B [decode 0.62s]
+SELF-DECODE-IDENTICAL

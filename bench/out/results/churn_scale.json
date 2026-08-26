@@ -1,0 +1,2982 @@
+{
+ "prometheus-3.13.1-3.13.2": {
+  "old_bytes": 135857317,
+  "new_bytes": 135899968,
+  "diff_bytes": 117314116,
+  "pct": 86.35097364685923,
+  "runs": 7094198,
+  "runs8": 95930,
+  "median_run": 3,
+  "largest_unchanged": 334055,
+  "unchanged_cov": {
+   "4096": 0.006232553525254735,
+   "65536": 0.005544095942951677,
+   "262144": 0.002458866459139628,
+   "1048576": 0.0,
+   "4194304": 0.0
+  },
+  "sections": [
+   {
+    "name": ".note.go.buildid",
+    "size": 100,
+    "new_size": 100,
+    "diff": 79,
+    "pct": 79.0,
+    "runs": 5,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".note.gnu.build-id",
+    "size": 36,
+    "new_size": 36,
+    "diff": 20,
+    "pct": 55.55555555555556,
+    "runs": 1,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".text",
+    "size": 42416177,
+    "new_size": 42429777,
+    "diff": 39979786,
+    "pct": 94.25598634219203,
+    "runs": 1179850,
+    "runs8": 22550,
+    "compressed": false
+   },
+   {
+    "name": ".rodata",
+    "size": 19352697,
+    "new_size": 19354777,
+    "diff": 14199881,
+    "pct": 73.37417105223112,
+    "runs": 1434720,
+    "runs8": 25188,
+    "compressed": false
+   },
+   {
+    "name": ".gopclntab",
+    "size": 34612073,
+    "new_size": 34621634,
+    "diff": 27916257,
+    "pct": 80.65468081036349,
+    "runs": 3549703,
+    "runs8": 19814,
+    "compressed": false
+   },
+   {
+    "name": ".typelink",
+    "size": 161404,
+    "new_size": 161428,
+    "diff": 95405,
+    "pct": 59.10943966692275,
+    "runs": 40421,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".itablink",
+    "size": 42488,
+    "new_size": 42512,
+    "diff": 12829,
+    "pct": 30.19440783279985,
+    "runs": 5313,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.buildinfo",
+    "size": 23280,
+    "new_size": 23280,
+    "diff": 330,
+    "pct": 1.4175257731958764,
+    "runs": 39,
+    "runs8": 12,
+    "compressed": false
+   },
+   {
+    "name": ".go.fipsinfo",
+    "size": 120,
+    "new_size": 120,
+    "diff": 48,
+    "pct": 40.0,
+    "runs": 10,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.module",
+    "size": 592,
+    "new_size": 592,
+    "diff": 96,
+    "pct": 16.216216216216218,
+    "runs": 48,
+    "runs8": 5,
+    "compressed": false
+   },
+   {
+    "name": ".noptrdata",
+    "size": 589921,
+    "new_size": 589921,
+    "diff": 7048,
+    "pct": 1.1947362443445817,
+    "runs": 2654,
+    "runs8": 517,
+    "compressed": false
+   },
+   {
+    "name": ".data",
+    "size": 345650,
+    "new_size": 345682,
+    "diff": 61026,
+    "pct": 17.65543179516852,
+    "runs": 25276,
+    "runs8": 8527,
+    "compressed": false
+   },
+   {
+    "name": ".debug_abbrev",
+    "size": 352,
+    "new_size": 352,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".debug_line",
+    "size": 5401488,
+    "new_size": 5408517,
+    "diff": 5379977,
+    "pct": 99.60175788597512,
+    "runs": 21163,
+    "runs8": 12,
+    "compressed": false
+   },
+   {
+    "name": ".debug_frame",
+    "size": 1301885,
+    "new_size": 1302119,
+    "diff": 1274834,
+    "pct": 97.92216670443241,
+    "runs": 5635,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".debug_gdb_scripts",
+    "size": 42,
+    "new_size": 42,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".debug_info",
+    "size": 9929066,
+    "new_size": 9934355,
+    "diff": 9890205,
+    "pct": 99.60861374070834,
+    "runs": 38653,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".debug_loclists",
+    "size": 5736597,
+    "new_size": 5739561,
+    "diff": 5713901,
+    "pct": 99.60436474795074,
+    "runs": 22485,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".debug_rnglists",
+    "size": 2089055,
+    "new_size": 2087190,
+    "diff": 2080811,
+    "pct": 99.60537180686961,
+    "runs": 8191,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".debug_addr",
+    "size": 218436,
+    "new_size": 218478,
+    "diff": 217300,
+    "pct": 99.47993920416049,
+    "runs": 1079,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".symtab",
+    "size": 3234624,
+    "new_size": 3235872,
+    "diff": 732694,
+    "pct": 22.651597218100157,
+    "runs": 390218,
+    "runs8": 15977,
+    "compressed": false
+   },
+   {
+    "name": ".strtab",
+    "size": 10391041,
+    "new_size": 10394180,
+    "diff": 9749129,
+    "pct": 93.8224476257961,
+    "runs": 368374,
+    "runs8": 3276,
+    "compressed": false
+   },
+   {
+    "name": ".shstrtab",
+    "size": 292,
+    "new_size": 292,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   }
+  ],
+  "seconds": 1.5759963989257812
+ },
+ "prometheus-3.13.1-3.13.2-stripped": {
+  "old_bytes": 97552696,
+  "new_bytes": 97577304,
+  "diff_bytes": 82275269,
+  "pct": 84.3393082647352,
+  "runs": 6238411,
+  "runs8": 76646,
+  "median_run": 3,
+  "largest_unchanged": 334055,
+  "unchanged_cov": {
+   "4096": 0.007011943575603487,
+   "65536": 0.006272804597835,
+   "262144": 0.0034243543612572226,
+   "1048576": 0.0,
+   "4194304": 0.0
+  },
+  "sections": [
+   {
+    "name": ".note.go.buildid",
+    "size": 100,
+    "new_size": 100,
+    "diff": 79,
+    "pct": 79.0,
+    "runs": 5,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".note.gnu.build-id",
+    "size": 36,
+    "new_size": 36,
+    "diff": 20,
+    "pct": 55.55555555555556,
+    "runs": 1,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".text",
+    "size": 42416177,
+    "new_size": 42429777,
+    "diff": 39979786,
+    "pct": 94.25598634219203,
+    "runs": 1179850,
+    "runs8": 22550,
+    "compressed": false
+   },
+   {
+    "name": ".rodata",
+    "size": 19352697,
+    "new_size": 19354777,
+    "diff": 14199881,
+    "pct": 73.37417105223112,
+    "runs": 1434720,
+    "runs8": 25188,
+    "compressed": false
+   },
+   {
+    "name": ".gopclntab",
+    "size": 34612073,
+    "new_size": 34621634,
+    "diff": 27916257,
+    "pct": 80.65468081036349,
+    "runs": 3549703,
+    "runs8": 19814,
+    "compressed": false
+   },
+   {
+    "name": ".typelink",
+    "size": 161404,
+    "new_size": 161428,
+    "diff": 95405,
+    "pct": 59.10943966692275,
+    "runs": 40421,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".itablink",
+    "size": 42488,
+    "new_size": 42512,
+    "diff": 12829,
+    "pct": 30.19440783279985,
+    "runs": 5313,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.buildinfo",
+    "size": 23280,
+    "new_size": 23280,
+    "diff": 330,
+    "pct": 1.4175257731958764,
+    "runs": 39,
+    "runs8": 12,
+    "compressed": false
+   },
+   {
+    "name": ".go.fipsinfo",
+    "size": 120,
+    "new_size": 120,
+    "diff": 48,
+    "pct": 40.0,
+    "runs": 10,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.module",
+    "size": 592,
+    "new_size": 592,
+    "diff": 96,
+    "pct": 16.216216216216218,
+    "runs": 48,
+    "runs8": 5,
+    "compressed": false
+   },
+   {
+    "name": ".noptrdata",
+    "size": 589921,
+    "new_size": 589921,
+    "diff": 7048,
+    "pct": 1.1947362443445817,
+    "runs": 2654,
+    "runs8": 517,
+    "compressed": false
+   },
+   {
+    "name": ".data",
+    "size": 345650,
+    "new_size": 345682,
+    "diff": 61026,
+    "pct": 17.65543179516852,
+    "runs": 25276,
+    "runs8": 8527,
+    "compressed": false
+   },
+   {
+    "name": ".shstrtab",
+    "size": 162,
+    "new_size": 162,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   }
+  ],
+  "seconds": 0.5475234985351562
+ },
+ "prometheus-3.13.2-3.14.0": {
+  "old_bytes": 135899968,
+  "new_bytes": 142095522,
+  "diff_bytes": 121216282,
+  "pct": 89.19522482889768,
+  "runs": 6622744,
+  "runs8": 80706,
+  "median_run": 3,
+  "largest_unchanged": 63257,
+  "unchanged_cov": {
+   "4096": 0.0005708757782783289,
+   "65536": 0.0,
+   "262144": 0.0,
+   "1048576": 0.0,
+   "4194304": 0.0
+  },
+  "sections": [
+   {
+    "name": ".note.go.buildid",
+    "size": 100,
+    "new_size": 100,
+    "diff": 74,
+    "pct": 74.0,
+    "runs": 9,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".note.gnu.build-id",
+    "size": 36,
+    "new_size": 36,
+    "diff": 20,
+    "pct": 55.55555555555556,
+    "runs": 1,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".text",
+    "size": 42429777,
+    "new_size": 43430769,
+    "diff": 40579825,
+    "pct": 95.63996765761932,
+    "runs": 1144208,
+    "runs8": 11199,
+    "compressed": false
+   },
+   {
+    "name": ".rodata",
+    "size": 19354777,
+    "new_size": 20550521,
+    "diff": 15568123,
+    "pct": 80.43555862203941,
+    "runs": 1108549,
+    "runs8": 34257,
+    "compressed": false
+   },
+   {
+    "name": ".gopclntab",
+    "size": 34621634,
+    "new_size": 37324308,
+    "diff": 28828899,
+    "pct": 83.2684528985547,
+    "runs": 3368315,
+    "runs8": 19346,
+    "compressed": false
+   },
+   {
+    "name": ".typelink",
+    "size": 161428,
+    "new_size": 171660,
+    "diff": 114781,
+    "pct": 71.10352603018063,
+    "runs": 40497,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".itablink",
+    "size": 42512,
+    "new_size": 46760,
+    "diff": 15704,
+    "pct": 36.94015807301468,
+    "runs": 5322,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.buildinfo",
+    "size": 23280,
+    "new_size": 23680,
+    "diff": 15455,
+    "pct": 66.38745704467354,
+    "runs": 382,
+    "runs8": 33,
+    "compressed": false
+   },
+   {
+    "name": ".go.fipsinfo",
+    "size": 120,
+    "new_size": 120,
+    "diff": 61,
+    "pct": 50.833333333333336,
+    "runs": 9,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.module",
+    "size": 592,
+    "new_size": 592,
+    "diff": 141,
+    "pct": 23.81756756756757,
+    "runs": 50,
+    "runs8": 5,
+    "compressed": false
+   },
+   {
+    "name": ".noptrdata",
+    "size": 589921,
+    "new_size": 605249,
+    "diff": 525191,
+    "pct": 89.02734433932679,
+    "runs": 30364,
+    "runs8": 1222,
+    "compressed": false
+   },
+   {
+    "name": ".data",
+    "size": 345682,
+    "new_size": 352114,
+    "diff": 84360,
+    "pct": 24.4039319374454,
+    "runs": 30359,
+    "runs8": 7107,
+    "compressed": false
+   },
+   {
+    "name": ".debug_abbrev",
+    "size": 352,
+    "new_size": 352,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".debug_line",
+    "size": 5408517,
+    "new_size": 5538895,
+    "diff": 5387232,
+    "pct": 99.60645404276255,
+    "runs": 21186,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".debug_frame",
+    "size": 1302119,
+    "new_size": 1340994,
+    "diff": 1296346,
+    "pct": 99.55664574435977,
+    "runs": 5656,
+    "runs8": 5,
+    "compressed": false
+   },
+   {
+    "name": ".debug_gdb_scripts",
+    "size": 42,
+    "new_size": 42,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".debug_info",
+    "size": 9934355,
+    "new_size": 10294988,
+    "diff": 9895715,
+    "pct": 99.61104671616829,
+    "runs": 38440,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".debug_loclists",
+    "size": 5739561,
+    "new_size": 5840082,
+    "diff": 5716748,
+    "pct": 99.6025305768159,
+    "runs": 22614,
+    "runs8": 4,
+    "compressed": false
+   },
+   {
+    "name": ".debug_rnglists",
+    "size": 2087190,
+    "new_size": 2108065,
+    "diff": 2078809,
+    "pct": 99.59845533947556,
+    "runs": 8315,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".debug_addr",
+    "size": 218478,
+    "new_size": 228164,
+    "diff": 217290,
+    "pct": 99.45623815670227,
+    "runs": 1124,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".symtab",
+    "size": 3235872,
+    "new_size": 3416832,
+    "diff": 959622,
+    "pct": 29.655746580828907,
+    "runs": 420058,
+    "runs8": 5517,
+    "compressed": false
+   },
+   {
+    "name": ".strtab",
+    "size": 10394180,
+    "new_size": 10812126,
+    "diff": 9930631,
+    "pct": 95.54030236151385,
+    "runs": 376894,
+    "runs8": 1965,
+    "compressed": false
+   },
+   {
+    "name": ".shstrtab",
+    "size": 292,
+    "new_size": 292,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   }
+  ],
+  "seconds": 0.7571406364440918
+ },
+ "prometheus-3.13.2-3.14.0-stripped": {
+  "old_bytes": 97577304,
+  "new_bytes": 102514648,
+  "diff_bytes": 85733929,
+  "pct": 87.86257201777167,
+  "runs": 5728508,
+  "runs8": 73217,
+  "median_run": 3,
+  "largest_unchanged": 63257,
+  "unchanged_cov": {
+   "4096": 0.0006482757506807116,
+   "65536": 0.0,
+   "262144": 0.0,
+   "1048576": 0.0,
+   "4194304": 0.0
+  },
+  "sections": [
+   {
+    "name": ".note.go.buildid",
+    "size": 100,
+    "new_size": 100,
+    "diff": 74,
+    "pct": 74.0,
+    "runs": 9,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".note.gnu.build-id",
+    "size": 36,
+    "new_size": 36,
+    "diff": 20,
+    "pct": 55.55555555555556,
+    "runs": 1,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".text",
+    "size": 42429777,
+    "new_size": 43430769,
+    "diff": 40579825,
+    "pct": 95.63996765761932,
+    "runs": 1144208,
+    "runs8": 11199,
+    "compressed": false
+   },
+   {
+    "name": ".rodata",
+    "size": 19354777,
+    "new_size": 20550521,
+    "diff": 15568123,
+    "pct": 80.43555862203941,
+    "runs": 1108549,
+    "runs8": 34257,
+    "compressed": false
+   },
+   {
+    "name": ".gopclntab",
+    "size": 34621634,
+    "new_size": 37324308,
+    "diff": 28828899,
+    "pct": 83.2684528985547,
+    "runs": 3368315,
+    "runs8": 19346,
+    "compressed": false
+   },
+   {
+    "name": ".typelink",
+    "size": 161428,
+    "new_size": 171660,
+    "diff": 114781,
+    "pct": 71.10352603018063,
+    "runs": 40497,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".itablink",
+    "size": 42512,
+    "new_size": 46760,
+    "diff": 15704,
+    "pct": 36.94015807301468,
+    "runs": 5322,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.buildinfo",
+    "size": 23280,
+    "new_size": 23680,
+    "diff": 15455,
+    "pct": 66.38745704467354,
+    "runs": 382,
+    "runs8": 33,
+    "compressed": false
+   },
+   {
+    "name": ".go.fipsinfo",
+    "size": 120,
+    "new_size": 120,
+    "diff": 61,
+    "pct": 50.833333333333336,
+    "runs": 9,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.module",
+    "size": 592,
+    "new_size": 592,
+    "diff": 141,
+    "pct": 23.81756756756757,
+    "runs": 50,
+    "runs8": 5,
+    "compressed": false
+   },
+   {
+    "name": ".noptrdata",
+    "size": 589921,
+    "new_size": 605249,
+    "diff": 525191,
+    "pct": 89.02734433932679,
+    "runs": 30364,
+    "runs8": 1222,
+    "compressed": false
+   },
+   {
+    "name": ".data",
+    "size": 345682,
+    "new_size": 352114,
+    "diff": 84360,
+    "pct": 24.4039319374454,
+    "runs": 30359,
+    "runs8": 7107,
+    "compressed": false
+   },
+   {
+    "name": ".shstrtab",
+    "size": 162,
+    "new_size": 162,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   }
+  ],
+  "seconds": 0.5249276161193848
+ },
+ "kube-apiserver-1.36.3-1.36.4": {
+  "old_bytes": 88387746,
+  "new_bytes": 88436898,
+  "diff_bytes": 69490917,
+  "pct": 78.62053298655223,
+  "runs": 5766047,
+  "runs8": 150096,
+  "median_run": 3,
+  "largest_unchanged": 903339,
+  "unchanged_cov": {
+   "4096": 0.014304120844986815,
+   "65536": 0.011598711884790003,
+   "262144": 0.010220183689263895,
+   "1048576": 0.0,
+   "4194304": 0.0
+  },
+  "sections": [
+   {
+    "name": ".note.go.buildid",
+    "size": 100,
+    "new_size": 100,
+    "diff": 78,
+    "pct": 78.0,
+    "runs": 6,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".note.gnu.build-id",
+    "size": 36,
+    "new_size": 36,
+    "diff": 20,
+    "pct": 55.55555555555556,
+    "runs": 1,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".text",
+    "size": 42289201,
+    "new_size": 42306417,
+    "diff": 34747745,
+    "pct": 82.16694611941237,
+    "runs": 1096484,
+    "runs8": 72711,
+    "compressed": false
+   },
+   {
+    "name": ".rodata",
+    "size": 12649465,
+    "new_size": 12657529,
+    "diff": 8817675,
+    "pct": 69.70788883166205,
+    "runs": 1131459,
+    "runs8": 43787,
+    "compressed": false
+   },
+   {
+    "name": ".gopclntab",
+    "size": 32403861,
+    "new_size": 32425872,
+    "diff": 25530068,
+    "pct": 78.78711737468569,
+    "runs": 3459180,
+    "runs8": 23929,
+    "compressed": false
+   },
+   {
+    "name": ".typelink",
+    "size": 119404,
+    "new_size": 119464,
+    "diff": 75826,
+    "pct": 63.50373521825065,
+    "runs": 29897,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".itablink",
+    "size": 42784,
+    "new_size": 42816,
+    "diff": 13554,
+    "pct": 31.68006731488407,
+    "runs": 5349,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.buildinfo",
+    "size": 5872,
+    "new_size": 5872,
+    "diff": 58,
+    "pct": 0.9877384196185286,
+    "runs": 15,
+    "runs8": 10,
+    "compressed": false
+   },
+   {
+    "name": ".go.fipsinfo",
+    "size": 120,
+    "new_size": 120,
+    "diff": 54,
+    "pct": 45.0,
+    "runs": 10,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.module",
+    "size": 592,
+    "new_size": 592,
+    "diff": 105,
+    "pct": 17.736486486486488,
+    "runs": 50,
+    "runs8": 5,
+    "compressed": false
+   },
+   {
+    "name": ".noptrdata",
+    "size": 579329,
+    "new_size": 579361,
+    "diff": 258628,
+    "pct": 44.642681446984355,
+    "runs": 25204,
+    "runs8": 1821,
+    "compressed": false
+   },
+   {
+    "name": ".data",
+    "size": 287730,
+    "new_size": 287922,
+    "diff": 44584,
+    "pct": 15.495082195113474,
+    "runs": 18024,
+    "runs8": 7786,
+    "compressed": false
+   },
+   {
+    "name": ".shstrtab",
+    "size": 162,
+    "new_size": 162,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   }
+  ],
+  "seconds": 0.49194812774658203
+ },
+ "terraform-1.15.8-1.15.9": {
+  "old_bytes": 117289144,
+  "new_bytes": 117838008,
+  "diff_bytes": 101775667,
+  "pct": 86.77330529413703,
+  "runs": 7576102,
+  "runs8": 97245,
+  "median_run": 3,
+  "largest_unchanged": 66194,
+  "unchanged_cov": {
+   "4096": 0.0006546300653366521,
+   "65536": 0.000564365957006217,
+   "262144": 0.0,
+   "1048576": 0.0,
+   "4194304": 0.0
+  },
+  "sections": [
+   {
+    "name": ".text",
+    "size": 55987601,
+    "new_size": 56298929,
+    "diff": 52858622,
+    "pct": 94.41130010196365,
+    "runs": 1742199,
+    "runs8": 21806,
+    "compressed": false
+   },
+   {
+    "name": ".rodata",
+    "size": 22668857,
+    "new_size": 22992953,
+    "diff": 15737639,
+    "pct": 69.42405168465265,
+    "runs": 2404129,
+    "runs8": 55774,
+    "compressed": false
+   },
+   {
+    "name": ".typelink",
+    "size": 170280,
+    "new_size": 170884,
+    "diff": 114207,
+    "pct": 67.07011980267794,
+    "runs": 42696,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".itablink",
+    "size": 84160,
+    "new_size": 84560,
+    "diff": 30467,
+    "pct": 36.201283269961976,
+    "runs": 10531,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".gopclntab",
+    "size": 35983552,
+    "new_size": 36155296,
+    "diff": 31164341,
+    "pct": 86.60718374884169,
+    "runs": 3259170,
+    "runs8": 12427,
+    "compressed": false
+   },
+   {
+    "name": ".go.buildinfo",
+    "size": 25248,
+    "new_size": 25248,
+    "diff": 1356,
+    "pct": 5.370722433460076,
+    "runs": 91,
+    "runs8": 30,
+    "compressed": false
+   },
+   {
+    "name": ".go.fipsinfo",
+    "size": 120,
+    "new_size": 120,
+    "diff": 55,
+    "pct": 45.833333333333336,
+    "runs": 10,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".noptrdata",
+    "size": 1743361,
+    "new_size": 1487521,
+    "diff": 1614203,
+    "pct": 92.59143688541846,
+    "runs": 47731,
+    "runs8": 1493,
+    "compressed": false
+   },
+   {
+    "name": ".data",
+    "size": 616618,
+    "new_size": 616202,
+    "diff": 252172,
+    "pct": 40.89598422361981,
+    "runs": 68894,
+    "runs8": 5615,
+    "compressed": false
+   },
+   {
+    "name": ".note.gnu.build-id",
+    "size": 36,
+    "new_size": 36,
+    "diff": 20,
+    "pct": 55.55555555555556,
+    "runs": 1,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".note.go.buildid",
+    "size": 100,
+    "new_size": 100,
+    "diff": 80,
+    "pct": 80.0,
+    "runs": 4,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".shstrtab",
+    "size": 184,
+    "new_size": 184,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   }
+  ],
+  "seconds": 0.6409380435943604
+ },
+ "cockroach-26.2.4-26.2.5": {
+  "old_bytes": 326021464,
+  "new_bytes": 326116488,
+  "diff_bytes": 268370451,
+  "pct": 82.31680445432268,
+  "runs": 16322945,
+  "runs8": 466092,
+  "median_run": 3,
+  "largest_unchanged": 2440673,
+  "unchanged_cov": {
+   "4096": 0.02025166662033025,
+   "65536": 0.01780540743783667,
+   "262144": 0.016873435057024343,
+   "1048576": 0.014004571797150141,
+   "4194304": 0.0
+  },
+  "sections": [
+   {
+    "name": ".interp",
+    "size": 28,
+    "new_size": 28,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".note.ABI-tag",
+    "size": 32,
+    "new_size": 32,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".note.go.buildid",
+    "size": 24,
+    "new_size": 24,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".note.gnu.build-id",
+    "size": 36,
+    "new_size": 36,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".hash",
+    "size": 37388,
+    "new_size": 37388,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".dynsym",
+    "size": 125904,
+    "new_size": 125904,
+    "diff": 13005,
+    "pct": 10.329298513152878,
+    "runs": 4985,
+    "runs8": 4985,
+    "compressed": false
+   },
+   {
+    "name": ".dynstr",
+    "size": 127904,
+    "new_size": 127904,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".gnu.version",
+    "size": 10492,
+    "new_size": 10492,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".gnu.version_r",
+    "size": 384,
+    "new_size": 384,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".rela.dyn",
+    "size": 240,
+    "new_size": 240,
+    "diff": 22,
+    "pct": 9.166666666666666,
+    "runs": 10,
+    "runs8": 10,
+    "compressed": false
+   },
+   {
+    "name": ".rela.plt",
+    "size": 5976,
+    "new_size": 5976,
+    "diff": 498,
+    "pct": 8.333333333333334,
+    "runs": 249,
+    "runs8": 249,
+    "compressed": false
+   },
+   {
+    "name": ".init",
+    "size": 36,
+    "new_size": 36,
+    "diff": 5,
+    "pct": 13.88888888888889,
+    "runs": 2,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".plt",
+    "size": 4000,
+    "new_size": 4000,
+    "diff": 502,
+    "pct": 12.55,
+    "runs": 251,
+    "runs8": 249,
+    "compressed": false
+   },
+   {
+    "name": ".plt.got",
+    "size": 40,
+    "new_size": 40,
+    "diff": 10,
+    "pct": 25.0,
+    "runs": 5,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".text",
+    "size": 105568983,
+    "new_size": 105607063,
+    "diff": 88126210,
+    "pct": 83.47736948455778,
+    "runs": 2997744,
+    "runs8": 159205,
+    "compressed": false
+   },
+   {
+    "name": ".fini",
+    "size": 14,
+    "new_size": 14,
+    "diff": 3,
+    "pct": 21.428571428571427,
+    "runs": 1,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".rodata",
+    "size": 41409512,
+    "new_size": 41426568,
+    "diff": 26833173,
+    "pct": 64.79953929425683,
+    "runs": 4655663,
+    "runs8": 118320,
+    "compressed": false
+   },
+   {
+    "name": ".typelink",
+    "size": 245440,
+    "new_size": 245508,
+    "diff": 157414,
+    "pct": 64.13543024771839,
+    "runs": 58976,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".itablink",
+    "size": 127248,
+    "new_size": 127248,
+    "diff": 41308,
+    "pct": 32.46259273230228,
+    "runs": 15906,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".gopclntab",
+    "size": 71625832,
+    "new_size": 71647056,
+    "diff": 60864120,
+    "pct": 84.97509669416475,
+    "runs": 5837737,
+    "runs8": 19773,
+    "compressed": false
+   },
+   {
+    "name": ".eh_frame_hdr",
+    "size": 49260,
+    "new_size": 49260,
+    "diff": 15872,
+    "pct": 32.2208688591149,
+    "runs": 6156,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".eh_frame",
+    "size": 322380,
+    "new_size": 322380,
+    "diff": 15824,
+    "pct": 4.908493082697438,
+    "runs": 6162,
+    "runs8": 6158,
+    "compressed": false
+   },
+   {
+    "name": ".gcc_except_table",
+    "size": 1945,
+    "new_size": 1945,
+    "diff": 4,
+    "pct": 0.20565552699228792,
+    "runs": 2,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".tdata",
+    "size": 2632,
+    "new_size": 2632,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".init_array",
+    "size": 24,
+    "new_size": 24,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".ctors",
+    "size": 16,
+    "new_size": 16,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".dtors",
+    "size": 16,
+    "new_size": 16,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".jcr",
+    "size": 8,
+    "new_size": 8,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".data.rel.ro",
+    "size": 6104,
+    "new_size": 6104,
+    "diff": 1436,
+    "pct": 23.525557011795545,
+    "runs": 532,
+    "runs8": 180,
+    "compressed": false
+   },
+   {
+    "name": ".dynamic",
+    "size": 528,
+    "new_size": 528,
+    "diff": 7,
+    "pct": 1.3257575757575757,
+    "runs": 3,
+    "runs8": 3,
+    "compressed": false
+   },
+   {
+    "name": ".got",
+    "size": 56,
+    "new_size": 56,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".got.plt",
+    "size": 2016,
+    "new_size": 2016,
+    "diff": 2,
+    "pct": 0.0992063492063492,
+    "runs": 1,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".data",
+    "size": 2433736,
+    "new_size": 2433896,
+    "diff": 403705,
+    "pct": 16.587871486471826,
+    "runs": 167252,
+    "runs8": 56566,
+    "compressed": false
+   },
+   {
+    "name": ".go.buildinfo",
+    "size": 48,
+    "new_size": 48,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".go.fipsinfo",
+    "size": 120,
+    "new_size": 120,
+    "diff": 58,
+    "pct": 48.333333333333336,
+    "runs": 9,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".noptrdata",
+    "size": 8128097,
+    "new_size": 8119457,
+    "diff": 6930196,
+    "pct": 85.26222066493547,
+    "runs": 474568,
+    "runs8": 17468,
+    "compressed": false
+   },
+   {
+    "name": ".comment",
+    "size": 33,
+    "new_size": 33,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".debug_aranges",
+    "size": 3749,
+    "new_size": 3780,
+    "diff": 3697,
+    "pct": 98.61296345692185,
+    "runs": 27,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".debug_info",
+    "size": 22053846,
+    "new_size": 22055657,
+    "diff": 21965992,
+    "pct": 99.60163864389006,
+    "runs": 87202,
+    "runs8": 5,
+    "compressed": false
+   },
+   {
+    "name": ".debug_abbrev",
+    "size": 19098,
+    "new_size": 19098,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".debug_line",
+    "size": 13899150,
+    "new_size": 13908798,
+    "diff": 13843353,
+    "pct": 99.59855818521277,
+    "runs": 55397,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".debug_frame",
+    "size": 2491397,
+    "new_size": 2492553,
+    "diff": 2070417,
+    "pct": 83.10265284898392,
+    "runs": 9817,
+    "runs8": 29,
+    "compressed": false
+   },
+   {
+    "name": ".debug_str",
+    "size": 131736,
+    "new_size": 131736,
+    "diff": 129813,
+    "pct": 98.54026234286755,
+    "runs": 622,
+    "runs8": 15,
+    "compressed": false
+   },
+   {
+    "name": ".debug_loc",
+    "size": 471492,
+    "new_size": 471365,
+    "diff": 469523,
+    "pct": 99.58238952092506,
+    "runs": 1923,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".debug_ranges",
+    "size": 85088,
+    "new_size": 85157,
+    "diff": 84650,
+    "pct": 99.4852388115833,
+    "runs": 406,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".debug_macro",
+    "size": 65074,
+    "new_size": 65086,
+    "diff": 64554,
+    "pct": 99.20090973353413,
+    "runs": 423,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".debug_addr",
+    "size": 467541,
+    "new_size": 467587,
+    "diff": 464626,
+    "pct": 99.37652526730277,
+    "runs": 2814,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".debug_gdb_scripts",
+    "size": 35,
+    "new_size": 35,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".debug_loclists",
+    "size": 12943044,
+    "new_size": 12949395,
+    "diff": 12890122,
+    "pct": 99.59111627836543,
+    "runs": 52018,
+    "runs8": 14,
+    "compressed": false
+   },
+   {
+    "name": ".debug_rnglists",
+    "size": 5934050,
+    "new_size": 5937821,
+    "diff": 5909347,
+    "pct": 99.58370758588148,
+    "runs": 24207,
+    "runs8": 5,
+    "compressed": false
+   },
+   {
+    "name": ".symtab",
+    "size": 8324184,
+    "new_size": 8325840,
+    "diff": 1642545,
+    "pct": 19.732204381834904,
+    "runs": 888209,
+    "runs8": 72539,
+    "compressed": false
+   },
+   {
+    "name": ".strtab",
+    "size": 28886989,
+    "new_size": 28892336,
+    "diff": 25421812,
+    "pct": 88.00436764108575,
+    "runs": 973447,
+    "runs8": 10286,
+    "compressed": false
+   },
+   {
+    "name": ".shstrtab",
+    "size": 584,
+    "new_size": 584,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   }
+  ],
+  "seconds": 2.6536929607391357
+ },
+ "cockroach-26.2.4-26.2.5-stripped": {
+  "old_bytes": 230243816,
+  "new_bytes": 230309064,
+  "diff_bytes": 183409004,
+  "pct": 79.6586015582716,
+  "runs": 14226447,
+  "runs8": 383194,
+  "median_run": 3,
+  "largest_unchanged": 2440673,
+  "unchanged_cov": {
+   "4096": 0.013835042588071073,
+   "65536": 0.011203219460191713,
+   "262144": 0.010600384594042691,
+   "1048576": 0.010600384594042691,
+   "4194304": 0.0
+  },
+  "sections": [
+   {
+    "name": ".interp",
+    "size": 28,
+    "new_size": 28,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".note.ABI-tag",
+    "size": 32,
+    "new_size": 32,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".note.go.buildid",
+    "size": 24,
+    "new_size": 24,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".note.gnu.build-id",
+    "size": 36,
+    "new_size": 36,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".hash",
+    "size": 37388,
+    "new_size": 37388,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".dynsym",
+    "size": 125904,
+    "new_size": 125904,
+    "diff": 13005,
+    "pct": 10.329298513152878,
+    "runs": 4985,
+    "runs8": 4985,
+    "compressed": false
+   },
+   {
+    "name": ".dynstr",
+    "size": 127904,
+    "new_size": 127904,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".gnu.version",
+    "size": 10492,
+    "new_size": 10492,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".gnu.version_r",
+    "size": 384,
+    "new_size": 384,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".rela.dyn",
+    "size": 240,
+    "new_size": 240,
+    "diff": 22,
+    "pct": 9.166666666666666,
+    "runs": 10,
+    "runs8": 10,
+    "compressed": false
+   },
+   {
+    "name": ".rela.plt",
+    "size": 5976,
+    "new_size": 5976,
+    "diff": 498,
+    "pct": 8.333333333333334,
+    "runs": 249,
+    "runs8": 249,
+    "compressed": false
+   },
+   {
+    "name": ".init",
+    "size": 36,
+    "new_size": 36,
+    "diff": 5,
+    "pct": 13.88888888888889,
+    "runs": 2,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".plt",
+    "size": 4000,
+    "new_size": 4000,
+    "diff": 502,
+    "pct": 12.55,
+    "runs": 251,
+    "runs8": 249,
+    "compressed": false
+   },
+   {
+    "name": ".plt.got",
+    "size": 40,
+    "new_size": 40,
+    "diff": 10,
+    "pct": 25.0,
+    "runs": 5,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".text",
+    "size": 105568983,
+    "new_size": 105607063,
+    "diff": 88126210,
+    "pct": 83.47736948455778,
+    "runs": 2997744,
+    "runs8": 159205,
+    "compressed": false
+   },
+   {
+    "name": ".fini",
+    "size": 14,
+    "new_size": 14,
+    "diff": 3,
+    "pct": 21.428571428571427,
+    "runs": 1,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".rodata",
+    "size": 41409512,
+    "new_size": 41426568,
+    "diff": 26833173,
+    "pct": 64.79953929425683,
+    "runs": 4655663,
+    "runs8": 118320,
+    "compressed": false
+   },
+   {
+    "name": ".typelink",
+    "size": 245440,
+    "new_size": 245508,
+    "diff": 157414,
+    "pct": 64.13543024771839,
+    "runs": 58976,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".itablink",
+    "size": 127248,
+    "new_size": 127248,
+    "diff": 41308,
+    "pct": 32.46259273230228,
+    "runs": 15906,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".gopclntab",
+    "size": 71625832,
+    "new_size": 71647056,
+    "diff": 60864120,
+    "pct": 84.97509669416475,
+    "runs": 5837737,
+    "runs8": 19773,
+    "compressed": false
+   },
+   {
+    "name": ".eh_frame_hdr",
+    "size": 49260,
+    "new_size": 49260,
+    "diff": 15872,
+    "pct": 32.2208688591149,
+    "runs": 6156,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".eh_frame",
+    "size": 322380,
+    "new_size": 322380,
+    "diff": 15824,
+    "pct": 4.908493082697438,
+    "runs": 6162,
+    "runs8": 6158,
+    "compressed": false
+   },
+   {
+    "name": ".gcc_except_table",
+    "size": 1945,
+    "new_size": 1945,
+    "diff": 4,
+    "pct": 0.20565552699228792,
+    "runs": 2,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".tdata",
+    "size": 2632,
+    "new_size": 2632,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".init_array",
+    "size": 24,
+    "new_size": 24,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".ctors",
+    "size": 16,
+    "new_size": 16,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".dtors",
+    "size": 16,
+    "new_size": 16,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".jcr",
+    "size": 8,
+    "new_size": 8,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".data.rel.ro",
+    "size": 6104,
+    "new_size": 6104,
+    "diff": 1436,
+    "pct": 23.525557011795545,
+    "runs": 532,
+    "runs8": 180,
+    "compressed": false
+   },
+   {
+    "name": ".dynamic",
+    "size": 528,
+    "new_size": 528,
+    "diff": 7,
+    "pct": 1.3257575757575757,
+    "runs": 3,
+    "runs8": 3,
+    "compressed": false
+   },
+   {
+    "name": ".got",
+    "size": 56,
+    "new_size": 56,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".got.plt",
+    "size": 2016,
+    "new_size": 2016,
+    "diff": 2,
+    "pct": 0.0992063492063492,
+    "runs": 1,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".data",
+    "size": 2433736,
+    "new_size": 2433896,
+    "diff": 403705,
+    "pct": 16.587871486471826,
+    "runs": 167252,
+    "runs8": 56566,
+    "compressed": false
+   },
+   {
+    "name": ".go.buildinfo",
+    "size": 48,
+    "new_size": 48,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".go.fipsinfo",
+    "size": 120,
+    "new_size": 120,
+    "diff": 58,
+    "pct": 48.333333333333336,
+    "runs": 9,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".noptrdata",
+    "size": 8128097,
+    "new_size": 8119457,
+    "diff": 6930196,
+    "pct": 85.26222066493547,
+    "runs": 474568,
+    "runs8": 17468,
+    "compressed": false
+   },
+   {
+    "name": ".comment",
+    "size": 33,
+    "new_size": 33,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".shstrtab",
+    "size": 390,
+    "new_size": 390,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   }
+  ],
+  "seconds": 1.2395765781402588
+ },
+ "vault-2.0.3-2.0.4": {
+  "old_bytes": 536903029,
+  "new_bytes": 537754780,
+  "diff_bytes": 466509714,
+  "pct": 86.88900766100912,
+  "runs": 27905054,
+  "runs8": 716380,
+  "median_run": 4,
+  "largest_unchanged": 701409,
+  "unchanged_cov": {
+   "4096": 0.0015511329886723363,
+   "65536": 0.0014405282857884566,
+   "262144": 0.0013063979193903934,
+   "1048576": 0.0,
+   "4194304": 0.0
+  },
+  "sections": [
+   {
+    "name": ".note.go.buildid",
+    "size": 100,
+    "new_size": 100,
+    "diff": 79,
+    "pct": 79.0,
+    "runs": 5,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".note.gnu.build-id",
+    "size": 36,
+    "new_size": 36,
+    "diff": 20,
+    "pct": 55.55555555555556,
+    "runs": 1,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".text",
+    "size": 158878865,
+    "new_size": 159148337,
+    "diff": 149952226,
+    "pct": 94.38148113658792,
+    "runs": 4410555,
+    "runs8": 124504,
+    "compressed": false
+   },
+   {
+    "name": ".rodata",
+    "size": 94880697,
+    "new_size": 94992985,
+    "diff": 70320416,
+    "pct": 74.11456515754728,
+    "runs": 6463468,
+    "runs8": 378541,
+    "compressed": false
+   },
+   {
+    "name": ".gopclntab",
+    "size": 135200297,
+    "new_size": 135404350,
+    "diff": 113400186,
+    "pct": 83.87569296537862,
+    "runs": 12779581,
+    "runs8": 57434,
+    "compressed": false
+   },
+   {
+    "name": ".typelink",
+    "size": 857156,
+    "new_size": 857692,
+    "diff": 617712,
+    "pct": 72.06529499881002,
+    "runs": 164038,
+    "runs8": 29,
+    "compressed": false
+   },
+   {
+    "name": ".itablink",
+    "size": 148440,
+    "new_size": 148704,
+    "diff": 54238,
+    "pct": 36.53866882241983,
+    "runs": 18562,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.buildinfo",
+    "size": 48560,
+    "new_size": 48624,
+    "diff": 18465,
+    "pct": 38.02512355848435,
+    "runs": 302,
+    "runs8": 3,
+    "compressed": false
+   },
+   {
+    "name": ".go.fipsinfo",
+    "size": 120,
+    "new_size": 120,
+    "diff": 59,
+    "pct": 49.166666666666664,
+    "runs": 9,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.module",
+    "size": 592,
+    "new_size": 592,
+    "diff": 128,
+    "pct": 21.62162162162162,
+    "runs": 51,
+    "runs8": 5,
+    "compressed": false
+   },
+   {
+    "name": ".noptrdata",
+    "size": 1397825,
+    "new_size": 1398305,
+    "diff": 1022820,
+    "pct": 73.17224974513977,
+    "runs": 125936,
+    "runs8": 5514,
+    "compressed": false
+   },
+   {
+    "name": ".data",
+    "size": 1754978,
+    "new_size": 1758882,
+    "diff": 459273,
+    "pct": 26.16972976299418,
+    "runs": 153365,
+    "runs8": 44410,
+    "compressed": false
+   },
+   {
+    "name": ".debug_abbrev",
+    "size": 352,
+    "new_size": 352,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".debug_line",
+    "size": 15813668,
+    "new_size": 15857409,
+    "diff": 15751393,
+    "pct": 99.60619509654559,
+    "runs": 61840,
+    "runs8": 4,
+    "compressed": false
+   },
+   {
+    "name": ".debug_frame",
+    "size": 4159926,
+    "new_size": 4169236,
+    "diff": 4135066,
+    "pct": 99.40239321564854,
+    "runs": 19162,
+    "runs8": 37,
+    "compressed": false
+   },
+   {
+    "name": ".debug_gdb_scripts",
+    "size": 63,
+    "new_size": 63,
+    "diff": 1,
+    "pct": 1.5873015873015872,
+    "runs": 1,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".debug_info",
+    "size": 35796487,
+    "new_size": 35849018,
+    "diff": 35656132,
+    "pct": 99.60790845202212,
+    "runs": 139633,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".debug_loclists",
+    "size": 16509836,
+    "new_size": 16547098,
+    "diff": 16442975,
+    "pct": 99.5950232334228,
+    "runs": 65121,
+    "runs8": 48,
+    "compressed": false
+   },
+   {
+    "name": ".debug_rnglists",
+    "size": 4822814,
+    "new_size": 4850166,
+    "diff": 4802827,
+    "pct": 99.58557389938737,
+    "runs": 19550,
+    "runs8": 3,
+    "compressed": false
+   },
+   {
+    "name": ".debug_addr",
+    "size": 948207,
+    "new_size": 949728,
+    "diff": 943114,
+    "pct": 99.46288099539447,
+    "runs": 4814,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".symtab",
+    "size": 13909464,
+    "new_size": 13928328,
+    "diff": 3507225,
+    "pct": 25.21466679089863,
+    "runs": 1655507,
+    "runs8": 96701,
+    "compressed": false
+   },
+   {
+    "name": ".strtab",
+    "size": 51766873,
+    "new_size": 51834128,
+    "diff": 49423059,
+    "pct": 95.47236704832451,
+    "runs": 1822995,
+    "runs8": 9088,
+    "compressed": false
+   },
+   {
+    "name": ".shstrtab",
+    "size": 292,
+    "new_size": 292,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   }
+  ],
+  "seconds": 3.8615469932556152
+ },
+ "vault-2.0.3-2.0.4-stripped": {
+  "old_bytes": 393175304,
+  "new_bytes": 393769576,
+  "diff_bytes": 335847896,
+  "pct": 85.41937720483075,
+  "runs": 24116426,
+  "runs8": 610465,
+  "median_run": 4,
+  "largest_unchanged": 701409,
+  "unchanged_cov": {
+   "4096": 0.0020392252306874288,
+   "65536": 0.0019671225332097662,
+   "262144": 0.001783959961025426,
+   "1048576": 0.0,
+   "4194304": 0.0
+  },
+  "sections": [
+   {
+    "name": ".note.go.buildid",
+    "size": 100,
+    "new_size": 100,
+    "diff": 79,
+    "pct": 79.0,
+    "runs": 5,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".note.gnu.build-id",
+    "size": 36,
+    "new_size": 36,
+    "diff": 20,
+    "pct": 55.55555555555556,
+    "runs": 1,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".text",
+    "size": 158878865,
+    "new_size": 159148337,
+    "diff": 149952226,
+    "pct": 94.38148113658792,
+    "runs": 4410555,
+    "runs8": 124504,
+    "compressed": false
+   },
+   {
+    "name": ".rodata",
+    "size": 94880697,
+    "new_size": 94992985,
+    "diff": 70320416,
+    "pct": 74.11456515754728,
+    "runs": 6463468,
+    "runs8": 378541,
+    "compressed": false
+   },
+   {
+    "name": ".gopclntab",
+    "size": 135200297,
+    "new_size": 135404350,
+    "diff": 113400186,
+    "pct": 83.87569296537862,
+    "runs": 12779581,
+    "runs8": 57434,
+    "compressed": false
+   },
+   {
+    "name": ".typelink",
+    "size": 857156,
+    "new_size": 857692,
+    "diff": 617712,
+    "pct": 72.06529499881002,
+    "runs": 164038,
+    "runs8": 29,
+    "compressed": false
+   },
+   {
+    "name": ".itablink",
+    "size": 148440,
+    "new_size": 148704,
+    "diff": 54238,
+    "pct": 36.53866882241983,
+    "runs": 18562,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.buildinfo",
+    "size": 48560,
+    "new_size": 48624,
+    "diff": 18465,
+    "pct": 38.02512355848435,
+    "runs": 302,
+    "runs8": 3,
+    "compressed": false
+   },
+   {
+    "name": ".go.fipsinfo",
+    "size": 120,
+    "new_size": 120,
+    "diff": 59,
+    "pct": 49.166666666666664,
+    "runs": 9,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.module",
+    "size": 592,
+    "new_size": 592,
+    "diff": 128,
+    "pct": 21.62162162162162,
+    "runs": 51,
+    "runs8": 5,
+    "compressed": false
+   },
+   {
+    "name": ".noptrdata",
+    "size": 1397825,
+    "new_size": 1398305,
+    "diff": 1022820,
+    "pct": 73.17224974513977,
+    "runs": 125936,
+    "runs8": 5514,
+    "compressed": false
+   },
+   {
+    "name": ".data",
+    "size": 1754978,
+    "new_size": 1758882,
+    "diff": 459273,
+    "pct": 26.16972976299418,
+    "runs": 153365,
+    "runs8": 44410,
+    "compressed": false
+   },
+   {
+    "name": ".shstrtab",
+    "size": 162,
+    "new_size": 162,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   }
+  ],
+  "seconds": 1.9140479564666748
+ },
+ "F2.v1-v5": {
+  "old_bytes": 29561097,
+  "new_bytes": 29561097,
+  "diff_bytes": 20689608,
+  "pct": 69.9893106132022,
+  "runs": 1952657,
+  "runs8": 59922,
+  "median_run": 3,
+  "largest_unchanged": 413546,
+  "unchanged_cov": {
+   "4096": 0.04492969256181528,
+   "65536": 0.03904912595090771,
+   "262144": 0.027613318950917145,
+   "1048576": 0.0,
+   "4194304": 0.0
+  },
+  "sections": [
+   {
+    "name": ".note.go.buildid",
+    "size": 100,
+    "new_size": 100,
+    "diff": 80,
+    "pct": 80.0,
+    "runs": 4,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".note.gnu.build-id",
+    "size": 36,
+    "new_size": 36,
+    "diff": 20,
+    "pct": 55.55555555555556,
+    "runs": 1,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".interp",
+    "size": 28,
+    "new_size": 28,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".text",
+    "size": 14781841,
+    "new_size": 14784177,
+    "diff": 10805291,
+    "pct": 73.09841176075429,
+    "runs": 403379,
+    "runs8": 36174,
+    "compressed": false
+   },
+   {
+    "name": ".plt",
+    "size": 720,
+    "new_size": 720,
+    "diff": 92,
+    "pct": 12.777777777777779,
+    "runs": 46,
+    "runs8": 44,
+    "compressed": false
+   },
+   {
+    "name": ".rodata",
+    "size": 3527449,
+    "new_size": 3527641,
+    "diff": 1756297,
+    "pct": 49.789437069111415,
+    "runs": 335801,
+    "runs8": 12242,
+    "compressed": false
+   },
+   {
+    "name": ".gopclntab",
+    "size": 10541954,
+    "new_size": 10543671,
+    "diff": 8078619,
+    "pct": 76.63303216841963,
+    "runs": 1187212,
+    "runs8": 7032,
+    "compressed": false
+   },
+   {
+    "name": ".rela",
+    "size": 24,
+    "new_size": 24,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".rela.plt",
+    "size": 1056,
+    "new_size": 1056,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".gnu.version_r",
+    "size": 96,
+    "new_size": 96,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".gnu.version",
+    "size": 98,
+    "new_size": 98,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".hash",
+    "size": 232,
+    "new_size": 232,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".dynstr",
+    "size": 714,
+    "new_size": 714,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".dynsym",
+    "size": 1176,
+    "new_size": 1176,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".typelink",
+    "size": 38272,
+    "new_size": 38272,
+    "diff": 12222,
+    "pct": 31.934573578595316,
+    "runs": 9568,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".itablink",
+    "size": 16600,
+    "new_size": 16600,
+    "diff": 3378,
+    "pct": 20.349397590361445,
+    "runs": 2075,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.buildinfo",
+    "size": 4128,
+    "new_size": 4128,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".go.fipsinfo",
+    "size": 120,
+    "new_size": 120,
+    "diff": 41,
+    "pct": 34.166666666666664,
+    "runs": 7,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".dynamic",
+    "size": 304,
+    "new_size": 304,
+    "diff": 14,
+    "pct": 4.605263157894737,
+    "runs": 7,
+    "runs8": 7,
+    "compressed": false
+   },
+   {
+    "name": ".got.plt",
+    "size": 376,
+    "new_size": 376,
+    "diff": 88,
+    "pct": 23.404255319148938,
+    "runs": 44,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.module",
+    "size": 592,
+    "new_size": 592,
+    "diff": 58,
+    "pct": 9.797297297297296,
+    "runs": 38,
+    "runs8": 8,
+    "compressed": false
+   },
+   {
+    "name": ".got",
+    "size": 8,
+    "new_size": 8,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".noptrdata",
+    "size": 454273,
+    "new_size": 454273,
+    "diff": 551,
+    "pct": 0.12129270284608594,
+    "runs": 273,
+    "runs8": 161,
+    "compressed": false
+   },
+   {
+    "name": ".data",
+    "size": 178258,
+    "new_size": 178290,
+    "diff": 29792,
+    "pct": 16.71285440204647,
+    "runs": 13768,
+    "runs8": 4224,
+    "compressed": false
+   },
+   {
+    "name": ".shstrtab",
+    "size": 265,
+    "new_size": 265,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   }
+  ],
+  "seconds": 0.14485478401184082
+ },
+ "F2.v4-v5": {
+  "old_bytes": 29561097,
+  "new_bytes": 29561097,
+  "diff_bytes": 20737909,
+  "pct": 70.15270441418328,
+  "runs": 1950124,
+  "runs8": 59877,
+  "median_run": 3,
+  "largest_unchanged": 413546,
+  "unchanged_cov": {
+   "4096": 0.04492969256181528,
+   "65536": 0.03904912595090771,
+   "262144": 0.027613318950917145,
+   "1048576": 0.0,
+   "4194304": 0.0
+  },
+  "sections": [
+   {
+    "name": ".note.go.buildid",
+    "size": 100,
+    "new_size": 100,
+    "diff": 78,
+    "pct": 78.0,
+    "runs": 6,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".note.gnu.build-id",
+    "size": 36,
+    "new_size": 36,
+    "diff": 20,
+    "pct": 55.55555555555556,
+    "runs": 1,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".interp",
+    "size": 28,
+    "new_size": 28,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".text",
+    "size": 14782161,
+    "new_size": 14784177,
+    "diff": 10805026,
+    "pct": 73.09503664585984,
+    "runs": 403465,
+    "runs8": 36200,
+    "compressed": false
+   },
+   {
+    "name": ".plt",
+    "size": 720,
+    "new_size": 720,
+    "diff": 92,
+    "pct": 12.777777777777779,
+    "runs": 46,
+    "runs8": 44,
+    "compressed": false
+   },
+   {
+    "name": ".rodata",
+    "size": 3527449,
+    "new_size": 3527641,
+    "diff": 1754672,
+    "pct": 49.743369783659524,
+    "runs": 336835,
+    "runs8": 12243,
+    "compressed": false
+   },
+   {
+    "name": ".gopclntab",
+    "size": 10542147,
+    "new_size": 10543671,
+    "diff": 8129185,
+    "pct": 77.11128482651588,
+    "runs": 1183602,
+    "runs8": 6958,
+    "compressed": false
+   },
+   {
+    "name": ".rela",
+    "size": 24,
+    "new_size": 24,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".rela.plt",
+    "size": 1056,
+    "new_size": 1056,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".gnu.version_r",
+    "size": 96,
+    "new_size": 96,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".gnu.version",
+    "size": 98,
+    "new_size": 98,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".hash",
+    "size": 232,
+    "new_size": 232,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".dynstr",
+    "size": 714,
+    "new_size": 714,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".dynsym",
+    "size": 1176,
+    "new_size": 1176,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".typelink",
+    "size": 38272,
+    "new_size": 38272,
+    "diff": 12222,
+    "pct": 31.934573578595316,
+    "runs": 9568,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".itablink",
+    "size": 16600,
+    "new_size": 16600,
+    "diff": 3378,
+    "pct": 20.349397590361445,
+    "runs": 2075,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.buildinfo",
+    "size": 4128,
+    "new_size": 4128,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".go.fipsinfo",
+    "size": 120,
+    "new_size": 120,
+    "diff": 41,
+    "pct": 34.166666666666664,
+    "runs": 7,
+    "runs8": 2,
+    "compressed": false
+   },
+   {
+    "name": ".dynamic",
+    "size": 304,
+    "new_size": 304,
+    "diff": 14,
+    "pct": 4.605263157894737,
+    "runs": 7,
+    "runs8": 7,
+    "compressed": false
+   },
+   {
+    "name": ".got.plt",
+    "size": 376,
+    "new_size": 376,
+    "diff": 88,
+    "pct": 23.404255319148938,
+    "runs": 44,
+    "runs8": 1,
+    "compressed": false
+   },
+   {
+    "name": ".go.module",
+    "size": 592,
+    "new_size": 592,
+    "diff": 60,
+    "pct": 10.135135135135135,
+    "runs": 38,
+    "runs8": 8,
+    "compressed": false
+   },
+   {
+    "name": ".got",
+    "size": 8,
+    "new_size": 8,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   },
+   {
+    "name": ".noptrdata",
+    "size": 454273,
+    "new_size": 454273,
+    "diff": 551,
+    "pct": 0.12129270284608594,
+    "runs": 273,
+    "runs8": 161,
+    "compressed": false
+   },
+   {
+    "name": ".data",
+    "size": 178258,
+    "new_size": 178290,
+    "diff": 29767,
+    "pct": 16.69882978604046,
+    "runs": 13765,
+    "runs8": 4226,
+    "compressed": false
+   },
+   {
+    "name": ".shstrtab",
+    "size": 265,
+    "new_size": 265,
+    "diff": 0,
+    "pct": 0.0,
+    "runs": 0,
+    "runs8": 0,
+    "compressed": false
+   }
+  ],
+  "seconds": 0.1318967342376709
+ }
+}

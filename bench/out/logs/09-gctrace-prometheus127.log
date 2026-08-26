@@ -1,0 +1,23 @@
+=== gctrace (Wed Aug 26 14:31:44 PDT 2026)
+gc 1 0.15+0.088+0.010 90->90->89 MB P
+gc 2 0.022+2.4+0.005 208->209->201 MB P
+  [  0.12s] loaded prometheus (go1.27, 93741283 B) -> prometheus (go1.27, 93769955 B)
+  [  0.14s] match: exact=110090 normalised=0 content=5 unmatched-new=52 unmatched-old=14
+  [  0.24s] content map .rodata
+gc 3 0.025+8.1+0.004 304->304->238 MB P
+gc 4 0.026+3.4+0.090 360->360->357 MB P
+  [  0.55s] content map .go.type
+  [  0.56s] content map .go.func
+  [  0.57s] content map .noptrdata
+  [  0.59s] content map .data
+  [  0.72s] shift tables
+  [  0.72s] content maps + shift tables
+  [  0.73s] layout: 110147 funcs, 20 rec shapes, raw 231406 B, zstd 5731 B
+gc 5 0.034+13+0.004 550->550->250 MB P
+  [  1.19s] stage 1 (h): pclntab blobs 24478232 -> 24486832 B, delta 100949 B
+gc 6 0.030+3.7+0.014 371->374->272 MB P
+gc 7 0.031+5.0+0.012 403->403->371 MB P
+gc 8 0.14+5.6+0.090 594->594->554 MB P
+gc 9 0.037+3.7+0.004 821->821->458 MB P
+  [  1.59s] prediction: 93769955 B (new 93769955 B), insns=10688083 decode-failures=1876, differing bytes=179885 in 71085 runs
+  [  1.70s] stage 2 (positional): raw 332870 B, zstd 111337 B

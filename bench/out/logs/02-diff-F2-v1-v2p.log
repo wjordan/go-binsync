@@ -1,0 +1,141 @@
+## v1-F2 -> v2p-F2
+old=29,561,097 B new=29,561,097 B; section layout identical: False
+comparison mode: section-aligned (each section compared from its own start)
+
+total differing bytes: 6,526,025 (22.076% of old)
+differing runs (byte-exact): 1,134,685; merged with gap<=8: 25,046; gap<=64: 2,535
+differing run length: median 3 B, mean 5.8 B, max 1,179 B
+largest contiguous unchanged region: 2,879,547 B
+  fraction of file in unchanged runs >=    4 KiB:  65.36%  (19,321,574 B)
+  fraction of file in unchanged runs >=   16 KiB:  58.83%  (17,391,590 B)
+  fraction of file in unchanged runs >=   64 KiB:  45.12%  (13,337,914 B)
+  fraction of file in unchanged runs >=  256 KiB:  28.87%  (8,535,106 B)
+  fraction of file in unchanged runs >= 1024 KiB:  21.51%  (6,357,565 B)
+
+| section | size | differing bytes | % differing | runs (byte-exact) | runs (gap<=8) |
+|---|---:|---:|---:|---:|---:|
+| .note.go.buildid | 100 | 76 | 76.000% | 8 | 1 |
+| .note.gnu.build-id | 36 | 19 | 52.778% | 2 | 1 |
+| .text | 14,781,841 | 427,804 | 2.894% | 16,364 | 1,157 |
+| .plt | 720 | 73 | 10.139% | 46 | 44 |
+| .rodata | 3,527,449 | 2,837 | 0.080% | 2,031 | 1,511 |
+| .gopclntab | 10,541,954 | 6,094,753 | 57.814% | 1,116,023 | 22,246 |
+| .rela.plt | 1,056 | 0 | 0.000% | 0 | 0 |
+| .dynstr | 714 | 0 | 0.000% | 0 | 0 |
+| .dynsym | 1,176 | 0 | 0.000% | 0 | 0 |
+| .typelink | 38,272 | 0 | 0.000% | 0 | 0 |
+| .itablink | 16,600 | 0 | 0.000% | 0 | 0 |
+| .go.buildinfo | 4,128 | 0 | 0.000% | 0 | 0 |
+| .go.fipsinfo | 120 | 35 | 29.167% | 3 | 1 |
+| .dynamic | 304 | 13 | 4.276% | 7 | 7 |
+| .got.plt | 376 | 65 | 17.287% | 44 | 1 |
+| .go.module | 592 | 24 | 4.054% | 16 | 10 |
+| .noptrdata | 454,273 | 51 | 0.011% | 32 | 21 |
+| .data | 178,258 | 28 | 0.016% | 27 | 27 |
+| .shstrtab | 265 | 0 | 0.000% | 0 | 0 |
+
+.text differing runs categorised by instruction at run start (16,364 runs):
+     5,027  insn-boundary-shifted
+     4,750  code-shifted(delta=+128)
+     4,501  same-insn-immediate-changed
+     1,906  same-insn-displacement/target-changed
+        57  code-shifted(delta=+32)
+        55  code-shifted(delta=+64)
+        28  code-shifted(delta=+96)
+        24  code-shifted(delta=+48)
+        15  code-shifted(delta=+16)
+         1  different-instruction
+
+20 sampled .text differing runs (evenly spaced):
+  0x401014 len=2   old=988d             new=188e             [same-insn-displacement/target-changed]
+      old: call 1219db0 <malloc@plt>
+      new: call 1219e30 <malloc@plt>
+  0xa2c945 len=1   old=df               new=e7               [same-insn-displacement/target-changed]
+      old: lea 0xaf86df(%rip),%rdi
+      new: lea 0xaf86e7(%rip),%rdi
+  0x11b0eb2 len=54  old=e573d213c4637bf0 new=bd72d1034189d7c4 [code-shifted(delta=+128)]
+      old: vpsrlq $0x13,%ymm2,%ymm3
+      new: vpsrlq $0x13,%ymm2,%ymm3
+  0x11b77eb len=161 old=8bb424a000000049 new=09e04d31c24c8bac [code-shifted(delta=+128)]
+      old: mov 0xa0(%rsp),%r14
+      new: mov 0xa0(%rsp),%r14
+  0x11bedb7 len=31  old=498d34134c29c14a new=00004839d14989c8 [insn-boundary-shifted]
+      old: lea (%r11,%rdx,1),%rsi
+      new: mov 0xd8(%rsp),%rdx
+  0x11c50aa len=3   old=107020           new=117810           [same-insn-immediate-changed]
+      old: movups 0x20(%rax),%xmm14
+      new: movups %xmm15,0x10(%rax)
+  0x11ca730 len=7   old=0000488b9424f0   new=48898424180100   [insn-boundary-shifted]
+      old: mov 0xb8(%rsp),%r10
+      new: mov %rax,0x118(%rsp)
+  0x11cf843 len=10  old=8b9424980600004d new=11c2488994242007 [code-shifted(delta=+128)]
+      old: mov 0x698(%rsp),%r10
+      new: mov 0x698(%rsp),%r10
+  0x11d456f len=10  old=e80c9fffff48c744 new=00000000488d8424 [insn-boundary-shifted]
+      old: call 11ce480 <crosscall2@@Base+0xc1b040>
+      new: movq $0x0,0x88(%rsp)
+  0x11daf7c len=10  old=100f1f00e81ba600 new=28440f1036440f11 [code-shifted(delta=+128)]
+      old: mov %rdx,0x10(%rsp)
+      new: mov %rdx,0x10(%rsp)
+  0x11e05ed len=45  old=0000488bb424e001 new=440f1139440f1179 [insn-boundary-shifted]
+      old: mov $0x85,%edx
+      new: movups %xmm15,(%rcx)
+  0x11e76dc len=1   old=44               new=04               [same-insn-immediate-changed]
+      old: mov %rax,0x10(%rsp)
+      new: mov %rax,(%rsp)
+  0x11ee221 len=33  old=20000000488d9424 new=440f113a440f117a [insn-boundary-shifted]
+      old: movq $0x20,0x1208(%rsp)
+      new: movups %xmm15,(%rdx)
+  0x11f3ffc len=31  old=3a440f117a10440f new=7910450f11792045 [same-insn-immediate-changed]
+      old: movups %xmm15,(%rdx)
+      new: movups %xmm15,0x10(%r9)
+  0x11f9a1f len=12  old=8d353b7e33004839 new=89d041ffd0488b94 [code-shifted(delta=+128)]
+      old: lea 0x337e3b(%rip),%rsi
+      new: lea 0x337dbb(%rip),%rsi
+  0x11ff63d len=42  old=241848890424488b new=0f117910440f1179 [insn-boundary-shifted]
+      old: lea 0x18(%rsp),%rax
+      new: movups %xmm15,0x10(%rcx)
+  0x120629b len=61  old=30488d057d2d1700 new=442428c6003066c7 [same-insn-immediate-changed]
+      old: mov %rsi,(%rax)
+      new: mov %rax,0x28(%rsp)
+  0x120c73b len=19  old=c1fa3f4c21c24989 new=89cf488bb424c014 [code-shifted(delta=+128)]
+      old: sar $0x3f,%rdx
+      new: sar $0x3f,%rdx
+  0x1213354 len=1   old=4c               new=44               [same-insn-immediate-changed]
+      old: mov %rcx,0x18(%rsp)
+      new: mov %rax,0x20(%rsp)
+  0x1219d80 len=17  old=cccccccccccccccc new=493b6610766e5548 [code-shifted(delta=+128)]
+      old: int3 
+      new: int3 
+
+objdump --start-address cross-check for 3 samples:
+  v1-F2:
+    401010:	48 89 ef             	mov    %rbp,%rdi
+    401013:	e8 98 8d e1 00       	call   1219db0 <malloc@plt>
+    401018:	48 85 c0             	test   %rax,%rax
+    40101b:	74 0b                	je     401028 <_cgo_topofstack@@Base-0x95f78>
+  v2p-F2:
+    401010:	48 89 ef             	mov    %rbp,%rdi
+    401013:	e8 18 8e e1 00       	call   1219e30 <malloc@plt>
+    401018:	48 85 c0             	test   %rax,%rax
+    40101b:	74 0b                	je     401028 <_cgo_topofstack@@Base-0x95f78>
+  v1-F2:
+    11ca722:	48 89 8c 24 28 02 00 	mov    %rcx,0x228(%rsp)
+    11ca729:	00
+    11ca72a:	4c 8b 94 24 b8 00 00 	mov    0xb8(%rsp),%r10
+    11ca731:	00
+  v2p-F2:
+    11ca722:	4c 89 d0             	mov    %r10,%rax
+    11ca725:	49 f7 e1             	mul    %r9
+    11ca728:	48 89 94 24 10 01 00 	mov    %rdx,0x110(%rsp)
+    11ca72f:	00
+  v1-F2:
+    11ee20d:	48 c7 84 24 00 12 00 	movq   $0x0,0x1200(%rsp)
+    11ee214:	00 00 00 00 00
+    11ee219:	48 c7 84 24 08 12 00 	movq   $0x20,0x1208(%rsp)
+    11ee220:	00 20 00 00 00
+  v2p-F2:
+    11ee20d:	94                   	xchg   %eax,%esp
+    11ee20e:	24 28                	and    $0x28,%al
+    11ee210:	12 00                	adc    (%rax),%al
+    11ee212:	00 90 48 8d 94 24    	add    %dl,0x24948d48(%rax)

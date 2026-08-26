@@ -1,0 +1,17 @@
+== datapredict ../out/corpus/cockroach/26.2.4/cockroach.stripped -> ../out/corpus/cockroach/26.2.5/cockroach.stripped
+.rodata: 41409512 bytes, 816743 aligned qwords point into the image: text-matched=152308 text-nofunc=2417 rodata=660084 noptrdata=114 data=104 bss/noptrbss=18 plt=6 other-section=1679 outside-image=13
+  pointer rewrite: unchanged-in-new=30015 re-targeted-correctly=761517 mispredicted=31858 unmapped=13 (map: blocks=2588095 matched=1885612 ambiguous=4087 unmatched=698396 shift-changes=6124)
+WARN: bsdiff [/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt/dp-cockroach.stripped-cockroach.stripped.rodata-relayout_ptr.old /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt/dp-cockroach.stripped-cockroach.stripped.rodata-relayout_ptr.new /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt/dp-cockroach.stripped-cockroach.stripped.rodata-relayout_ptr.bsdiff]: signal: terminated: 
+  baseline old->new:            bsdiff=1247881 hdiffz=1473398 zstd=0 rawdiff=26850229 runs=4655664
+  blocks re-laid (no ptr fix):  bsdiff=1344302 hdiffz=1556817 zstd=0 rawdiff=4792839 runs=2002826
+  blocks re-laid + ptr rewrite: bsdiff=-1 hdiffz=1028031 zstd=0 rawdiff=2824008 runs=1250336
+.noptrdata: 8128097 bytes, 6842 aligned qwords point into the image: text-matched=4711 text-nofunc=21 rodata=206 noptrdata=1096 data=4 bss/noptrbss=4 other-section=798 outside-image=2
+  pointer rewrite: unchanged-in-new=3926 re-targeted-correctly=2822 mispredicted=3002 unmapped=2 (map: blocks=508007 matched=320658 ambiguous=4 unmatched=187345 shift-changes=211)
+  baseline old->new:            bsdiff=2997947 hdiffz=2981548 zstd=0 rawdiff=6930196 runs=474569
+  blocks re-laid (no ptr fix):  bsdiff=3000713 hdiffz=2983357 zstd=0 rawdiff=2972102 runs=16560
+  blocks re-laid + ptr rewrite: bsdiff=3003549 hdiffz=2984753 zstd=0 rawdiff=2971274 runs=16651
+.data: 2433736 bytes, 122749 aligned qwords point into the image: text-matched=97 text-nofunc=656 rodata=90812 noptrdata=2283 data=5083 bss/noptrbss=23815 other-section=3
+  pointer rewrite: unchanged-in-new=98 re-targeted-correctly=121173 mispredicted=1551 unmapped=0 (map: blocks=152109 matched=152100 ambiguous=0 unmatched=9 shift-changes=1)
+  baseline old->new:            bsdiff=44012 hdiffz=74773 zstd=0 rawdiff=403865 runs=167253
+  blocks re-laid (no ptr fix):  bsdiff=39892 hdiffz=55365 zstd=0 rawdiff=332670 runs=122667
+  blocks re-laid + ptr rewrite: bsdiff=1449 hdiffz=1616 zstd=0 rawdiff=2661 runs=1567

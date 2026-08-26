@@ -1,0 +1,12 @@
+bcj enc: .text [4096,+14781841) processed
+bcj enc: .text [4096,+14782033) processed
+bcj enc: .text [4096,+14781841) processed
+bcj dec: .text [4096,+14781841) processed
+bcj round-trip OK (dec(enc(v1)) == v1)
+bytes changed by bcj on v1-F2: 931563
+v1->v2c plain zstd19=213124 zstd19-long27=213124 bsdiff=60478 xdelta3=464283 hdiffz-m6=75305
+v1->v2c bcj   zstd19=212995 zstd19-long27=212995 bsdiff=61509 xdelta3=466051 hdiffz-m6=76513
+v1->v2l plain zstd19=55648 zstd19-long27=55648 bsdiff=24322 xdelta3=106331 hdiffz-m6=32899
+v1->v2l bcj   zstd19=55689 zstd19-long27=55689 bsdiff=24322 xdelta3=107607 hdiffz-m6=32899
+differing bytes v1->v2c: plain=4000728 bcj=3999654
+differing bytes v1->v2l: plain=396119 bcj=396119

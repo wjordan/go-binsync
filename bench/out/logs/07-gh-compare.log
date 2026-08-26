@@ -1,0 +1,8 @@
+| repo | base..head | commits | files (API) | +lines | -lines | files (diff) | +/- (diff) | .go files (diff) | capped? |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---|
+| prometheus/prometheus | v3.13.1..v3.13.2 | 11 | 13 | 136 | 36 | 13 | +118/-36 | 4 | no |
+| prometheus/prometheus | v3.13.2..v3.14.0 | 359 | 265 | 11929 | 2151 | 265 | +16549/-4365 | 158 | no |
+| kubernetes/kubernetes | v1.36.3..v1.36.4 | 18 | 300 | 13412 | 29464 | 320 | +22070/-83210 | 234 | yes(300 cap) |
+| hashicorp/terraform | v1.15.8..v1.15.9 | 8 | 37 | 889 | 724 | 37 | +847/-723 | 2 | no |
+| hashicorp/vault | v2.0.3..v2.0.4 | 200 | 300 | 14071 | 1547 | 413 | +21102/-2368 | 208 | yes(300 cap) |
+| cockroachdb/cockroach | v26.2.4..v26.2.5 | 240 | 284 | 12817 | 1433 | 284 | +12293/-1635 | 167 | no |

@@ -3,7 +3,7 @@
 # Usage: build.sh            (all)      build.sh v1 v2c   (subset of variants)
 set -euo pipefail
 BENCH="$(cd "$(dirname "$0")" && pwd)"
-OUT="$BENCH/out/bin"; mkdir -p "$OUT"
+OUT="${BENCH_OUT_BIN:-$BENCH/out/bin}"; mkdir -p "$OUT"
 export PATH=/usr/local/go/bin:$PATH
 export GOFLAGS=-mod=mod
 VARIANTS=("$@"); [ ${#VARIANTS[@]} -eq 0 ] && VARIANTS=(v1 v2s v2l v2c v2p v3 v4)

@@ -1,0 +1,11 @@
+== whole ../out/corpus/terraform/1.15.8/terraform -> ../out/corpus/terraform/1.15.9/terraform (layout go1.25)
+match: exact=143363 normalised=9 content=92 unmatched-new=669 unmatched-old=67; layout table zstd=10598 B
+shift table .bss: 112 breakpoints from 76386 samples, 267 B raw: @7008:+8 @7576:+16 @9208:+24 @9528:+40 @19840:-10616 @19848:+32
+shift table .noptrbss: 17 breakpoints from 141142 samples, 44 B raw: @100:-1 @103:+1 @106:+5 @186:+4 @190:+6 @204:+8
+bss shift tables zstd=191 B (added to the layout cost)
+text relocation: insns=13873539 decode-failures=7942
+BASELINE whole file:        bsdiff=5427575 hdiffz=4918933 zstd=0 rawdiff=103851887 runs=7072890
+stage 1 (pclntab blobs 22570816 B): bsdiff=243020 hdiffz=233657 zstd=0 rawdiff=21386095 runs=929996
+stage 2 (predicted file):   bsdiff=1736740 hdiffz=1920718 zstd=0 rawdiff=12652825 runs=3099360
+TOTAL Go-aware = layout 10789 + stage1 + stage2: bsdiff 1990549 (2.7x smaller) hdiffz 2165164 (2.3x) zstd 10789 (0.0x)
+stage-2 differing bytes by section: .note.go.buildid=80(4 runs) .note.gnu.build-id=20(1 runs) .text=1760301(91082 runs) .rodata=2586633(940092 runs) .typelink=110106(42070 runs) .itablink=18549(9305 runs) .gopclntab=8100407(2004124 runs) .go.buildinfo=1356(91 runs) .go.fipsinfo=55(10 runs) .noptrdata=47043(2724 runs) .data=26810(9765 runs)

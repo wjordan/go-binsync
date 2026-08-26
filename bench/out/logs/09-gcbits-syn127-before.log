@@ -1,0 +1,50 @@
+=== v3-F2 -> v4-F2 dev binary before consensus (Wed Aug 26 14:32:48 PDT 2026)
+  [  0.04s] loaded v3-F2 (go1.27, 29995271 B) -> v4-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.12s] content map .noptrdata
+  [  0.14s] content map .data
+  [  0.19s] shift tables
+  datamap .rodata: blocks=49198 matched=49193 ambiguous=0 unmatched=5 shift-changes=4; rle 20 B
+  datamap .go.type: blocks=169423 matched=169422 ambiguous=0 unmatched=1 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39228 samples, 0 B raw:
+  [  0.19s] content maps + shift tables
+  [  0.19s] layout: 32652 funcs, 0 rec shapes, raw 65587 B, zstd 153 B
+  [  0.23s] stage 1 (h): pclntab blobs 7532360 -> 7532360 B, delta 810 B
+  [  0.39s] prediction: 29995271 B (new 29995271 B), insns=3735084 decode-failures=1867, differing bytes=10895 in 10698 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 bad=0
+  stage-2 differing bytes by section: .note.go.buildid=79(5 runs) .note.gnu.build-id=20(1 runs) .text=246(198 runs) .rodata=22(6 runs) .go.type=10494(10486 runs) .go.fipsinfo=32(1 runs) .data=2(1 runs)
+  [  0.42s] stage 2 (positional): raw 34838 B, zstd 5411 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt09b/v3-F2-v4-F2.gtp: 6486 B = header 112 + layout 153 + stage1(h) 810 + stage2(p) 5411  [encode 0.46s]
+TIME_WALL=0.50 TIME_USER=2.62 TIME_SYS=0.23 MAXRSS_KB=262596
+=== v1-F2 -> v4-F2 dev binary before consensus (Wed Aug 26 14:32:49 PDT 2026)
+  [  0.04s] loaded v1-F2 (go1.27, 29995271 B) -> v4-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.11s] content map .noptrdata
+  [  0.13s] content map .data
+  [  0.17s] shift tables
+  datamap .rodata: blocks=49196 matched=49185 ambiguous=2 unmatched=9 shift-changes=11; rle 36 B
+  datamap .go.type: blocks=169423 matched=169123 ambiguous=135 unmatched=165 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39226 samples, 0 B raw:
+  [  0.17s] content maps + shift tables
+  [  0.17s] layout: 32652 funcs, 0 rec shapes, raw 65636 B, zstd 228 B
+  [  0.22s] stage 1 (h): pclntab blobs 7532184 -> 7532360 B, delta 2587 B
+  [  0.37s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=1764 in 688 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 bad=0
+  stage-2 differing bytes by section: .note.go.buildid=80(4 runs) .note.gnu.build-id=20(1 runs) .text=1363(538 runs) .rodata=81(36 runs) .gopclntab=23(9 runs) .go.type=44(35 runs) .go.fipsinfo=32(1 runs) .go.module=20(14 runs) .noptrdata=2(2 runs) .data=5(4 runs)
+  [  0.40s] stage 2 (positional): raw 3527 B, zstd 2674 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt09b/v1-F2-v4-F2.gtp: 5601 B = header 112 + layout 228 + stage1(h) 2587 + stage2(p) 2674  [encode 0.43s]
+TIME_WALL=0.50 TIME_USER=2.61 TIME_SYS=0.22 MAXRSS_KB=261620

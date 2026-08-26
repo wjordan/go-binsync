@@ -1,0 +1,133 @@
+=== prometheus/1.27 votes: block fixes + descriptor fields, rounds=2 ovmin=2 (Wed Aug 26 14:39:53 PDT 2026)
+  [  0.12s] loaded prometheus (go1.27, 93741283 B) -> prometheus (go1.27, 93769955 B)
+  [  0.15s] match: exact=110090 normalised=0 content=5 unmatched-new=52 unmatched-old=14
+  [  0.25s] content map .rodata
+  [  0.56s] content map .go.type
+  [  0.56s] content map .go.func
+  [  0.58s] content map .noptrdata
+  [  0.59s] content map .data
+  [  0.75s] shift tables
+  datamap .rodata: blocks=229900 matched=229735 ambiguous=46 unmatched=119 shift-changes=86; rle 302 B
+  datamap .go.type: blocks=735529 matched=589725 ambiguous=75843 unmatched=69961 shift-changes=2241; rle 6905 B
+  datamap .go.func: blocks=1700 matched=1699 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=37081 matched=37080 ambiguous=0 unmatched=1 shift-changes=3; rle 17 B
+  datamap .data: blocks=21102 matched=21101 ambiguous=0 unmatched=1 shift-changes=1; rle 11 B
+  shift table .bss: 3 breakpoints from 56100 samples, 11 B raw: @18128:+8 @18912:+16 @47616:+32
+  shift table .noptrbss: 6 breakpoints from 108817 samples, 16 B raw: @118:+2 @180:+4 @760:+0 @1648:+8 @1792:+16 @5696:+0
+  [  0.75s] content maps + shift tables
+  [  1.14s] overrides: pointers=492298 fields=494946 targets=321488 mispredicted=47008 block-fixes=255 overrides=2681 (20725 votes)
+  [  1.15s] layout: 110147 funcs, 20 rec shapes, raw 239379 B, zstd 11271 B
+  [  1.62s] stage 1 (h): pclntab blobs 24478232 -> 24486832 B, delta 100949 B
+  [  2.14s] prediction: 93769955 B (new 93769955 B), insns=10688083 decode-failures=1876, differing bytes=127210 in 20387 runs
+  type descriptors: descriptors=62516 itabs=5337 rewritten nameOff=197353 typeOff=114379 textOff=170045 name.pkgPath=2155 unmapped=11014 bad=0
+  stage-2 differing bytes by section: .text=62555(4935 runs) .rodata=3782(953 runs) .gopclntab=7860(3702 runs) .go.type=45170(8199 runs) .go.func=2568(1186 runs) .go.buildinfo=215(15 runs) .go.fipsinfo=32(1 runs) .go.module=36(21 runs) .noptrdata=468(222 runs) .data=744(576 runs)
+  [  2.27s] stage 2 (positional): raw 169493 B, zstd 81287 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt09/p-10.gtp: 193621 B = header 114 + layout 11271 + stage1(h) 100949 + stage2(p) 81287  [encode 2.38s]
+TIME_WALL=2.50 TIME_USER=10.27 TIME_SYS=0.55 MAXRSS_KB=645668
+  [  0.11s] loaded old (go1.27) and patch: 193621 B, layout 239379 B
+  [  0.20s] stage 1 applied: 24486832 B of pclntab blobs; skeleton 110147 funcs
+  [  0.63s] prediction: 93769955 B, hash verified
+  [  0.74s] stage 2 (p) applied: 93769955 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt09/p-10.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt09/p-10.out: 93769955 B [decode 0.74s]
+TIME_WALL=0.80 TIME_USER=4.51 TIME_SYS=0.43 MAXRSS_KB=612412
+decode positional OK
+=== variant -ovmin 1 (Wed Aug 26 14:39:56 PDT 2026)
+  [  0.11s] loaded prometheus (go1.27, 93741283 B) -> prometheus (go1.27, 93769955 B)
+  [  0.13s] match: exact=110090 normalised=0 content=5 unmatched-new=52 unmatched-old=14
+  [  0.23s] content map .rodata
+  [  0.53s] content map .go.type
+  [  0.53s] content map .go.func
+  [  0.55s] content map .noptrdata
+  [  0.57s] content map .data
+  [  0.70s] shift tables
+  datamap .rodata: blocks=229900 matched=229735 ambiguous=46 unmatched=119 shift-changes=86; rle 302 B
+  datamap .go.type: blocks=735529 matched=589725 ambiguous=75843 unmatched=69961 shift-changes=2241; rle 6905 B
+  datamap .go.func: blocks=1700 matched=1699 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=37081 matched=37080 ambiguous=0 unmatched=1 shift-changes=3; rle 17 B
+  datamap .data: blocks=21102 matched=21101 ambiguous=0 unmatched=1 shift-changes=1; rle 11 B
+  shift table .bss: 3 breakpoints from 56100 samples, 11 B raw: @18128:+8 @18912:+16 @47616:+32
+  shift table .noptrbss: 6 breakpoints from 108817 samples, 16 B raw: @118:+2 @180:+4 @760:+0 @1648:+8 @1792:+16 @5696:+0
+  [  0.70s] content maps + shift tables
+  [  1.08s] overrides: pointers=492298 fields=494946 targets=321488 mispredicted=47008 block-fixes=255 overrides=46958 (65002 votes)
+  [  1.10s] layout: 110147 funcs, 20 rec shapes, raw 337341 B, zstd 31609 B
+  [  1.55s] stage 1 (h): pclntab blobs 24478232 -> 24486832 B, delta 100949 B
+  [  2.00s] prediction: 93769955 B (new 93769955 B), insns=10688083 decode-failures=1876, differing bytes=133771 in 22907 runs
+  type descriptors: descriptors=62516 itabs=5337 rewritten nameOff=197353 typeOff=114379 textOff=170045 name.pkgPath=2155 unmapped=11014 bad=0
+  stage-2 differing bytes by section: .text=78060(12197 runs) .rodata=3023(587 runs) .gopclntab=7860(3702 runs) .go.type=40674(5777 runs) .go.func=49(17 runs) .go.buildinfo=215(15 runs) .go.fipsinfo=32(1 runs) .go.module=19(12 runs) .noptrdata=17(7 runs) .data=42(15 runs)
+  [  2.10s] stage 2 (positional): raw 185171 B, zstd 94449 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt09/p-11.gtp: 227122 B = header 115 + layout 31609 + stage1(h) 100949 + stage2(p) 94449  [encode 2.21s]
+=== variant -ovrounds 1 (Wed Aug 26 14:39:58 PDT 2026)
+  [  0.12s] loaded prometheus (go1.27, 93741283 B) -> prometheus (go1.27, 93769955 B)
+  [  0.14s] match: exact=110090 normalised=0 content=5 unmatched-new=52 unmatched-old=14
+  [  0.23s] content map .rodata
+  [  0.54s] content map .go.type
+  [  0.54s] content map .go.func
+  [  0.56s] content map .noptrdata
+  [  0.58s] content map .data
+  [  0.71s] shift tables
+  datamap .rodata: blocks=229900 matched=229735 ambiguous=46 unmatched=119 shift-changes=86; rle 302 B
+  datamap .go.type: blocks=735529 matched=589725 ambiguous=75843 unmatched=69961 shift-changes=2241; rle 6905 B
+  datamap .go.func: blocks=1700 matched=1699 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=37081 matched=37080 ambiguous=0 unmatched=1 shift-changes=3; rle 17 B
+  datamap .data: blocks=21102 matched=21101 ambiguous=0 unmatched=1 shift-changes=1; rle 11 B
+  shift table .bss: 3 breakpoints from 56100 samples, 11 B raw: @18128:+8 @18912:+16 @47616:+32
+  shift table .noptrbss: 6 breakpoints from 108817 samples, 16 B raw: @118:+2 @180:+4 @760:+0 @1648:+8 @1792:+16 @5696:+0
+  [  0.71s] content maps + shift tables
+  [  0.92s] overrides: pointers=492298 fields=494946 targets=321490 mispredicted=47008 block-fixes=255 overrides=2681 (20725 votes)
+  [  0.93s] layout: 110147 funcs, 20 rec shapes, raw 239379 B, zstd 11271 B
+  [  1.36s] stage 1 (h): pclntab blobs 24478232 -> 24486832 B, delta 100949 B
+  [  1.81s] prediction: 93769955 B (new 93769955 B), insns=10688083 decode-failures=1876, differing bytes=127210 in 20387 runs
+  type descriptors: descriptors=62516 itabs=5337 rewritten nameOff=197353 typeOff=114379 textOff=170045 name.pkgPath=2155 unmapped=11014 bad=0
+  stage-2 differing bytes by section: .text=62555(4935 runs) .rodata=3782(953 runs) .gopclntab=7860(3702 runs) .go.type=45170(8199 runs) .go.func=2568(1186 runs) .go.buildinfo=215(15 runs) .go.fipsinfo=32(1 runs) .go.module=36(21 runs) .noptrdata=468(222 runs) .data=744(576 runs)
+  [  1.90s] stage 2 (positional): raw 169493 B, zstd 81287 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt09/p-11.gtp: 193621 B = header 114 + layout 11271 + stage1(h) 100949 + stage2(p) 81287  [encode 2.01s]
+=== variant -ovrounds 3 (Wed Aug 26 14:40:00 PDT 2026)
+  [  0.12s] loaded prometheus (go1.27, 93741283 B) -> prometheus (go1.27, 93769955 B)
+  [  0.14s] match: exact=110090 normalised=0 content=5 unmatched-new=52 unmatched-old=14
+  [  0.23s] content map .rodata
+  [  0.54s] content map .go.type
+  [  0.54s] content map .go.func
+  [  0.56s] content map .noptrdata
+  [  0.57s] content map .data
+  [  0.72s] shift tables
+  datamap .rodata: blocks=229900 matched=229735 ambiguous=46 unmatched=119 shift-changes=86; rle 302 B
+  datamap .go.type: blocks=735529 matched=589725 ambiguous=75843 unmatched=69961 shift-changes=2241; rle 6905 B
+  datamap .go.func: blocks=1700 matched=1699 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=37081 matched=37080 ambiguous=0 unmatched=1 shift-changes=3; rle 17 B
+  datamap .data: blocks=21102 matched=21101 ambiguous=0 unmatched=1 shift-changes=1; rle 11 B
+  shift table .bss: 3 breakpoints from 56100 samples, 11 B raw: @18128:+8 @18912:+16 @47616:+32
+  shift table .noptrbss: 6 breakpoints from 108817 samples, 16 B raw: @118:+2 @180:+4 @760:+0 @1648:+8 @1792:+16 @5696:+0
+  [  0.72s] content maps + shift tables
+  [  1.30s] overrides: pointers=492298 fields=494946 targets=321488 mispredicted=47008 block-fixes=255 overrides=2681 (20725 votes)
+  [  1.31s] layout: 110147 funcs, 20 rec shapes, raw 239379 B, zstd 11271 B
+  [  1.76s] stage 1 (h): pclntab blobs 24478232 -> 24486832 B, delta 100949 B
+  [  2.20s] prediction: 93769955 B (new 93769955 B), insns=10688083 decode-failures=1876, differing bytes=127210 in 20387 runs
+  type descriptors: descriptors=62516 itabs=5337 rewritten nameOff=197353 typeOff=114379 textOff=170045 name.pkgPath=2155 unmapped=11014 bad=0
+  stage-2 differing bytes by section: .text=62555(4935 runs) .rodata=3782(953 runs) .gopclntab=7860(3702 runs) .go.type=45170(8199 runs) .go.func=2568(1186 runs) .go.buildinfo=215(15 runs) .go.fipsinfo=32(1 runs) .go.module=36(21 runs) .noptrdata=468(222 runs) .data=744(576 runs)
+  [  2.30s] stage 2 (positional): raw 169493 B, zstd 81287 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt09/p-11.gtp: 193621 B = header 114 + layout 11271 + stage1(h) 100949 + stage2(p) 81287  [encode 2.41s]
+=== variant -ovrounds 3 -ovmin 1 (Wed Aug 26 14:40:03 PDT 2026)
+  [  0.12s] loaded prometheus (go1.27, 93741283 B) -> prometheus (go1.27, 93769955 B)
+  [  0.15s] match: exact=110090 normalised=0 content=5 unmatched-new=52 unmatched-old=14
+  [  0.24s] content map .rodata
+  [  0.54s] content map .go.type
+  [  0.54s] content map .go.func
+  [  0.56s] content map .noptrdata
+  [  0.58s] content map .data
+  [  0.72s] shift tables
+  datamap .rodata: blocks=229900 matched=229735 ambiguous=46 unmatched=119 shift-changes=86; rle 302 B
+  datamap .go.type: blocks=735529 matched=589725 ambiguous=75843 unmatched=69961 shift-changes=2241; rle 6905 B
+  datamap .go.func: blocks=1700 matched=1699 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=37081 matched=37080 ambiguous=0 unmatched=1 shift-changes=3; rle 17 B
+  datamap .data: blocks=21102 matched=21101 ambiguous=0 unmatched=1 shift-changes=1; rle 11 B
+  shift table .bss: 3 breakpoints from 56100 samples, 11 B raw: @18128:+8 @18912:+16 @47616:+32
+  shift table .noptrbss: 6 breakpoints from 108817 samples, 16 B raw: @118:+2 @180:+4 @760:+0 @1648:+8 @1792:+16 @5696:+0
+  [  0.72s] content maps + shift tables
+  [  1.29s] overrides: pointers=492298 fields=494946 targets=321488 mispredicted=47008 block-fixes=255 overrides=46958 (65002 votes)
+  [  1.32s] layout: 110147 funcs, 20 rec shapes, raw 337341 B, zstd 31609 B
+  [  1.76s] stage 1 (h): pclntab blobs 24478232 -> 24486832 B, delta 100949 B
+  [  2.21s] prediction: 93769955 B (new 93769955 B), insns=10688083 decode-failures=1876, differing bytes=133771 in 22907 runs
+  type descriptors: descriptors=62516 itabs=5337 rewritten nameOff=197353 typeOff=114379 textOff=170045 name.pkgPath=2155 unmapped=11014 bad=0
+  stage-2 differing bytes by section: .text=78060(12197 runs) .rodata=3023(587 runs) .gopclntab=7860(3702 runs) .go.type=40674(5777 runs) .go.func=49(17 runs) .go.buildinfo=215(15 runs) .go.fipsinfo=32(1 runs) .go.module=19(12 runs) .noptrdata=17(7 runs) .data=42(15 runs)
+  [  2.31s] stage 2 (positional): raw 185171 B, zstd 94449 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt09/p-11.gtp: 227122 B = header 115 + layout 31609 + stage1(h) 100949 + stage2(p) 94449  [encode 2.42s]

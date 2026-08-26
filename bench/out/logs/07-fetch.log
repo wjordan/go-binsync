@@ -1,0 +1,23 @@
+fetched terraform 1.15.8 -> /home/will/Code/binsync/bench/out/corpus/terraform/1.15.8/terraform (117289144 B) in 2 s
+fetched terraform 1.15.9 -> /home/will/Code/binsync/bench/out/corpus/terraform/1.15.9/terraform (117838008 B) in 3 s
+fetched vault 2.0.3 -> /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault (536903029 B) in 6 s
+fetched vault 2.0.4 -> /home/will/Code/binsync/bench/out/corpus/vault/2.0.4/vault (537754780 B) in 7 s
+fetched prometheus 3.13.2 -> /home/will/Code/binsync/bench/out/corpus/prometheus/3.13.2/prometheus (135899968 B) in 10 s
+fetched prometheus 3.14.0 -> /home/will/Code/binsync/bench/out/corpus/prometheus/3.14.0/prometheus (142095522 B) in 10 s
+fetched prometheus 3.13.1 -> /home/will/Code/binsync/bench/out/corpus/prometheus/3.13.1/prometheus (135857317 B) in 10 s
+fetched cockroach 26.2.4 -> /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach (326021464 B) in 11 s
+fetched cockroach 26.2.5 -> /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.5/cockroach (326116488 B) in 11 s
+fetched kube-apiserver 1.36.4 -> /home/will/Code/binsync/bench/out/corpus/kube-apiserver/1.36.4/kube-apiserver (88436898 B) in 15 s
+fetched kube-apiserver 1.36.3 -> /home/will/Code/binsync/bench/out/corpus/kube-apiserver/1.36.3/kube-apiserver (88387746 B) in 16 s
+corpus:
+326021464 /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.4/cockroach
+326116488 /home/will/Code/binsync/bench/out/corpus/cockroach/26.2.5/cockroach
+88387746 /home/will/Code/binsync/bench/out/corpus/kube-apiserver/1.36.3/kube-apiserver
+88436898 /home/will/Code/binsync/bench/out/corpus/kube-apiserver/1.36.4/kube-apiserver
+135857317 /home/will/Code/binsync/bench/out/corpus/prometheus/3.13.1/prometheus
+135899968 /home/will/Code/binsync/bench/out/corpus/prometheus/3.13.2/prometheus
+142095522 /home/will/Code/binsync/bench/out/corpus/prometheus/3.14.0/prometheus
+117289144 /home/will/Code/binsync/bench/out/corpus/terraform/1.15.8/terraform
+117838008 /home/will/Code/binsync/bench/out/corpus/terraform/1.15.9/terraform
+536903029 /home/will/Code/binsync/bench/out/corpus/vault/2.0.3/vault
+537754780 /home/will/Code/binsync/bench/out/corpus/vault/2.0.4/vault

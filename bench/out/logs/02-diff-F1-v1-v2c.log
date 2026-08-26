@@ -1,0 +1,151 @@
+## v1-F1 -> v2c-F1
+old=42,164,054 B new=42,164,214 B; section layout identical: False
+comparison mode: section-aligned (each section compared from its own start)
+
+total differing bytes: 12,789,084 (30.332% of old)
+differing runs (byte-exact): 1,005,095; merged with gap<=8: 77,964; gap<=64: 31,981
+differing run length: median 3 B, mean 12.7 B, max 3,447 B
+largest contiguous unchanged region: 5,559,482 B
+  fraction of file in unchanged runs >=    4 KiB:  35.18%  (14,835,081 B)
+  fraction of file in unchanged runs >=   16 KiB:  28.01%  (11,809,926 B)
+  fraction of file in unchanged runs >=   64 KiB:  23.88%  (10,067,365 B)
+  fraction of file in unchanged runs >=  256 KiB:  23.50%  (9,907,999 B)
+  fraction of file in unchanged runs >= 1024 KiB:  18.56%  (7,825,071 B)
+
+| section | size | differing bytes | % differing | runs (byte-exact) | runs (gap<=8) |
+|---|---:|---:|---:|---:|---:|
+| .note.go.buildid | 100 | 79 | 79.000% | 5 | 1 |
+| .note.gnu.build-id | 36 | 20 | 55.556% | 1 | 1 |
+| .text | 14,781,841 | 460,079 | 3.112% | 46,608 | 31,605 |
+| .plt | 720 | 84 | 11.667% | 46 | 44 |
+| .rodata | 3,527,513 | 438,882 | 12.442% | 57,048 | 21,569 |
+| .gopclntab | 10,579,922 | 3,067,955 | 28.998% | 858,148 | 21,219 |
+| .rela.plt | 1,056 | 0 | 0.000% | 0 | 0 |
+| .dynstr | 714 | 0 | 0.000% | 0 | 0 |
+| .dynsym | 1,176 | 0 | 0.000% | 0 | 0 |
+| .typelink | 38,272 | 0 | 0.000% | 0 | 0 |
+| .itablink | 16,600 | 0 | 0.000% | 0 | 0 |
+| .go.buildinfo | 4,176 | 0 | 0.000% | 0 | 0 |
+| .go.fipsinfo | 120 | 35 | 29.167% | 3 | 1 |
+| .dynamic | 304 | 8 | 2.632% | 7 | 7 |
+| .got.plt | 376 | 76 | 20.213% | 44 | 1 |
+| .go.module | 592 | 16 | 2.703% | 13 | 9 |
+| .noptrdata | 454,273 | 57 | 0.013% | 32 | 21 |
+| .data | 178,258 | 3,000 | 1.683% | 2,900 | 2,403 |
+| .debug_line | 2,167,531 | 2,157,344 | 99.530% | 9,509 | 21 |
+| .debug_frame | 456,727 | 13,726 | 3.005% | 74 | 1 |
+| .debug_info | 3,671,165 | 3,655,912 | 99.585% | 14,854 | 8 |
+| .debug_loclists | 2,179,094 | 2,167,446 | 99.465% | 10,243 | 38 |
+| .debug_rnglists | 762,709 | 758,034 | 99.387% | 4,005 | 10 |
+| .debug_addr | 65,313 | 64,451 | 98.680% | 485 | 10 |
+| .symtab | 997,896 | 1,579 | 0.158% | 970 | 968 |
+| .strtab | 2,265,131 | 0 | 0.000% | 0 | 0 |
+| .shstrtab | 395 | 0 | 0.000% | 0 | 0 |
+
+.text differing runs categorised by instruction at run start (46,608 runs):
+    32,361  same-insn-displacement/target-changed
+     4,927  code-shifted(delta=+192)
+     4,843  insn-boundary-shifted
+     4,253  same-insn-immediate-changed
+        44  code-shifted(delta=+128)
+        37  code-shifted(delta=+96)
+        36  code-shifted(delta=+64)
+        31  code-shifted(delta=+48)
+        29  code-shifted(delta=+32)
+        23  code-shifted(delta=+160)
+        22  code-shifted(delta=+16)
+         2  different-instruction
+
+20 sampled .text differing runs (evenly spaced):
+  0x401014 len=2   old=988d             new=588e             [same-insn-displacement/target-changed]
+      old: call 1219db0 <malloc@plt>
+      new: call 1219e70 <malloc@plt>
+  0x4bf293 len=1   old=cc               new=d4               [same-insn-displacement/target-changed]
+      old: lea 0x10032cc(%rip),%r8
+      new: lea 0x10032d4(%rip),%r8
+  0x6133d5 len=1   old=d0               new=d8               [same-insn-displacement/target-changed]
+      old: lea 0xebd4d0(%rip),%rdi
+      new: lea 0xebd4d8(%rip),%rdi
+  0x746178 len=1   old=3c               new=44               [same-insn-displacement/target-changed]
+      old: lea 0xdded3c(%rip),%rcx
+      new: lea 0xdded44(%rip),%rcx
+  0x8a0228 len=1   old=7c               new=84               [same-insn-displacement/target-changed]
+      old: lea 0xc1ce7c(%rip),%rdi
+      new: lea 0xc1ce84(%rip),%rdi
+  0x99f4a9 len=1   old=7f               new=87               [same-insn-displacement/target-changed]
+      old: lea 0xb19f7f(%rip),%rax
+      new: lea 0xb19f87(%rip),%rax
+  0xa42c05 len=1   old=4d               new=55               [same-insn-displacement/target-changed]
+      old: lea 0xa77a4d(%rip),%rcx
+      new: lea 0xa77a55(%rip),%rcx
+  0xad2cfb len=1   old=8c               new=94               [same-insn-displacement/target-changed]
+      old: lea 0x9f148c(%rip),%rcx
+      new: lea 0x9f1494(%rip),%rcx
+  0xbaac22 len=1   old=d6               new=de               [same-insn-displacement/target-changed]
+      old: lea 0x9337d6(%rip),%rcx
+      new: lea 0x9337de(%rip),%rcx
+  0xc86593 len=1   old=78               new=80               [same-insn-displacement/target-changed]
+      old: lea 0x864478(%rip),%rax
+      new: lea 0x864480(%rip),%rax
+  0xd11d6a len=1   old=95               new=9d               [same-insn-displacement/target-changed]
+      old: lea 0x7bc495(%rip),%rax
+      new: lea 0x7bc49d(%rip),%rax
+  0xe378c4 len=1   old=69               new=71               [same-insn-displacement/target-changed]
+      old: lea 0x69ff69(%rip),%rax
+      new: lea 0x69ff71(%rip),%rax
+  0x1053871 len=1   old=f3               new=fb               [same-insn-displacement/target-changed]
+      old: lea 0x4cfcf3(%rip),%rax
+      new: lea 0x4cfcfb(%rip),%rax
+  0x11ae189 len=30  old=000048894c246848 new=440f117c2440488d [code-shifted(delta=+192)]
+      old: lea 0xf5(%rip),%rcx
+      new: lea 0xf5(%rip),%rcx
+  0x11c19a3 len=26  old=28440f113b440f11 new=6848b9696a6b6c6d [code-shifted(delta=+192)]
+      old: lea 0x28(%rsp),%rbx
+      new: lea 0x28(%rsp),%rbx
+  0x11d1813 len=18  old=4c8b942440050000 new=004911d04c898424 [insn-boundary-shifted]
+      old: mov 0x540(%rsp),%r10
+      new: mov 0x518(%rsp),%rdx
+  0x11e2565 len=7   old=107210450f1171   new=0000488db42408   [insn-boundary-shifted]
+      old: movups 0x10(%r10),%xmm14
+      new: mov %rsi,0xf78(%rsp)
+  0x11f3997 len=60  old=60010000488b5a20 new=10488b4c2418488b [same-insn-immediate-changed]
+      old: mov 0x160(%rsp),%rdx
+      new: mov 0x10(%rsp),%rbx
+  0x12063f3 len=47  old=48baeaa27b7d0015 new=0000833d94ade500 [insn-boundary-shifted]
+      old: movabs $0xfb4815007d7ba2ea,%rdx
+      new: movq $0xe,0x10(%rax)
+  0x1219d6e len=35  old=8b441710ebbbe807 new=83c4605dc3488944 [code-shifted(delta=+192)]
+      old: mov 0x10(%rdi,%rdx,1),%rax
+      new: mov 0x10(%rdi,%rdx,1),%rax
+
+objdump --start-address cross-check for 3 samples:
+  v1-F1:
+    401010:	48 89 ef             	mov    %rbp,%rdi
+    401013:	e8 98 8d e1 00       	call   1219db0 <malloc@plt>
+    401018:	48 85 c0             	test   %rax,%rax
+    40101b:	74 0b                	je     401028 <_cgo_77133bf98b3a_Cfunc__Cmalloc+0x28>
+  v2c-F1:
+    401010:	48 89 ef             	mov    %rbp,%rdi
+    401013:	e8 58 8e e1 00       	call   1219e70 <malloc@plt>
+    401018:	48 85 c0             	test   %rax,%rax
+    40101b:	74 0b                	je     401028 <_cgo_77133bf98b3a_Cfunc__Cmalloc+0x28>
+  v1-F1:
+    a42bfd:	bb 01 00 00 00       	mov    $0x1,%ebx
+    a42c02:	48 8d 0d 4d 7a a7 00 	lea    0xa77a4d(%rip),%rcx        # 14ba656 <go:string.*+0x339e>
+    a42c09:	bf 06 00 00 00       	mov    $0x6,%edi
+    a42c0e:	48 8d 35 94 66 a7 00 	lea    0xa76694(%rip),%rsi        # 14b92a9 <go:string.*+0x1ff1>
+  v2c-F1:
+    a42bfd:	bb 01 00 00 00       	mov    $0x1,%ebx
+    a42c02:	48 8d 0d 55 7a a7 00 	lea    0xa77a55(%rip),%rcx        # 14ba65e <go:string.*+0x33a6>
+    a42c09:	bf 06 00 00 00       	mov    $0x6,%edi
+    a42c0e:	48 8d 35 9c 66 a7 00 	lea    0xa7669c(%rip),%rsi        # 14b92b1 <go:string.*+0x1ff9>
+  v1-F1:
+    1053867:	48 89 05 3a 3a f5 00 	mov    %rax,0xf53a3a(%rip)        # 1fa72a8 <modernc.org/sqlite/lib._rbuvfs_io_methods+0x8>
+    105386e:	48 8d 05 f3 fc 4c 00 	lea    0x4cfcf3(%rip),%rax        # 1523568 <go:funcdesc+0x3c30>
+    1053875:	48 89 05 34 3a f5 00 	mov    %rax,0xf53a34(%rip)        # 1fa72b0 <modernc.org/sqlite/lib._rbuvfs_io_methods+0x10>
+    105387c:	48                   	rex.W
+  v2c-F1:
+    1053867:	48 89 05 3a 3a f5 00 	mov    %rax,0xf53a3a(%rip)        # 1fa72a8 <modernc.org/sqlite/lib._rbuvfs_io_methods+0x8>
+    105386e:	48 8d 05 fb fc 4c 00 	lea    0x4cfcfb(%rip),%rax        # 1523570 <go:funcdesc+0x3c30>
+    1053875:	48 89 05 34 3a f5 00 	mov    %rax,0xf53a34(%rip)        # 1fa72b0 <modernc.org/sqlite/lib._rbuvfs_io_methods+0x10>
+    105387c:	48                   	rex.W

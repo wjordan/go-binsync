@@ -1,0 +1,34 @@
+## v1-F2 -> v2s-F2
+old=29,561,097 B new=29,561,097 B; section layout identical: True
+comparison mode: raw file offsets
+
+total differing bytes: 103 (0.000% of old)
+differing runs (byte-exact): 8; merged with gap<=8: 3; gap<=64: 2
+differing run length: median 14 B, mean 12.9 B, max 20 B
+largest contiguous unchanged region: 17,555,420 B
+  fraction of file in unchanged runs >=    4 KiB:  99.99%  (29,557,024 B)
+  fraction of file in unchanged runs >=   16 KiB:  99.99%  (29,557,024 B)
+  fraction of file in unchanged runs >=   64 KiB:  99.99%  (29,557,024 B)
+  fraction of file in unchanged runs >=  256 KiB:  99.99%  (29,557,024 B)
+  fraction of file in unchanged runs >= 1024 KiB:  99.99%  (29,557,024 B)
+
+| section | size | differing bytes | % differing | runs (byte-exact) | runs (gap<=8) |
+|---|---:|---:|---:|---:|---:|
+| .note.go.buildid | 100 | 78 | 78.000% | 6 | 1 |
+| .note.gnu.build-id | 36 | 20 | 55.556% | 1 | 1 |
+| .text | 14,781,841 | 0 | 0.000% | 0 | 0 |
+| .rodata | 3,527,449 | 5 | 0.000% | 1 | 1 |
+| .gopclntab | 10,541,954 | 0 | 0.000% | 0 | 0 |
+| .rela.plt | 1,056 | 0 | 0.000% | 0 | 0 |
+| .dynstr | 714 | 0 | 0.000% | 0 | 0 |
+| .dynsym | 1,176 | 0 | 0.000% | 0 | 0 |
+| .typelink | 38,272 | 0 | 0.000% | 0 | 0 |
+| .itablink | 16,600 | 0 | 0.000% | 0 | 0 |
+| .go.buildinfo | 4,128 | 0 | 0.000% | 0 | 0 |
+| .go.fipsinfo | 120 | 0 | 0.000% | 0 | 0 |
+| .go.module | 592 | 0 | 0.000% | 0 | 0 |
+| .noptrdata | 454,273 | 0 | 0.000% | 0 | 0 |
+| .data | 178,258 | 0 | 0.000% | 0 | 0 |
+| .shstrtab | 265 | 0 | 0.000% | 0 | 0 |
+
+.text: no differing bytes

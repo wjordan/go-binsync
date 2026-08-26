@@ -1,0 +1,24 @@
+# namespaces up; server cc=cubic (host cc=cubic)
+
+## cc=cubic profile A: 100 Mbit/s, 100 ms RTT, 0.0% loss each way  [qdisc netem 8003: root refcnt 25 limit 1666 delay 50ms rate 100Mbit seed 10799923626436283476]
+[     2s] bsdiff-60k       60,478 B  single: 0.40 s (1.20 Mbit/s, n=3)  connect 100 ms, TTFB 201 ms; conditional GET -> [304, 304, 304] in 200 ms
+[     6s] patch-1m      1,758,395 B  single: 1.13 s (12.45 Mbit/s, n=3)
+[    19s] full-8m       8,432,157 B  single: 1.76 s (38.34 Mbit/s, n=3)  4-way: 1.43 s (47.06 Mbit/s, n=3)  8-way: 1.26 s (53.66 Mbit/s, n=3)
+[    46s] blob-25m     25,547,524 B  single: 3.19 s (64.00 Mbit/s, n=3)  4-way: 2.97 s (68.88 Mbit/s, n=3)  8-way: 2.87 s (71.18 Mbit/s, n=3)
+
+## cc=cubic profile B: 20 Mbit/s, 200 ms RTT, 0.0% loss each way  [qdisc netem 8003: root refcnt 25 limit 1000 delay 100ms rate 20Mbit seed 14292506279202845945]
+[    50s] bsdiff-60k       60,478 B  single: 0.81 s (0.60 Mbit/s, n=3)  connect 200 ms, TTFB 401 ms; conditional GET -> [304, 304, 304] in 401 ms
+[    57s] patch-1m      1,758,395 B  single: 2.34 s (6.00 Mbit/s, n=3)
+[   103s] full-8m       8,432,157 B  single: 5.14 s (13.13 Mbit/s, n=3)  4-way: 5.53 s (12.19 Mbit/s, n=3)  8-way: 4.28 s (15.78 Mbit/s, n=3)
+[   210s] blob-25m     25,547,524 B  single: 12.29 s (16.62 Mbit/s, n=3)  4-way: 11.63 s (17.57 Mbit/s, n=3)  8-way: 11.38 s (17.96 Mbit/s, n=3)
+
+## cc=cubic profile C: 20 Mbit/s, 200 ms RTT, 1.0% loss each way  [qdisc netem 8003: root refcnt 25 limit 1000 delay 100ms loss 1% rate 20Mbit seed 13289093376046145365]
+[   215s] bsdiff-60k       60,478 B  single: 1.01 s (0.48 Mbit/s, n=3)  connect 200 ms, TTFB 401 ms; conditional GET -> [304, 304, 304] in 401 ms
+[   238s] patch-1m      1,758,395 B  single: 8.06 s (1.75 Mbit/s, n=3)
+[   466s] full-8m       8,432,157 B  single: 57.24 s (1.18 Mbit/s, n=3)  4-way: 14.83 s (4.55 Mbit/s, n=3)  8-way: 7.41 s (9.10 Mbit/s, n=3)
+[   873s] blob-25m     25,547,524 B  single: 179.88 s (1.14 Mbit/s, n=1)  4-way: 47.90 s (4.27 Mbit/s, n=3)  8-way: 25.64 s (7.97 Mbit/s, n=3)
+
+## cc=cubic profile D: 5 Mbit/s, 300 ms RTT, 2.0% loss each way  [qdisc netem 8003: root refcnt 25 limit 1000 delay 150ms loss 2% rate 5Mbit seed 15181970513611113021]
+[   880s] bsdiff-60k       60,478 B  single: 1.52 s (0.32 Mbit/s, n=3)  connect 300 ms, TTFB 602 ms; conditional GET -> [304, 304, 304] in 602 ms
+[   957s] patch-1m      1,758,395 B  single: 22.41 s (0.63 Mbit/s, n=3)
+[  1541s] full-8m       8,432,157 B  single: 131.54 s (0.51 Mbit/s, n=3)  4-way: 40.60 s (1.66 Mbit/s, n=3)  8-way: 26.81 s (2.52 Mbit/s, n=3)

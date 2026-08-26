@@ -1,0 +1,16 @@
+== datapredict ../out/corpus/prometheus/3.13.2/prometheus.stripped -> ../out/corpus/prometheus/3.14.0/prometheus.stripped
+.rodata: 19354777 bytes, 425917 aligned qwords point into the image: text-matched=40278 text-unmatched=220 rodata=385284 noptrdata=9 bss/noptrbss=66 other-section=60
+  pointer rewrite: unchanged-in-new=758 re-targeted-correctly=359926 mispredicted=65429 unmapped=220 (map: blocks=1209674 matched=797309 ambiguous=8862 unmatched=403503 shift-changes=5970)
+  baseline old->new:            bsdiff=4632707 hdiffz=4352496 zstd=0 rawdiff=16763867 runs=1108550
+  blocks re-laid (no ptr fix):  bsdiff=4571059 hdiffz=4323249 zstd=0 rawdiff=6485637 runs=1038260
+  blocks re-laid + ptr rewrite: bsdiff=4124373 hdiffz=3936045 zstd=0 rawdiff=5350617 runs=681611
+.noptrdata: 589921 bytes, 1757 aligned qwords point into the image: text-matched=1090 text-unmatched=5 rodata=5 noptrdata=633 bss/noptrbss=5 other-section=19
+  pointer rewrite: unchanged-in-new=182 re-targeted-correctly=814 mispredicted=930 unmapped=5 (map: blocks=36871 matched=36762 ambiguous=10 unmatched=99 shift-changes=32)
+  baseline old->new:            bsdiff=11994 hdiffz=10558 zstd=0 rawdiff=540519 runs=30365
+  blocks re-laid (no ptr fix):  bsdiff=12240 hdiffz=10454 zstd=0 rawdiff=14621 runs=5136
+  blocks re-laid + ptr rewrite: bsdiff=9662 hdiffz=8344 zstd=0 rawdiff=12377 runs=4479
+.data: 345682 bytes, 17028 aligned qwords point into the image: text-matched=70 rodata=10532 noptrdata=941 data=1470 bss/noptrbss=4009 other-section=6
+  pointer rewrite: unchanged-in-new=91 re-targeted-correctly=10740 mispredicted=6287 unmapped=0 (map: blocks=21606 matched=21125 ambiguous=477 unmatched=4 shift-changes=48)
+  baseline old->new:            bsdiff=31395 hdiffz=27951 zstd=0 rawdiff=90792 runs=30360
+  blocks re-laid (no ptr fix):  bsdiff=18768 hdiffz=28549 zstd=0 rawdiff=53168 runs=17919
+  blocks re-laid + ptr rewrite: bsdiff=6634 hdiffz=7216 zstd=0 rawdiff=12906 runs=7310

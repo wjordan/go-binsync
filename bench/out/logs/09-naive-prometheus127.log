@@ -1,0 +1,33 @@
+== xz -9 -T1 (whole new file)
+TIME 20.89 s RSS 682648 KB
+SIZE xz=18441736
+== zstd -19 (whole new file, 1 thread)
+TIME 21.08 s RSS 190700 KB
+SIZE zstd19=20579646
+== zstd -19 --long=27 --patch-from
+TIME 27.01 s RSS 342536 KB
+SIZE zstd-patch-from=8479550
+== zstd --patch-from decode
+TIME 0.12 s RSS 187128 KB
+patch-from decode OK
+== xdelta3 -9 -B 128MiB
+TIME 7.58 s RSS 697416 KB
+SIZE xdelta3=15157924
+== xdelta3 decode
+TIME 0.19 s RSS 111496 KB
+xdelta3 decode OK
+== desync CDC chunk store (default 16:64:256 KiB, zstd chunks): bytes added to store by new
+STORE_OLD_BYTES=29074345
+STORE_NEW_BYTES=54778152 CDC_RESEND_BYTES=25703807
+== desync CDC small chunks 4:16:64 KiB
+STORE_NEW_BYTES=57472335 CDC_RESEND_BYTES_SMALL=25899127
+== bsdiff (for bspatch cost)
+TIME 39.29 s RSS 825016 KB
+SIZE bsdiff=2691644
+== bspatch
+TIME 0.47 s RSS 192116 KB
+bspatch OK
+== zstd whole-file decode
+TIME 0.07 s RSS 13536 KB
+zstd decode OK
+DONE

@@ -1,0 +1,29 @@
+v1   F1      43217773 bytes    9.5s  go build  -o v1-F1 .
+v1   F2      29995271 bytes    9.1s  go build -trimpath -ldflags=-s -w -o v1-F2 .
+v1   F3      29995235 bytes    0.6s  go build -trimpath -ldflags=-s -w -buildid= -buildvcs=false -o v1-F3 .
+v1   F2pie   32907564 bytes   16.8s  go build -buildmode=pie -trimpath -ldflags=-s -w -o v1-F2pie .
+v1   F1b     43217773 bytes    8.0s  go build  -o v1-F1-rebuild .
+v1   F2b     29995271 bytes    2.5s  go build -trimpath -ldflags=-s -w -o v1-F2-rebuild .
+REPRO F1: identical
+REPRO F2: identical
+v2s  F1      43217773 bytes    4.1s  go build  -o v2s-F1 .
+v2s  F2      29995271 bytes    3.9s  go build -trimpath -ldflags=-s -w -o v2s-F2 .
+v2s  F3      29995235 bytes    1.9s  go build -trimpath -ldflags=-s -w -buildid= -buildvcs=false -o v2s-F3 .
+v2l  F1      43217773 bytes    1.1s  go build  -o v2l-F1 .
+v2l  F2      29995271 bytes    1.0s  go build -trimpath -ldflags=-s -w -o v2l-F2 .
+v2l  F3      29995235 bytes    0.8s  go build -trimpath -ldflags=-s -w -buildid= -buildvcs=false -o v2l-F3 .
+v2c  F1      43217981 bytes    1.5s  go build  -o v2c-F1 .
+v2c  F2      29995271 bytes    1.1s  go build -trimpath -ldflags=-s -w -o v2c-F2 .
+v2c  F3      29995235 bytes    1.2s  go build -trimpath -ldflags=-s -w -buildid= -buildvcs=false -o v2c-F3 .
+v2c  F2pie   32907564 bytes    1.3s  go build -buildmode=pie -trimpath -ldflags=-s -w -o v2c-F2pie .
+v2p  F1      43217325 bytes    1.0s  go build  -o v2p-F1 .
+v2p  F2      29995271 bytes    0.7s  go build -trimpath -ldflags=-s -w -o v2p-F2 .
+v2p  F3      29995235 bytes    0.7s  go build -trimpath -ldflags=-s -w -buildid= -buildvcs=false -o v2p-F3 .
+v3   F1      43217213 bytes    1.1s  go build  -o v3-F1 .
+v3   F2      29995271 bytes    0.8s  go build -trimpath -ldflags=-s -w -o v3-F2 .
+v3   F3      29995235 bytes    0.7s  go build -trimpath -ldflags=-s -w -buildid= -buildvcs=false -o v3-F3 .
+v4   F1      43217213 bytes    1.0s  go build  -o v4-F1 .
+v4   F2      29995271 bytes    0.7s  go build -trimpath -ldflags=-s -w -o v4-F2 .
+v4   F3      29995235 bytes    0.6s  go build -trimpath -ldflags=-s -w -buildid= -buildvcs=false -o v4-F3 .
+readelf: F1=EXEC F2=EXEC F2pie=DYN
+exit=0

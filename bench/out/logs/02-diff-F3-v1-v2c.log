@@ -1,0 +1,141 @@
+## v1-F3 -> v2c-F3
+old=29,561,061 B new=29,561,061 B; section layout identical: False
+comparison mode: section-aligned (each section compared from its own start)
+
+total differing bytes: 3,970,489 (13.431% of old)
+differing runs (byte-exact): 964,928; merged with gap<=8: 76,897; gap<=64: 31,937
+differing run length: median 3 B, mean 4.1 B, max 533 B
+largest contiguous unchanged region: 5,521,513 B
+  fraction of file in unchanged runs >=    4 KiB:  37.67%  (11,136,031 B)
+  fraction of file in unchanged runs >=   16 KiB:  27.66%  (8,175,867 B)
+  fraction of file in unchanged runs >=   64 KiB:  21.87%  (6,464,413 B)
+  fraction of file in unchanged runs >=  256 KiB:  21.63%  (6,393,150 B)
+  fraction of file in unchanged runs >= 1024 KiB:  18.68%  (5,521,513 B)
+
+| section | size | differing bytes | % differing | runs (byte-exact) | runs (gap<=8) |
+|---|---:|---:|---:|---:|---:|
+| .text | 14,781,841 | 460,088 | 3.113% | 46,602 | 31,605 |
+| .plt | 720 | 81 | 11.250% | 46 | 44 |
+| .rodata | 3,527,449 | 438,873 | 12.442% | 57,044 | 21,569 |
+| .gopclntab | 10,541,954 | 3,067,956 | 29.102% | 858,148 | 21,219 |
+| .rela.plt | 1,056 | 0 | 0.000% | 0 | 0 |
+| .dynstr | 714 | 0 | 0.000% | 0 | 0 |
+| .dynsym | 1,176 | 0 | 0.000% | 0 | 0 |
+| .typelink | 38,272 | 0 | 0.000% | 0 | 0 |
+| .itablink | 16,600 | 0 | 0.000% | 0 | 0 |
+| .go.buildinfo | 4,128 | 0 | 0.000% | 0 | 0 |
+| .go.fipsinfo | 120 | 35 | 29.167% | 3 | 1 |
+| .dynamic | 304 | 12 | 3.947% | 7 | 7 |
+| .got.plt | 376 | 76 | 20.213% | 44 | 1 |
+| .go.module | 592 | 17 | 2.872% | 13 | 9 |
+| .noptrdata | 454,273 | 57 | 0.013% | 32 | 21 |
+| .data | 178,258 | 2,998 | 1.682% | 2,899 | 2,402 |
+| .shstrtab | 229 | 0 | 0.000% | 0 | 0 |
+
+.text differing runs categorised by instruction at run start (46,602 runs):
+    32,361  same-insn-displacement/target-changed
+     4,910  code-shifted(delta=+192)
+     4,838  insn-boundary-shifted
+     4,253  same-insn-immediate-changed
+        46  code-shifted(delta=+128)
+        40  code-shifted(delta=+64)
+        39  code-shifted(delta=+96)
+        33  code-shifted(delta=+48)
+        32  code-shifted(delta=+32)
+        25  code-shifted(delta=+160)
+        23  code-shifted(delta=+16)
+         2  different-instruction
+
+20 sampled .text differing runs (evenly spaced):
+  0x401014 len=2   old=988d             new=588e             [same-insn-displacement/target-changed]
+      old: call 1219db0 <malloc@plt>
+      new: call 1219e70 <malloc@plt>
+  0x4bf287 len=1   old=f2               new=fa               [same-insn-displacement/target-changed]
+      old: lea 0x1006ef2(%rip),%rbx
+      new: lea 0x1006efa(%rip),%rbx
+  0x613355 len=1   old=9e               new=a6               [same-insn-displacement/target-changed]
+      old: lea 0xec019e(%rip),%rax
+      new: lea 0xec01a6(%rip),%rax
+  0x746156 len=1   old=5e               new=66               [same-insn-displacement/target-changed]
+      old: lea 0xdded5e(%rip),%rcx
+      new: lea 0xdded66(%rip),%rcx
+  0x89e631 len=1   old=95               new=9d               [same-insn-displacement/target-changed]
+      old: lea 0xc39795(%rip),%rcx
+      new: lea 0xc3979d(%rip),%rcx
+  0x99f3b9 len=1   old=73               new=7b               [same-insn-displacement/target-changed]
+      old: lea 0xb37e73(%rip),%rax
+      new: lea 0xb37e7b(%rip),%rax
+  0xa425c7 len=1   old=85               new=8d               [same-insn-displacement/target-changed]
+      old: lea 0xa78085(%rip),%rax
+      new: lea 0xa7808d(%rip),%rax
+  0xad2af3 len=1   old=44               new=4c               [same-insn-displacement/target-changed]
+      old: lea 0xa13544(%rip),%rcx
+      new: lea 0xa1354c(%rip),%rcx
+  0xbaa8de len=1   old=1a               new=22               [same-insn-displacement/target-changed]
+      old: lea 0x933b1a(%rip),%rax
+      new: lea 0x933b22(%rip),%rax
+  0xc8617d len=1   old=47               new=4f               [same-insn-displacement/target-changed]
+      old: lea 0x861f47(%rip),%rax
+      new: lea 0x861f4f(%rip),%rax
+  0xd11b32 len=1   old=27               new=2f               [same-insn-displacement/target-changed]
+      old: lea 0x7ce127(%rip),%rcx
+      new: lea 0x7ce12f(%rip),%rcx
+  0xe375cd len=1   old=7b               new=83               [same-insn-displacement/target-changed]
+      old: lea 0x68797b(%rip),%rax
+      new: lea 0x687983(%rip),%rax
+  0x1053821 len=1   old=0b               new=13               [same-insn-displacement/target-changed]
+      old: lea 0x4cfd0b(%rip),%rax
+      new: lea 0x4cfd13(%rip),%rax
+  0x11ae0ad len=2   old=899c             new=8b54             [same-insn-immediate-changed]
+      old: mov %rbx,0xa8(%rsp)
+      new: mov 0x38(%rsp),%rdx
+  0x11c19a0 len=2   old=8d5c             new=894c             [code-shifted(delta=+192)]
+      old: lea 0x28(%rsp),%rbx
+      new: lea 0x28(%rsp),%rbx
+  0x11d180b len=7   old=4c8b8424b80400   new=00488b94241805   [insn-boundary-shifted]
+      old: mov 0x4b8(%rsp),%r8
+      new: mov 0x500(%rsp),%r8
+  0x11e24ff len=5   old=440f103244       new=4889b42448       [code-shifted(delta=+192)]
+      old: movups (%rdx),%xmm14
+      new: movups (%rdx),%xmm14
+  0x11f3997 len=60  old=60010000488b5a20 new=10488b4c2418488b [same-insn-immediate-changed]
+      old: mov 0x160(%rsp),%rdx
+      new: mov 0x10(%rsp),%rbx
+  0x12063df len=19  old=000048ba744fed2f new=90e89b1421ff48c7 [insn-boundary-shifted]
+      old: mov %rdx,0xb0(%rsp)
+      new: nop 
+  0x1219d6e len=35  old=8b441710ebbbe807 new=83c4605dc3488944 [code-shifted(delta=+192)]
+      old: mov 0x10(%rdi,%rdx,1),%rax
+      new: mov 0x10(%rdi,%rdx,1),%rax
+
+objdump --start-address cross-check for 3 samples:
+  v1-F3:
+    401010:	48 89 ef             	mov    %rbp,%rdi
+    401013:	e8 98 8d e1 00       	call   1219db0 <malloc@plt>
+    401018:	48 85 c0             	test   %rax,%rax
+    40101b:	74 0b                	je     401028 <_cgo_topofstack@@Base-0x95f78>
+  v2c-F3:
+    401010:	48 89 ef             	mov    %rbp,%rdi
+    401013:	e8 58 8e e1 00       	call   1219e70 <malloc@plt>
+    401018:	48 85 c0             	test   %rax,%rax
+    40101b:	74 0b                	je     401028 <_cgo_topofstack@@Base-0x95f78>
+  v1-F3:
+    a425c1:	48 89 c7             	mov    %rax,%rdi
+    a425c4:	48 8d 05 85 80 a7 00 	lea    0xa78085(%rip),%rax        # 14ba650 <sysconf@plt+0x2a05f0>
+    a425cb:	ff d6                	call   *%rsi
+    a425cd:	48 8b 4c 24 28       	mov    0x28(%rsp),%rcx
+  v2c-F3:
+    a425c1:	48 89 c7             	mov    %rax,%rdi
+    a425c4:	48 8d 05 8d 80 a7 00 	lea    0xa7808d(%rip),%rax        # 14ba658 <sysconf@plt+0x2a0538>
+    a425cb:	ff d6                	call   *%rsi
+    a425cd:	48 8b 4c 24 28       	mov    0x28(%rsp),%rcx
+  v1-F3:
+    1053817:	48 89 05 2a ab f4 00 	mov    %rax,0xf4ab2a(%rip)        # 1f9e348 <sysconf@plt+0xd842e8>
+    105381e:	48 8d 05 0b fd 4c 00 	lea    0x4cfd0b(%rip),%rax        # 1523530 <sysconf@plt+0x3094d0>
+    1053825:	48 89 05 24 ab f4 00 	mov    %rax,0xf4ab24(%rip)        # 1f9e350 <sysconf@plt+0xd842f0>
+    105382c:	48                   	rex.W
+  v2c-F3:
+    1053817:	48 89 05 2a ab f4 00 	mov    %rax,0xf4ab2a(%rip)        # 1f9e348 <sysconf@plt+0xd84228>
+    105381e:	48 8d 05 13 fd 4c 00 	lea    0x4cfd13(%rip),%rax        # 1523538 <sysconf@plt+0x309418>
+    1053825:	48 89 05 24 ab f4 00 	mov    %rax,0xf4ab24(%rip)        # 1f9e350 <sysconf@plt+0xd84230>
+    105382c:	48                   	rex.W

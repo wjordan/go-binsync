@@ -1,0 +1,11 @@
+== whole ../out/bin127/v1-F2 -> ../out/bin127/v2c-F2 (layout go1.27)
+match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0; layout table zstd=30 B
+shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+shift table .noptrbss: 0 breakpoints from 39226 samples, 0 B raw:
+bss shift tables zstd=0 B (added to the layout cost)
+text relocation: insns=3735024 decode-failures=1866
+BASELINE whole file:        bsdiff=0 hdiffz=176995 zstd=0 rawdiff=11146446 runs=1622076
+stage 1 (pclntab blobs 7532264 B): bsdiff=0 hdiffz=1283 zstd=0 rawdiff=717688 runs=299880
+stage 2 (predicted file):   bsdiff=0 hdiffz=23598 zstd=0 rawdiff=1130989 runs=476440
+TOTAL Go-aware = layout 30 + stage1 + stage2: bsdiff 30 (0.0x smaller) hdiffz 24911 (7.1x) zstd 30 (0.0x)
+stage-2 differing bytes by section: .note.go.buildid=80(4 runs) .note.gnu.build-id=20(1 runs) .text=966(298 runs) .plt=81(46 runs) .rodata=31(14 runs) .gopclntab=1009737(387118 runs) .go.type=119726(88770 runs) .go.func=104(61 runs) .go.fipsinfo=38(5 runs) .dynamic=10(7 runs) .got.plt=76(44 runs) .go.module=24(19 runs) .noptrdata=2(2 runs)

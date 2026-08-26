@@ -1,0 +1,20 @@
+  [  0.04s] loaded v1-F2 (go1.26, 29561097 B) -> v2c-F2 (go1.26, 29561097 B)
+  [  0.04s] match: exact=32838 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  datamap .rodata: blocks=220466 matched=220173 ambiguous=0 unmatched=293 shift-changes=3; rle 21 B
+  datamap .noptrdata: blocks=28393 matched=28392 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11142 matched=11141 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 8988 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39004 samples, 0 B raw:
+  [  1.68s] content maps + shift tables
+  [  1.68s] layout: 32838 funcs, 0 rec shapes, raw 66388 B, zstd 598 B
+  [  1.72s] stage 1 (h): pclntab blobs 7357896 -> 7357984 B, delta 1678 B
+  [  2.18s] prediction: 29561097 B (new 29561097 B), insns=3664769 decode-failures=1869, differing bytes=1950 in 684 runs
+  stage-2 differing bytes by section: .note.go.buildid=80(4 runs) .note.gnu.build-id=20(1 runs) .text=639(29 runs) .rodata=1052(585 runs) .gopclntab=13(8 runs) .go.fipsinfo=32(1 runs) .go.module=12(9 runs)
+  [  2.21s] stage 2 (positional): raw 3458 B, zstd 2351 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/v1-v2c-126.gtp: 4739 B = header 112 + layout 598 + stage1(h) 1678 + stage2(p) 2351  [encode 2.24s]
+  [  0.03s] loaded old (go1.26) and patch: 4739 B, layout 66388 B
+  [  0.06s] stage 1 applied: 7357984 B of pclntab blobs; skeleton 32838 funcs
+  [  0.54s] prediction: 29561097 B, hash verified
+  [  0.58s] stage 2 (p) applied: 29561097 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/v1-v2c-126.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/v1-v2c-126.out: 29561097 B [decode 0.58s]
+DECODE-IDENTICAL

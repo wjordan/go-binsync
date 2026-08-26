@@ -1,0 +1,95 @@
+== ../out/bin/v1-F2 (29561097 bytes)
+sections (allocated, by address):
+  .tbss              addr=0x0        off=0x0       size=        8
+  .note.go.buildid   addr=0x400f5c   off=0xf5c     size=      100
+  .note.gnu.build-id addr=0x400fc0   off=0xfc0     size=       36
+  .interp            addr=0x400fe4   off=0xfe4     size=       28
+  .text              addr=0x401000   off=0x1000    size= 14781841
+  .plt               addr=0x1219da0  off=0xe19da0  size=      720
+  .rodata            addr=0x121b000  off=0xe1b000  size=  3527449
+  .gopclntab         addr=0x1578320  off=0x1178320 size= 10541954
+  .rela              addr=0x1f85ea8  off=0x1b85ea8 size=       24
+  .rela.plt          addr=0x1f85ec0  off=0x1b85ec0 size=     1056
+  .gnu.version_r     addr=0x1f862e0  off=0x1b862e0 size=       96
+  .gnu.version       addr=0x1f86340  off=0x1b86340 size=       98
+  .hash              addr=0x1f863c0  off=0x1b863c0 size=      232
+  .dynstr            addr=0x1f864c0  off=0x1b864c0 size=      714
+  .dynsym            addr=0x1f867a0  off=0x1b867a0 size=     1176
+  .typelink          addr=0x1f86c40  off=0x1b86c40 size=    38272
+  .itablink          addr=0x1f901c0  off=0x1b901c0 size=    16600
+  .go.buildinfo      addr=0x1f95000  off=0x1b95000 size=     4128
+  .go.fipsinfo       addr=0x1f96020  off=0x1b96020 size=      120
+  .dynamic           addr=0x1f960a0  off=0x1b960a0 size=      304
+  .got.plt           addr=0x1f961e0  off=0x1b961e0 size=      376
+  .go.module         addr=0x1f96360  off=0x1b96360 size=      592
+  .got               addr=0x1f965b0  off=0x1b965b0 size=        8
+  .noptrdata         addr=0x1f965c0  off=0x1b965c0 size=   454273
+  .data              addr=0x2005460  off=0x1c05460 size=   178258
+  .bss               addr=0x2030cc0  off=0x1c30cc0 size=   157240
+  .noptrbss          addr=0x2057300  off=0x1c57300 size= 33712064
+layout=go1.26 pclntab: magic ok, nfunc=32838 nfiles=1910 minLC=1 ptrSize=8 section=10541954 bytes (go:func.*/findfunctab inside .gopclntab: true)
+  funcnametab    off=       72 len=  2084432
+  cutab          off=  2084504 len=    76096
+  filetab        off=  2160600 len=    84536
+  pctab          off=  2245136 len=  3396048
+  functab+_func  off=  5641184 len=  3111808
+  go:func.*      off=  8752992 len=  1716784
+  findfunctab    off= 10469776 len=    72178
+moduledata: text=0x401000 etext=0x1219d90 minpc=0x401000 maxpc=0x1219d81 types=0x121b000 etypes=0x1578319 rodata=0x121b000 gofunc=0x1dd1280 findfunctab=0x1f744b0 epclntab=0x1f85ea2 typelinks=9568 itablinks=2075
+functions: 32838; first _cgo_77133bf98b3a_Cfunc__Cmalloc @0x401000; last go:textfipsend @0x1219d80 end=0x1219d81; .text end=0x1219d91 (gap after last func: 16 bytes)
+entry alignment: 32824 on 32-byte boundary, 14 not ([_cgo_77133bf98b3a_Cfunc_getnameinfo@0x4010b0 _cgo_77133bf98b3a_Cfunc_freeaddrinfo@0x401170 _cgo_77133bf98b3a_Cfunc_getaddrinfo@0x4011b0 _cgo_wait_runtime_init_done@0x401370 _cgo_set_stacklo@0x401450 x_cgo_bindm@0x4014b0 x_cgo_notify_runtime_init_done@0x4014d0 x_cgo_set_traceback_functions@0x401510 x_cgo_call_traceback_function@0x401550 _cgo_get_symbolizer_function@0x401590])
+x86asm decode failures: 1869 bytes in 85 functions; top: vendor/golang.org/x/crypto/chacha20poly1305.chacha20Poly1305Seal=247 vendor/golang.org/x/crypto/chacha20poly1305.chacha20Poly1305Open=181 crypto/internal/fips140/bigmod.addMulVVW2048=154 crypto/internal/fips140/bigmod.addMulVVW1536=117 crypto/internal/fips140/sha512.blockAVX2=114 crypto/internal/fips140/sha256.blockAVX2=95 crypto/internal/fips140/bigmod.addMulVVW1024=82 crypto/sha1.blockAVX2=60 crypto/internal/fips140/sha256.blockSHANI=51 math/big.addMulVVWW=45 crypto/sha1.blockSHANI=42 runtime.asyncPreempt=36
+sum of function sizes (entry to next entry): 14781825 = 100.00% of .text
+duplicate names: 34 distinct names with >1 function (examples: map[internal/bytealg.countGenericString:2 reflect.callReflect:2 runtime.args:2 runtime.asyncPreempt2:2 runtime.badmorestackg0:2 runtime.badsystemstack:2 runtime.debugCallCheck:2 runtime.debugCallWrap:2 runtime.goexit1:2 syscall.Syscall6:2])
+name categories: closure(.funcN)=2335 deferwrap=2254 generic[go.shape]=650 gowrap=66 linker/cgo/rt0=516 method-value(-fm)=257 type:.eq/.hash=1218
+== ../out/bin/v2c-F2 (29561097 bytes)
+sections (allocated, by address):
+  .tbss              addr=0x0        off=0x0       size=        8
+  .note.go.buildid   addr=0x400f5c   off=0xf5c     size=      100
+  .note.gnu.build-id addr=0x400fc0   off=0xfc0     size=       36
+  .interp            addr=0x400fe4   off=0xfe4     size=       28
+  .text              addr=0x401000   off=0x1000    size= 14782033
+  .plt               addr=0x1219e60  off=0xe19e60  size=      720
+  .rodata            addr=0x121b000  off=0xe1b000  size=  3527449
+  .gopclntab         addr=0x1578320  off=0x1178320 size= 10542035
+  .rela              addr=0x1f85ef8  off=0x1b85ef8 size=       24
+  .rela.plt          addr=0x1f85f10  off=0x1b85f10 size=     1056
+  .gnu.version_r     addr=0x1f86340  off=0x1b86340 size=       96
+  .gnu.version       addr=0x1f863a0  off=0x1b863a0 size=       98
+  .hash              addr=0x1f86420  off=0x1b86420 size=      232
+  .dynstr            addr=0x1f86520  off=0x1b86520 size=      714
+  .dynsym            addr=0x1f86800  off=0x1b86800 size=     1176
+  .typelink          addr=0x1f86ca0  off=0x1b86ca0 size=    38272
+  .itablink          addr=0x1f90220  off=0x1b90220 size=    16600
+  .go.buildinfo      addr=0x1f95000  off=0x1b95000 size=     4128
+  .go.fipsinfo       addr=0x1f96020  off=0x1b96020 size=      120
+  .dynamic           addr=0x1f960a0  off=0x1b960a0 size=      304
+  .got.plt           addr=0x1f961e0  off=0x1b961e0 size=      376
+  .go.module         addr=0x1f96360  off=0x1b96360 size=      592
+  .got               addr=0x1f965b0  off=0x1b965b0 size=        8
+  .noptrdata         addr=0x1f965c0  off=0x1b965c0 size=   454273
+  .data              addr=0x2005460  off=0x1c05460 size=   178258
+  .bss               addr=0x2030cc0  off=0x1c30cc0 size=   157240
+  .noptrbss          addr=0x2057300  off=0x1c57300 size= 33712064
+layout=go1.26 pclntab: magic ok, nfunc=32838 nfiles=1910 minLC=1 ptrSize=8 section=10542035 bytes (go:func.*/findfunctab inside .gopclntab: true)
+  funcnametab    off=       72 len=  2084432
+  cutab          off=  2084504 len=    76096
+  filetab        off=  2160600 len=    84536
+  pctab          off=  2245136 len=  3396088
+  functab+_func  off=  5641224 len=  3111800
+  go:func.*      off=  8753024 len=  1716832
+  findfunctab    off= 10469856 len=    72179
+moduledata: text=0x401000 etext=0x1219e50 minpc=0x401000 maxpc=0x1219e41 types=0x121b000 etypes=0x1578319 rodata=0x121b000 gofunc=0x1dd12a0 findfunctab=0x1f74500 epclntab=0x1f85ef3 typelinks=9568 itablinks=2075
+functions: 32838; first _cgo_77133bf98b3a_Cfunc__Cmalloc @0x401000; last go:textfipsend @0x1219e40 end=0x1219e41; .text end=0x1219e51 (gap after last func: 16 bytes)
+entry alignment: 32824 on 32-byte boundary, 14 not ([_cgo_77133bf98b3a_Cfunc_getnameinfo@0x4010b0 _cgo_77133bf98b3a_Cfunc_freeaddrinfo@0x401170 _cgo_77133bf98b3a_Cfunc_getaddrinfo@0x4011b0 _cgo_wait_runtime_init_done@0x401370 _cgo_set_stacklo@0x401450 x_cgo_bindm@0x4014b0 x_cgo_notify_runtime_init_done@0x4014d0 x_cgo_set_traceback_functions@0x401510 x_cgo_call_traceback_function@0x401550 _cgo_get_symbolizer_function@0x401590])
+x86asm decode failures: 1866 bytes in 85 functions; top: vendor/golang.org/x/crypto/chacha20poly1305.chacha20Poly1305Seal=247 vendor/golang.org/x/crypto/chacha20poly1305.chacha20Poly1305Open=181 crypto/internal/fips140/bigmod.addMulVVW2048=154 crypto/internal/fips140/bigmod.addMulVVW1536=117 crypto/internal/fips140/sha512.blockAVX2=114 crypto/internal/fips140/sha256.blockAVX2=92 crypto/internal/fips140/bigmod.addMulVVW1024=82 crypto/sha1.blockAVX2=60 crypto/internal/fips140/sha256.blockSHANI=51 math/big.addMulVVWW=45 crypto/sha1.blockSHANI=42 runtime.asyncPreempt=36
+sum of function sizes (entry to next entry): 14782017 = 100.00% of .text
+duplicate names: 34 distinct names with >1 function (examples: map[runtime.asmcgocall:2 runtime.badmcall:2 runtime.badmorestackg0:2 runtime.badmorestackgsignal:2 runtime.badreflectcall:2 runtime.badsystemstack:2 runtime.goexit1:2 runtime.mstart0:2 runtime.osinit:2 runtime.reflectcallmove:2])
+name categories: closure(.funcN)=2335 deferwrap=2254 generic[go.shape]=650 gowrap=66 linker/cgo/rt0=516 method-value(-fm)=257 type:.eq/.hash=1218
+== pair ../out/bin/v1-F2 -> ../out/bin/v2c-F2
+names only in old (0): 
+names only in new (0): 
+match: exact-name=32838 normalised-name=0 size+content=0 unmatched-new=0 unmatched-old=0 (new has 32838, old has 32838)
+matched functions: size changed=1 (old 512 B -> new 704 B) moved=768 bytes-identical=23858 content-changed(after masking PC-rel fields)=4
+size-changed: main.helloHandler(512->704)
+layout table: 32838 functions, raw delta encoding 65677 B, zstd -19 30 B

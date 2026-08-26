@@ -1,0 +1,13 @@
+== whole ../out/corpus/prometheus/3.13.2/prometheus.stripped -> ../out/corpus/prometheus/3.14.0/prometheus.stripped (layout go1.26)
+match: exact=113154 normalised=1 content=56 unmatched-new=6326 unmatched-old=606; layout table zstd=29538 B
+shift table .bss: 31 breakpoints from 54769 samples, 99 B raw: @1176:+8 @1192:+1424 @1192:+8 @1192:+1424 @1192:+8 @1192:+1424
+shift table .noptrbss: 8 breakpoints from 91527 samples, 22 B raw: @93:+2 @184:+0 @1576:+8 @1592:+24 @2480:+56 @4288:+64
+bss shift tables zstd=130 B (added to the layout cost)
+WARN: bsdiff [/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt/wh-prometheus.stripped-prometheus.stripped-base.old /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt/wh-prometheus.stripped-prometheus.stripped-base.new /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt/wh-prometheus.stripped-prometheus.stripped-base.bsdiff]: exit status 1: bsdiff: BZ2_bzWriteClose, bz2err = -6
+
+text relocation: insns=10743320 decode-failures=1809
+BASELINE whole file:        bsdiff=-1 hdiffz=8599007 zstd=0 rawdiff=92829033 runs=5134006
+stage 1 (pclntab blobs 25703816 B): bsdiff=607472 hdiffz=532047 zstd=0 rawdiff=22217225 runs=1482865
+stage 2 (predicted file):   bsdiff=5262844 hdiffz=4854335 zstd=0 rawdiff=18605270 runs=3597233
+TOTAL Go-aware = layout 29668 + stage1 + stage2: bsdiff 5899984 (-0.0x smaller) hdiffz 5416050 (1.6x) zstd 29668 (0.0x)
+stage-2 differing bytes by section: .note.go.buildid=74(9 runs) .note.gnu.build-id=20(1 runs) .text=2792483(162871 runs) .rodata=5350617(681611 runs) .gopclntab=10288434(2695457 runs) .typelink=118844(43049 runs) .itablink=13972(5341 runs) .go.buildinfo=15852(383 runs) .go.fipsinfo=61(9 runs) .go.module=141(50 runs) .noptrdata=12377(4479 runs) .data=8859(3779 runs)

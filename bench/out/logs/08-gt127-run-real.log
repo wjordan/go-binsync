@@ -1,0 +1,363 @@
+=== PAIR ../out/corpus127/prometheus/3.13.1/prometheus -> ../out/corpus127/prometheus/3.13.2/prometheus  (Wed Aug 26 13:20:28 PDT 2026)
+--- baseline bsdiff
+TIME_WALL=48.50 TIME_USER=48.13 TIME_SYS=0.34 MAXRSS_KB=824948
+SIZE bsdiff=2691644
+--- baseline bspatch
+TIME_WALL=0.52 TIME_USER=0.39 TIME_SYS=0.13 MAXRSS_KB=192116
+bspatch OK
+--- baseline hdiffz -m-6 -p-8
+old : "../out/corpus127/prometheus/3.13.1/prometheus"
+new : "../out/corpus127/prometheus/3.13.2/prometheus"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/base.hdiff"
+create single compressed diffData!
+  compress plugin: "zstd"
+oldDataSize : 93741283
+newDataSize : 93769955
+  match covers by block ...
+    create blocks's match table ...
+    search covers by match table ...
+  load new data into memory from new stream ...
+    build cache for search invalid oldData ranges ...
+    search invalid oldData ranges for skip ...
+  load old data into memory from old stream ...
+  match covers by suffix string ...
+    create suffix string ...
+    search covers by suffix string ...
+  serialize single compressed diffData ...
+    (used one zstd dictSize: 16777216  (input data: 15995294))
+diffDataSize: 2719152
+diff    time: 7.277 s
+  out diff file ok!
+TIME_WALL=7.27 TIME_USER=14.57 TIME_SYS=0.29 MAXRSS_KB=397592
+SIZE hdiffz=2719152
+--- baseline hpatchz
+old : "../out/corpus127/prometheus/3.13.1/prometheus"
+diff: "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/base.hdiff"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/base.hout"
+  input oldDataSize: 93741283
+       diffDataSize: 2719152
+       diffDataType: SHDiff 
+  saved oldDataSize: 93741283
+  saved newDataSize: 93769955
+       compressType: "zstd" (need decompress 1)
+        stepMemSize: 261960
+
+  patch ok!
+
+hpatchz time: 0.083 s
+TIME_WALL=0.08 TIME_USER=0.02 TIME_SYS=0.05 MAXRSS_KB=25604
+hpatchz OK
+--- goaware encode -s1 h -s2 p
+  [  0.12s] loaded prometheus (go1.27, 93741283 B) -> prometheus (go1.27, 93769955 B)
+  [  0.14s] match: exact=110090 normalised=0 content=5 unmatched-new=52 unmatched-old=14
+  datamap .rodata: blocks=229900 matched=229731 ambiguous=0 unmatched=169 shift-changes=67; rle 244 B
+  datamap .go.type: blocks=735529 matched=589405 ambiguous=32210 unmatched=113914 shift-changes=1979; rle 6002 B
+  datamap .go.func: blocks=1700 matched=1699 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=37081 matched=37080 ambiguous=0 unmatched=1 shift-changes=3; rle 17 B
+  datamap .data: blocks=21102 matched=21101 ambiguous=0 unmatched=1 shift-changes=1; rle 11 B
+  shift table .bss: 3 breakpoints from 56100 samples, 11 B raw: @18128:+8 @18912:+16 @47616:+32
+  shift table .noptrbss: 6 breakpoints from 108817 samples, 16 B raw: @118:+2 @180:+4 @760:+0 @1648:+8 @1792:+16 @5696:+0
+  [ 10.93s] content maps + shift tables
+  [ 10.95s] layout: 110147 funcs, 20 rec shapes, raw 230445 B, zstd 5252 B
+  [ 11.43s] stage 1 (h): pclntab blobs 24478232 -> 24486832 B, delta 100949 B
+  [ 11.98s] prediction: 93769955 B (new 93769955 B), insns=10688083 decode-failures=1876, differing bytes=1276877 in 538105 runs
+  stage-2 differing bytes by section: .text=64548(6074 runs) .rodata=6083(2212 runs) .gopclntab=7223(3684 runs) .go.type=1190177(522705 runs) .go.func=2568(1186 runs) .go.buildinfo=215(15 runs) .go.fipsinfo=32(1 runs) .go.module=52(29 runs) .noptrdata=647(306 runs) .data=1552(1316 runs)
+  [ 12.52s] stage 2 (positional): raw 2253816 B, zstd 853853 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/p.gtp: 960168 B = header 114 + layout 5252 + stage1(h) 100949 + stage2(p) 853853  [encode 12.65s]
+TIME_WALL=12.71 TIME_USER=15.35 TIME_SYS=0.48 MAXRSS_KB=807336
+--- goaware decode (positional)
+  [  0.13s] loaded old (go1.27) and patch: 960168 B, layout 230445 B
+  [  0.22s] stage 1 applied: 24486832 B of pclntab blobs; skeleton 110147 funcs
+  [  0.84s] prediction: 93769955 B, hash verified
+  [  0.96s] stage 2 (p) applied: 93769955 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/p.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/p.out: 93769955 B [decode 0.96s]
+TIME_WALL=1.02 TIME_USER=3.24 TIME_SYS=0.51 MAXRSS_KB=923844
+decode positional OK
+--- goaware encode -s1 h -s2 h
+  [  0.13s] loaded prometheus (go1.27, 93741283 B) -> prometheus (go1.27, 93769955 B)
+  [  0.16s] match: exact=110090 normalised=0 content=5 unmatched-new=52 unmatched-old=14
+  datamap .rodata: blocks=229900 matched=229731 ambiguous=0 unmatched=169 shift-changes=67; rle 244 B
+  datamap .go.type: blocks=735529 matched=589405 ambiguous=32210 unmatched=113914 shift-changes=1979; rle 6002 B
+  datamap .go.func: blocks=1700 matched=1699 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=37081 matched=37080 ambiguous=0 unmatched=1 shift-changes=3; rle 17 B
+  datamap .data: blocks=21102 matched=21101 ambiguous=0 unmatched=1 shift-changes=1; rle 11 B
+  shift table .bss: 3 breakpoints from 56100 samples, 11 B raw: @18128:+8 @18912:+16 @47616:+32
+  shift table .noptrbss: 6 breakpoints from 108817 samples, 16 B raw: @118:+2 @180:+4 @760:+0 @1648:+8 @1792:+16 @5696:+0
+  [ 11.13s] content maps + shift tables
+  [ 11.14s] layout: 110147 funcs, 20 rec shapes, raw 230445 B, zstd 5252 B
+  [ 11.59s] stage 1 (h): pclntab blobs 24478232 -> 24486832 B, delta 100949 B
+  [ 12.13s] prediction: 93769955 B (new 93769955 B), insns=10688083 decode-failures=1876, differing bytes=1276877 in 538105 runs
+  [ 13.38s] stage 2 (h): 417471 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/h.gtp: 523786 B = header 114 + layout 5252 + stage1(h) 100949 + stage2(h) 417471  [encode 13.49s]
+TIME_WALL=13.54 TIME_USER=17.08 TIME_SYS=0.65 MAXRSS_KB=807144
+--- goaware decode (hdiffz)
+  [  0.12s] loaded old (go1.27) and patch: 523786 B, layout 230445 B
+  [  0.20s] stage 1 applied: 24486832 B of pclntab blobs; skeleton 110147 funcs
+  [  0.80s] prediction: 93769955 B, hash verified
+  [  0.98s] stage 2 (h) applied: 93769955 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/h.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/h.out: 93769955 B [decode 0.98s]
+TIME_WALL=1.04 TIME_USER=3.19 TIME_SYS=0.56 MAXRSS_KB=916200
+decode hdiffz OK
+--- goaware encode -s1 b -s2 b
+  [  0.13s] loaded prometheus (go1.27, 93741283 B) -> prometheus (go1.27, 93769955 B)
+  [  0.15s] match: exact=110090 normalised=0 content=5 unmatched-new=52 unmatched-old=14
+  datamap .rodata: blocks=229900 matched=229731 ambiguous=0 unmatched=169 shift-changes=67; rle 244 B
+  datamap .go.type: blocks=735529 matched=589405 ambiguous=32210 unmatched=113914 shift-changes=1979; rle 6002 B
+  datamap .go.func: blocks=1700 matched=1699 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=37081 matched=37080 ambiguous=0 unmatched=1 shift-changes=3; rle 17 B
+  datamap .data: blocks=21102 matched=21101 ambiguous=0 unmatched=1 shift-changes=1; rle 11 B
+  shift table .bss: 3 breakpoints from 56100 samples, 11 B raw: @18128:+8 @18912:+16 @47616:+32
+  shift table .noptrbss: 6 breakpoints from 108817 samples, 16 B raw: @118:+2 @180:+4 @760:+0 @1648:+8 @1792:+16 @5696:+0
+  [ 11.02s] content maps + shift tables
+  [ 11.03s] layout: 110147 funcs, 20 rec shapes, raw 230445 B, zstd 5252 B
+  [ 15.35s] stage 1 (b): pclntab blobs 24478232 -> 24486832 B, delta 93224 B
+  [ 15.88s] prediction: 93769955 B (new 93769955 B), insns=10688083 decode-failures=1876, differing bytes=1276877 in 538105 runs
+  [ 38.22s] stage 2 (b): 335506 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/b.gtp: 434096 B = header 114 + layout 5252 + stage1(b) 93224 + stage2(b) 335506  [encode 38.33s]
+TIME_WALL=38.39 TIME_USER=40.30 TIME_SYS=0.92 MAXRSS_KB=825068
+--- goaware decode (bsdiff)
+  [  0.11s] loaded old (go1.27) and patch: 434096 B, layout 230445 B
+  [  0.27s] stage 1 applied: 24486832 B of pclntab blobs; skeleton 110147 funcs
+  [  0.87s] prediction: 93769955 B, hash verified
+  [  1.30s] stage 2 (b) applied: 93769955 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/b.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/b.out: 93769955 B [decode 1.30s]
+TIME_WALL=1.34 TIME_USER=3.50 TIME_SYS=0.59 MAXRSS_KB=815784
+decode bsdiff OK
+=== PAIR ../out/corpus/prometheus/3.13.1/prometheus.stripped -> ../out/corpus/prometheus/3.13.2/prometheus.stripped  (Wed Aug 26 13:22:32 PDT 2026)
+--- baseline bsdiff
+TIME_WALL=40.37 TIME_USER=40.04 TIME_SYS=0.28 MAXRSS_KB=858616
+SIZE bsdiff=2714204
+--- baseline bspatch
+TIME_WALL=0.48 TIME_USER=0.38 TIME_SYS=0.10 MAXRSS_KB=199796
+bspatch OK
+--- baseline hdiffz -m-6 -p-8
+old : "../out/corpus/prometheus/3.13.1/prometheus.stripped"
+new : "../out/corpus/prometheus/3.13.2/prometheus.stripped"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/base.hdiff"
+create single compressed diffData!
+  compress plugin: "zstd"
+oldDataSize : 97552696
+newDataSize : 97577304
+  match covers by block ...
+    create blocks's match table ...
+    search covers by match table ...
+  load new data into memory from new stream ...
+    build cache for search invalid oldData ranges ...
+    search invalid oldData ranges for skip ...
+  load old data into memory from old stream ...
+  match covers by suffix string ...
+    create suffix string ...
+    search covers by suffix string ...
+  serialize single compressed diffData ...
+    (used one zstd dictSize: 16777216  (input data: 15952502))
+diffDataSize: 2730887
+diff    time: 6.748 s
+  out diff file ok!
+TIME_WALL=6.75 TIME_USER=13.45 TIME_SYS=0.30 MAXRSS_KB=406472
+SIZE hdiffz=2730887
+--- baseline hpatchz
+old : "../out/corpus/prometheus/3.13.1/prometheus.stripped"
+diff: "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/base.hdiff"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/base.hout"
+  input oldDataSize: 97552696
+       diffDataSize: 2730887
+       diffDataType: SHDiff 
+  saved oldDataSize: 97552696
+  saved newDataSize: 97577304
+       compressType: "zstd" (need decompress 1)
+        stepMemSize: 262111
+
+  patch ok!
+
+hpatchz time: 0.076 s
+TIME_WALL=0.07 TIME_USER=0.02 TIME_SYS=0.05 MAXRSS_KB=25912
+hpatchz OK
+--- goaware encode -s1 h -s2 p
+  [  0.13s] loaded prometheus.stripped (go1.26, 97552696 B) -> prometheus.stripped (go1.26, 97577304 B)
+  [  0.17s] match: exact=113762 normalised=0 content=5 unmatched-new=50 unmatched-old=13
+  datamap .rodata: blocks=1209544 matched=1013933 ambiguous=94535 unmatched=101076 shift-changes=922; rle 3628 B
+  datamap .noptrdata: blocks=36871 matched=36870 ambiguous=0 unmatched=1 shift-changes=4; rle 21 B
+  datamap .data: blocks=21604 matched=21603 ambiguous=0 unmatched=1 shift-changes=1; rle 11 B
+  shift table .bss: 3 breakpoints from 55715 samples, 11 B raw: @18040:+8 @18944:+16 @47328:+0
+  shift table .noptrbss: 6 breakpoints from 109125 samples, 16 B raw: @116:+2 @180:+4 @760:+0 @1640:+8 @1776:+16 @5824:+0
+  [ 38.67s] content maps + shift tables
+  [ 38.68s] layout: 113817 funcs, 20 rec shapes, raw 234942 B, zstd 4390 B
+  [ 39.11s] stage 1 (h): pclntab blobs 23546312 -> 23552368 B, delta 97374 B
+  [ 39.63s] prediction: 97577304 B (new 97577304 B), insns=10824477 decode-failures=1796, differing bytes=1128848 in 491545 runs
+  stage-2 differing bytes by section: .note.go.buildid=79(5 runs) .note.gnu.build-id=20(1 runs) .text=74809(7614 runs) .rodata=940225(435762 runs) .gopclntab=23917(9343 runs) .typelink=77162(32409 runs) .itablink=8505(4865 runs) .go.buildinfo=330(39 runs) .go.fipsinfo=32(1 runs) .go.module=58(30 runs) .noptrdata=674(328 runs) .data=1064(852 runs)
+  [ 39.99s] stage 2 (positional): raw 2082301 B, zstd 938426 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/p.gtp: 1040304 B = header 114 + layout 4390 + stage1(h) 97374 + stage2(p) 938426  [encode 40.11s]
+TIME_WALL=40.16 TIME_USER=42.82 TIME_SYS=0.51 MAXRSS_KB=876640
+--- goaware decode (positional)
+  [  0.13s] loaded old (go1.26) and patch: 1040304 B, layout 234942 B
+  [  0.21s] stage 1 applied: 23552368 B of pclntab blobs; skeleton 113817 funcs
+  [  0.81s] prediction: 97577304 B, hash verified
+  [  0.92s] stage 2 (p) applied: 97577304 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/p.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/p.out: 97577304 B [decode 0.92s]
+TIME_WALL=0.98 TIME_USER=3.27 TIME_SYS=0.49 MAXRSS_KB=992040
+decode positional OK
+--- goaware encode -s1 h -s2 h
+  [  0.12s] loaded prometheus.stripped (go1.26, 97552696 B) -> prometheus.stripped (go1.26, 97577304 B)
+  [  0.14s] match: exact=113762 normalised=0 content=5 unmatched-new=50 unmatched-old=13
+  datamap .rodata: blocks=1209544 matched=1013933 ambiguous=94535 unmatched=101076 shift-changes=922; rle 3628 B
+  datamap .noptrdata: blocks=36871 matched=36870 ambiguous=0 unmatched=1 shift-changes=4; rle 21 B
+  datamap .data: blocks=21604 matched=21603 ambiguous=0 unmatched=1 shift-changes=1; rle 11 B
+  shift table .bss: 3 breakpoints from 55715 samples, 11 B raw: @18040:+8 @18944:+16 @47328:+0
+  shift table .noptrbss: 6 breakpoints from 109125 samples, 16 B raw: @116:+2 @180:+4 @760:+0 @1640:+8 @1776:+16 @5824:+0
+  [ 38.60s] content maps + shift tables
+  [ 38.61s] layout: 113817 funcs, 20 rec shapes, raw 234942 B, zstd 4390 B
+  [ 39.08s] stage 1 (h): pclntab blobs 23546312 -> 23552368 B, delta 97374 B
+  [ 39.62s] prediction: 97577304 B (new 97577304 B), insns=10824477 decode-failures=1796, differing bytes=1128848 in 491545 runs
+  [ 40.67s] stage 2 (h): 384430 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/h.gtp: 486308 B = header 114 + layout 4390 + stage1(h) 97374 + stage2(h) 384430  [encode 40.79s]
+TIME_WALL=40.84 TIME_USER=44.43 TIME_SYS=0.69 MAXRSS_KB=893544
+--- goaware decode (hdiffz)
+  [  0.13s] loaded old (go1.26) and patch: 486308 B, layout 234942 B
+  [  0.22s] stage 1 applied: 23552368 B of pclntab blobs; skeleton 113817 funcs
+  [  0.88s] prediction: 97577304 B, hash verified
+  [  1.05s] stage 2 (h) applied: 97577304 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/h.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/h.out: 97577304 B [decode 1.05s]
+TIME_WALL=1.10 TIME_USER=3.24 TIME_SYS=0.57 MAXRSS_KB=894124
+decode hdiffz OK
+--- goaware encode -s1 b -s2 b
+  [  0.13s] loaded prometheus.stripped (go1.26, 97552696 B) -> prometheus.stripped (go1.26, 97577304 B)
+  [  0.16s] match: exact=113762 normalised=0 content=5 unmatched-new=50 unmatched-old=13
+  datamap .rodata: blocks=1209544 matched=1013933 ambiguous=94535 unmatched=101076 shift-changes=922; rle 3628 B
+  datamap .noptrdata: blocks=36871 matched=36870 ambiguous=0 unmatched=1 shift-changes=4; rle 21 B
+  datamap .data: blocks=21604 matched=21603 ambiguous=0 unmatched=1 shift-changes=1; rle 11 B
+  shift table .bss: 3 breakpoints from 55715 samples, 11 B raw: @18040:+8 @18944:+16 @47328:+0
+  shift table .noptrbss: 6 breakpoints from 109125 samples, 16 B raw: @116:+2 @180:+4 @760:+0 @1640:+8 @1776:+16 @5824:+0
+  [ 38.77s] content maps + shift tables
+  [ 38.78s] layout: 113817 funcs, 20 rec shapes, raw 234942 B, zstd 4390 B
+  [ 42.75s] stage 1 (b): pclntab blobs 23546312 -> 23552368 B, delta 89649 B
+  [ 43.30s] prediction: 97577304 B (new 97577304 B), insns=10824477 decode-failures=1796, differing bytes=1128848 in 491545 runs
+  [ 65.38s] stage 2 (b): 295641 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/b.gtp: 389794 B = header 114 + layout 4390 + stage1(b) 89649 + stage2(b) 295641  [encode 65.50s]
+TIME_WALL=65.55 TIME_USER=67.44 TIME_SYS=0.90 MAXRSS_KB=904296
+--- goaware decode (bsdiff)
+  [  0.12s] loaded old (go1.26) and patch: 389794 B, layout 234942 B
+  [  0.27s] stage 1 applied: 23552368 B of pclntab blobs; skeleton 113817 funcs
+  [  0.86s] prediction: 97577304 B, hash verified
+  [  1.33s] stage 2 (b) applied: 97577304 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/b.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/b.out: 97577304 B [decode 1.33s]
+TIME_WALL=1.40 TIME_USER=3.42 TIME_SYS=0.69 MAXRSS_KB=985512
+decode bsdiff OK
+=== PAIR ../out/corpus/kube-apiserver/1.36.3/kube-apiserver -> ../out/corpus/kube-apiserver/1.36.4/kube-apiserver  (Wed Aug 26 13:25:50 PDT 2026)
+--- baseline bsdiff
+TIME_WALL=36.60 TIME_USER=36.29 TIME_SYS=0.29 MAXRSS_KB=777912
+SIZE bsdiff=2060250
+--- baseline bspatch
+TIME_WALL=0.48 TIME_USER=0.35 TIME_SYS=0.12 MAXRSS_KB=178740
+bspatch OK
+--- baseline hdiffz -m-6 -p-8
+old : "../out/corpus/kube-apiserver/1.36.3/kube-apiserver"
+new : "../out/corpus/kube-apiserver/1.36.4/kube-apiserver"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/base.hdiff"
+create single compressed diffData!
+  compress plugin: "zstd"
+oldDataSize : 88387746
+newDataSize : 88436898
+  match covers by block ...
+    create blocks's match table ...
+    search covers by match table ...
+  load new data into memory from new stream ...
+    build cache for search invalid oldData ranges ...
+    search invalid oldData ranges for skip ...
+  load old data into memory from old stream ...
+  match covers by suffix string ...
+    create suffix string ...
+    search covers by suffix string ...
+  serialize single compressed diffData ...
+    (used one zstd dictSize: 16777216  (input data: 13852048))
+diffDataSize: 2367788
+diff    time: 7.140 s
+  out diff file ok!
+TIME_WALL=7.14 TIME_USER=14.62 TIME_SYS=0.29 MAXRSS_KB=386504
+SIZE hdiffz=2367788
+--- baseline hpatchz
+old : "../out/corpus/kube-apiserver/1.36.3/kube-apiserver"
+diff: "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/base.hdiff"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/base.hout"
+  input oldDataSize: 88387746
+       diffDataSize: 2367788
+       diffDataType: SHDiff 
+  saved oldDataSize: 88387746
+  saved newDataSize: 88436898
+       compressType: "zstd" (need decompress 1)
+        stepMemSize: 261813
+
+  patch ok!
+
+hpatchz time: 0.068 s
+TIME_WALL=0.06 TIME_USER=0.02 TIME_SYS=0.04 MAXRSS_KB=23464
+hpatchz OK
+--- goaware encode -s1 h -s2 p
+  [  0.11s] loaded kube-apiserver (go1.26, 88387746 B) -> kube-apiserver (go1.26, 88436898 B)
+  [  0.13s] match: exact=105482 normalised=0 content=24 unmatched-new=49 unmatched-old=1
+  datamap .rodata: blocks=790592 matched=594374 ambiguous=83916 unmatched=112302 shift-changes=1579; rle 5457 B
+  datamap .noptrdata: blocks=36209 matched=36207 ambiguous=0 unmatched=2 shift-changes=15; rle 65 B
+  datamap .data: blocks=17984 matched=17971 ambiguous=0 unmatched=13 shift-changes=12; rle 45 B
+  shift table .bss: 0 breakpoints from 67340 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 120094 samples, 0 B raw:
+  [ 25.94s] content maps + shift tables
+  [ 25.95s] layout: 105555 funcs, 21 rec shapes, raw 219861 B, zstd 5728 B
+  [ 26.33s] stage 1 (h): pclntab blobs 22135400 -> 22152664 B, delta 68461 B
+  [ 31.06s] prediction: 88436898 B (new 88436898 B), insns=10585312 decode-failures=1788, differing bytes=1069992 in 517483 runs
+  stage-2 differing bytes by section: .note.go.buildid=78(6 runs) .note.gnu.build-id=20(1 runs) .text=55186(10141 runs) .rodata=893402(465886 runs) .gopclntab=15312(6800 runs) .typelink=66573(26849 runs) .itablink=6687(3120 runs) .go.buildinfo=58(15 runs) .go.fipsinfo=33(2 runs) .go.module=57(32 runs) .noptrdata=28759(2782 runs) .data=1476(1196 runs)
+  [ 31.53s] stage 2 (positional): raw 2173446 B, zstd 809907 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/p.gtp: 884210 B = header 114 + layout 5728 + stage1(h) 68461 + stage2(p) 809907  [encode 31.64s]
+TIME_WALL=31.70 TIME_USER=34.17 TIME_SYS=0.54 MAXRSS_KB=801000
+--- goaware decode (positional)
+  [  0.11s] loaded old (go1.26) and patch: 884210 B, layout 219861 B
+  [  0.19s] stage 1 applied: 22152664 B of pclntab blobs; skeleton 105555 funcs
+  [  5.01s] prediction: 88436898 B, hash verified
+  [  5.11s] stage 2 (p) applied: 88436898 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/p.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/p.out: 88436898 B [decode 5.11s]
+TIME_WALL=5.16 TIME_USER=7.46 TIME_SYS=0.37 MAXRSS_KB=712300
+decode positional OK
+--- goaware encode -s1 h -s2 h
+  [  0.10s] loaded kube-apiserver (go1.26, 88387746 B) -> kube-apiserver (go1.26, 88436898 B)
+  [  0.12s] match: exact=105482 normalised=0 content=24 unmatched-new=49 unmatched-old=1
+  datamap .rodata: blocks=790592 matched=594374 ambiguous=83916 unmatched=112302 shift-changes=1579; rle 5457 B
+  datamap .noptrdata: blocks=36209 matched=36207 ambiguous=0 unmatched=2 shift-changes=15; rle 65 B
+  datamap .data: blocks=17984 matched=17971 ambiguous=0 unmatched=13 shift-changes=12; rle 45 B
+  shift table .bss: 0 breakpoints from 67340 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 120094 samples, 0 B raw:
+  [ 26.50s] content maps + shift tables
+  [ 26.51s] layout: 105555 funcs, 21 rec shapes, raw 219861 B, zstd 5728 B
+  [ 26.90s] stage 1 (h): pclntab blobs 22135400 -> 22152664 B, delta 68461 B
+  [ 31.82s] prediction: 88436898 B (new 88436898 B), insns=10585312 decode-failures=1788, differing bytes=1069992 in 517483 runs
+  [ 32.94s] stage 2 (h): 336029 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/h.gtp: 410332 B = header 114 + layout 5728 + stage1(h) 68461 + stage2(h) 336029  [encode 33.04s]
+TIME_WALL=33.10 TIME_USER=36.44 TIME_SYS=0.62 MAXRSS_KB=803112
+--- goaware decode (hdiffz)
+  [  0.12s] loaded old (go1.26) and patch: 410332 B, layout 219861 B
+  [  0.20s] stage 1 applied: 22152664 B of pclntab blobs; skeleton 105555 funcs
+  [  5.20s] prediction: 88436898 B, hash verified
+  [  5.38s] stage 2 (h) applied: 88436898 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/h.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/h.out: 88436898 B [decode 5.38s]
+TIME_WALL=5.41 TIME_USER=7.58 TIME_SYS=0.47 MAXRSS_KB=620844
+decode hdiffz OK
+--- goaware encode -s1 b -s2 b
+  [  0.13s] loaded kube-apiserver (go1.26, 88387746 B) -> kube-apiserver (go1.26, 88436898 B)
+  [  0.15s] match: exact=105482 normalised=0 content=24 unmatched-new=49 unmatched-old=1
+  datamap .rodata: blocks=790592 matched=594374 ambiguous=83916 unmatched=112302 shift-changes=1579; rle 5457 B
+  datamap .noptrdata: blocks=36209 matched=36207 ambiguous=0 unmatched=2 shift-changes=15; rle 65 B
+  datamap .data: blocks=17984 matched=17971 ambiguous=0 unmatched=13 shift-changes=12; rle 45 B
+  shift table .bss: 0 breakpoints from 67340 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 120094 samples, 0 B raw:
+  [ 26.90s] content maps + shift tables
+  [ 26.91s] layout: 105555 funcs, 21 rec shapes, raw 219861 B, zstd 5728 B
+  [ 31.39s] stage 1 (b): pclntab blobs 22135400 -> 22152664 B, delta 66126 B
+  [ 36.28s] prediction: 88436898 B (new 88436898 B), insns=10585312 decode-failures=1788, differing bytes=1069992 in 517483 runs
+  [ 59.99s] stage 2 (b): 283303 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/b.gtp: 355271 B = header 114 + layout 5728 + stage1(b) 66126 + stage2(b) 283303  [encode 60.10s]
+TIME_WALL=60.15 TIME_USER=61.95 TIME_SYS=0.93 MAXRSS_KB=811368
+--- goaware decode (bsdiff)
+  [  0.12s] loaded old (go1.26) and patch: 355271 B, layout 219861 B
+  [  0.29s] stage 1 applied: 22152664 B of pclntab blobs; skeleton 105555 funcs
+  [  4.95s] prediction: 88436898 B, hash verified
+  [  5.37s] stage 2 (b) applied: 88436898 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/b.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-real/b.out: 88436898 B [decode 5.37s]
+TIME_WALL=5.41 TIME_USER=7.50 TIME_SYS=0.58 MAXRSS_KB=712296
+decode bsdiff OK

@@ -1,0 +1,51 @@
+== corpus127/prometheus/3.13.1/prometheus
+out/corpus127/prometheus/3.13.1/prometheus: go1.27.0
+	path	github.com/prometheus/prometheus/cmd/prometheus
+	mod	github.com/prometheus/prometheus	(devel)	
+	dep	cloud.google.com/go/auth	v0.20.0	h1:kXTssoVb4azsVDoUiF8KvxAqrsQcQtB53DcSgta74CA=
+	dep	cloud.google.com/go/auth/oauth2adapt	v0.2.8	h1:keo8NaayQZ6wimpNSmW5OPc283g65QNIiLpZnkHRbnc=
+	dep	cloud.google.com/go/compute/metadata	v0.9.0	h1:pDUj4QMoPejqq20dK0Pg2N4yG9zIkYGdBtwLoEkH9Zs=
+	dep	github.com/Azure/azure-sdk-for-go/sdk/azcore	v1.22.0	h1:aokoqcHvaGjiM3VpjKDfMMnF/8epJ+Q1HLJ7CudztqE=
+	dep	github.com/Azure/azure-sdk-for-go/sdk/azidentity	v1.14.0	h1:CU4+EJeJi3TKYWEcYuSdWsjzw0nVsK/H0MSQOiPcymU=
+	dep	github.com/Azure/azure-sdk-for-go/sdk/internal	v1.12.0	h1:fhqpLE3UEXi9lPaBRpQ6XuRW0nU7hgg4zlmZZa+a9q4=
+	dep	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/compute/armcompute/v5	v5.7.0	h1:LkHbJbgF3YyvC53aqYGR+wWQDn2Rdp9AQdGndf9QvY4=
+	dep	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/network/armnetwork/v4	v4.3.0	h1:bXwSugBiSbgtz7rOtbfGf+woewp4f06orW9OP5BjHLA=
+	dep	github.com/AzureAD/microsoft-authentication-library-for-go	v1.7.2	h1:RHK7bS+HQMslb1sZpAokUt+zTVmue0hKSs2C791hhzU=
+-rwxrwxr-x 1 will will 93741283 Aug 26 13:05 out/corpus127/prometheus/3.13.1/prometheus
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:46.06
+	Maximum resident set size (kbytes): 2770224
+== corpus127/prometheus/3.13.2/prometheus
+out/corpus127/prometheus/3.13.2/prometheus: go1.27.0
+	path	github.com/prometheus/prometheus/cmd/prometheus
+	mod	github.com/prometheus/prometheus	(devel)	
+	dep	cloud.google.com/go/auth	v0.20.0	h1:kXTssoVb4azsVDoUiF8KvxAqrsQcQtB53DcSgta74CA=
+	dep	cloud.google.com/go/auth/oauth2adapt	v0.2.8	h1:keo8NaayQZ6wimpNSmW5OPc283g65QNIiLpZnkHRbnc=
+	dep	cloud.google.com/go/compute/metadata	v0.9.0	h1:pDUj4QMoPejqq20dK0Pg2N4yG9zIkYGdBtwLoEkH9Zs=
+	dep	github.com/Azure/azure-sdk-for-go/sdk/azcore	v1.22.0	h1:aokoqcHvaGjiM3VpjKDfMMnF/8epJ+Q1HLJ7CudztqE=
+	dep	github.com/Azure/azure-sdk-for-go/sdk/azidentity	v1.14.0	h1:CU4+EJeJi3TKYWEcYuSdWsjzw0nVsK/H0MSQOiPcymU=
+	dep	github.com/Azure/azure-sdk-for-go/sdk/internal	v1.12.0	h1:fhqpLE3UEXi9lPaBRpQ6XuRW0nU7hgg4zlmZZa+a9q4=
+	dep	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/compute/armcompute/v5	v5.7.0	h1:LkHbJbgF3YyvC53aqYGR+wWQDn2Rdp9AQdGndf9QvY4=
+	dep	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/network/armnetwork/v4	v4.3.0	h1:bXwSugBiSbgtz7rOtbfGf+woewp4f06orW9OP5BjHLA=
+	dep	github.com/AzureAD/microsoft-authentication-library-for-go	v1.7.2	h1:RHK7bS+HQMslb1sZpAokUt+zTVmue0hKSs2C791hhzU=
+-rwxrwxr-x 1 will will 93769955 Aug 26 13:05 out/corpus127/prometheus/3.13.2/prometheus
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:44.99
+	Maximum resident set size (kbytes): 2990752
+== bin127/v1-F2: out/bin127/v1-F2: go1.27.0 29995271 B
+== bin127/v2s-F2: out/bin127/v2s-F2: go1.27.0 29995271 B
+== bin127/v2l-F2: out/bin127/v2l-F2: go1.27.0 29995271 B
+== bin127/v2c-F2: out/bin127/v2c-F2: go1.27.0 29995271 B
+== bin127/v2p-F2: out/bin127/v2p-F2: go1.27.0 29995271 B
+== bin127/v3-F2: out/bin127/v3-F2: go1.27.0 29995271 B
+== bin127/v4-F2: out/bin127/v4-F2: go1.27.0 29995271 B
+== official 1.26 corpus
+/home/will/Code/binsync/bench/out/corpus/prometheus/3.13.1/prometheus: go1.26.5
+	path	github.com/prometheus/prometheus/cmd/prometheus
+	mod	github.com/prometheus/prometheus	v0.0.0-20260710080347-73ff57ce2b81+dirty	
+  [ 3] .text             PROGBITS        0000000000401000 001000 282a5d1 00  AX  0   0 64
+  [ 5] .rodata           PROGBITS        0000000002c2c000 282c000 382019 00   A  0   0 32
+  [ 6] .gopclntab        PROGBITS        0000000002fae020 2bae020 21930fa 00   A  0   0  8
+  [14] .go.type          PROGBITS        0000000005141ec0 4d41ec0 b39a70 00   A  0   0 16
+  [15] .go.func          PROGBITS        0000000005c7b930 587b930 006a48 00   A  0   0  8
+  [16] .go.buildinfo     PROGBITS        0000000005c83000 5883000 005910 00  WA  0   0 16
+  [17] .go.fipsinfo      PROGBITS        0000000005c88920 5888920 000078 00  WA  0   0 32
+  [20] .go.module        PROGBITS        0000000005c88c60 5888c60 000238 00  WA  0   0 32

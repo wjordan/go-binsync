@@ -1,0 +1,4 @@
+v4  F2   29561097 bytes   0.6s
+v5  F2   29561097 bytes   0.7s
+REPRO v4-F2 after gen.py round-trip: identical
+v5-F2 ELF EXEC

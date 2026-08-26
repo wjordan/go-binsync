@@ -1,0 +1,40 @@
+== sectdiff ../out/corpus/cockroach/26.2.4/cockroach.stripped -> ../out/corpus/cockroach/26.2.5/cockroach.stripped
+section                  size    rawdiff       runs     bsdiff     hdiffz       zstd
+.interp                    28          0          0          0          0          0
+.note.ABI-tag              32          0          0          0          0          0
+.note.go.buildid           24          0          0          0          0          0
+.note.gnu.build-id         36          0          0          0          0          0
+.hash                   37388          0          0          0          0          0
+.dynsym                125904      13005       4985       2530       3094      13359
+.dynstr                127904          0          0          0          0          0
+.gnu.version            10492          0          0          0          0          0
+.gnu.version_r            384          0          0          0          0          0
+.rela.dyn                 240         22         10        152         58         54
+.rela.plt                5976        498        249        149         58        219
+.init                      36          5          2        142         36         33
+.plt                     4000        502        251        145         64        239
+.plt.got                   40         10          5        137         52         27
+.text               105607063   88164290    2997745    2849784    2963663   10162579
+.fini                      14          3          1        137         41         27
+.rodata              41426568   26850229    4655664    1247881    1473398    3620428
+.typelink              245508     157482      58977     146591     140684     142200
+.itablink              127248      41308      15906      34690      33595      23414
+.gopclntab           71647056   60885344    5837738    1220585    1749621    4928085
+.eh_frame_hdr           49260      15872       6156        946       2967      16195
+.eh_frame              322380      15824       6162       3677       4355      18475
+.gcc_except_table        1945          4          2        153         42         33
+.tdata                   2632          0          0          0          0          0
+.init_array                24          0          0          0          0          0
+.ctors                     16          0          0          0          0          0
+.dtors                     16          0          0          0          0          0
+.jcr                        8          0          0          0          0          0
+.data.rel.ro             6104       1436        532        390        627       1246
+.dynamic                  528          7          3        156         59         37
+.got                       56          0          0          0          0          0
+.got.plt                 2016          2          1        146         34         25
+.data                 2433896     403865     167253      44012      74773     174906
+.go.buildinfo              48          0          0          0          0          0
+.go.fipsinfo              120         58          9        252        103         98
+.noptrdata            8119457    6930196     474569    2997947    2981548    2979306
+SUM(sections)                  183479962   14226220    8550602    9428872   22080985
+WHOLE FILE          230309064  187016997   13870375    8588309    9455199   23782446  (bsdiff 177.7s hdiffz 61.8s zstd 66.6s)

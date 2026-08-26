@@ -1,0 +1,16 @@
+== datapredict ../out/corpus/kube-apiserver/1.36.3/kube-apiserver -> ../out/corpus/kube-apiserver/1.36.4/kube-apiserver
+.rodata: 12649465 bytes, 317988 aligned qwords point into the image: text-matched=38780 rodata=279027 noptrdata=3 bss/noptrbss=49 other-section=129
+  pointer rewrite: unchanged-in-new=10912 re-targeted-correctly=274623 mispredicted=32877 unmapped=0 (map: blocks=790592 matched=593691 ambiguous=4696 unmatched=192205 shift-changes=1507)
+  baseline old->new:            bsdiff=340444 hdiffz=428194 zstd=0 rawdiff=8825739 runs=1131460
+  blocks re-laid (no ptr fix):  bsdiff=403420 hdiffz=455958 zstd=0 rawdiff=1499875 runs=738451
+  blocks re-laid + ptr rewrite: bsdiff=236250 hdiffz=266207 zstd=0 rawdiff=873817 runs=464969
+.noptrdata: 579329 bytes, 2454 aligned qwords point into the image: text-matched=1538 rodata=6 noptrdata=892 bss/noptrbss=6 other-section=12
+  pointer rewrite: unchanged-in-new=365 re-targeted-correctly=1265 mispredicted=963 unmapped=0 (map: blocks=36209 matched=36203 ambiguous=5 unmatched=1 shift-changes=13)
+  baseline old->new:            bsdiff=3759 hdiffz=4077 zstd=0 rawdiff=258660 runs=25205
+  blocks re-laid (no ptr fix):  bsdiff=3736 hdiffz=15184 zstd=0 rawdiff=31630 runs=3901
+  blocks re-laid + ptr rewrite: bsdiff=1757 hdiffz=12395 zstd=0 rawdiff=28721 runs=2768
+.data: 287730 bytes, 14868 aligned qwords point into the image: text-matched=80 rodata=8988 noptrdata=851 data=1382 bss/noptrbss=3564 other-section=3
+  pointer rewrite: unchanged-in-new=91 re-targeted-correctly=13720 mispredicted=1141 unmapped=0 (map: blocks=17984 matched=17961 ambiguous=21 unmatched=2 shift-changes=13)
+  baseline old->new:            bsdiff=8394 hdiffz=13709 zstd=0 rawdiff=44776 runs=18025
+  blocks re-laid (no ptr fix):  bsdiff=8104 hdiffz=14162 zstd=0 rawdiff=36944 runs=14795
+  blocks re-laid + ptr rewrite: bsdiff=1108 hdiffz=1599 zstd=0 rawdiff=1442 runs=1175

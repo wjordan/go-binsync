@@ -1,0 +1,274 @@
+<title>binsync Design Brief</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  :root {
+    --bg: #F6F8F6;
+    --surface: #FFFFFF;
+    --ink: #1A2126;
+    --muted: #5A6670;
+    --line: #D6DDDA;
+    --accent: #0E6F8A;
+    --accent-ink: #0B586E;
+    --changed: #C2740A;
+    --changed-soft: #F2D9A6;
+    --kept-soft: #CFE5EC;
+    --code-bg: #EEF2F0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1518;
+      --surface: #151C20;
+      --ink: #E4EAED;
+      --muted: #97A4AD;
+      --line: #2A353B;
+      --accent: #4FC0E0;
+      --accent-ink: #7AD2EA;
+      --changed: #F0A63A;
+      --changed-soft: #5A3F12;
+      --kept-soft: #173C48;
+      --code-bg: #1B242A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1518;
+    --surface: #151C20;
+    --ink: #E4EAED;
+    --muted: #97A4AD;
+    --line: #2A353B;
+    --accent: #4FC0E0;
+    --accent-ink: #7AD2EA;
+    --changed: #F0A63A;
+    --changed-soft: #5A3F12;
+    --kept-soft: #173C48;
+    --code-bg: #1B242A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  .page { max-width: 1040px; margin: 0 auto; padding: 48px 24px 96px; display: flex; flex-direction: column; gap: 56px; }
+  header { display: flex; flex-direction: column; gap: 14px; border-bottom: 1px solid var(--line); padding-bottom: 32px; }
+  .eyebrow { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  h1 { font-family: "Bricolage Grotesque", "Source Sans 3", sans-serif; font-weight: 700; font-size: clamp(36px, 5vw, 56px); line-height: 1.02; margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
+  h1 em { font-style: normal; color: var(--accent); }
+  .lede { font-size: 20px; max-width: 68ch; margin: 0; color: var(--ink); }
+  h2 { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 26px; letter-spacing: -0.01em; margin: 0 0 6px; text-wrap: balance; }
+  h3 { font-family: "Bricolage Grotesque", sans-serif; font-weight: 600; font-size: 18px; margin: 0 0 4px; }
+  section { display: flex; flex-direction: column; gap: 18px; }
+  section > p, section > ul { max-width: 70ch; margin: 0; }
+  ul { padding-left: 1.2em; }
+  li { margin: 4px 0; }
+  code, .mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 0.88em; }
+  code { background: var(--code-bg); padding: 1px 5px; border-radius: 3px; }
+  a { color: var(--accent-ink); }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* stat row */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); padding: 16px 18px; display: flex; flex-direction: column; gap: 4px; }
+  .stat .n { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .stat .n.changed { color: var(--changed); }
+  .stat .n.kept { color: var(--accent); }
+  .stat .l { color: var(--muted); font-size: 14px; }
+
+  /* section map */
+  .map { background: var(--surface); border: 1px solid var(--line); padding: 18px 18px 14px; display: flex; flex-direction: column; gap: 10px; overflow-x: auto; }
+  .map-title { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+  .bar { display: flex; height: 44px; min-width: 640px; gap: 2px; }
+  .seg { position: relative; background: var(--kept-soft); overflow: hidden; }
+  .seg .churn { position: absolute; left: 0; top: 0; bottom: 0; background: var(--changed); opacity: 0.85; }
+  .seg .lab { position: absolute; left: 6px; top: 4px; font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink); white-space: nowrap; }
+  .seg .pct { position: absolute; right: 6px; bottom: 3px; font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink); }
+  .legend { display: flex; gap: 18px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
+  .sw { display: inline-block; width: 12px; height: 12px; vertical-align: -1px; margin-right: 6px; }
+  .sw.k { background: var(--kept-soft); border: 1px solid var(--line); }
+  .sw.c { background: var(--changed); }
+
+  /* tables */
+  .tbl { overflow-x: auto; border: 1px solid var(--line); background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: "JetBrains Mono", monospace; font-size: 14px; }
+  tr.pick td { background: color-mix(in srgb, var(--kept-soft) 45%, transparent); }
+  tr.pick td:first-child { font-weight: 600; }
+  tbody tr:last-child td { border-bottom: none; }
+  .tag { display: inline-block; font-family: "JetBrains Mono", monospace; font-size: 11px; padding: 1px 6px; border: 1px solid var(--line); color: var(--muted); border-radius: 3px; }
+  .tag.pick { color: var(--accent-ink); border-color: var(--accent); }
+
+  /* decisions */
+  .dec { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .d { background: var(--surface); border: 1px solid var(--line); padding: 14px 16px; display: grid; grid-template-columns: 56px 1fr; gap: 12px; }
+  .d .id { font-family: "JetBrains Mono", monospace; font-size: 13px; color: var(--accent-ink); font-weight: 600; padding-top: 2px; }
+  .d .body { display: flex; flex-direction: column; gap: 4px; }
+  .d .body b { font-weight: 600; }
+  .d .body span { color: var(--muted); font-size: 15px; }
+
+  pre.mermaid { background: var(--surface); border: 1px solid var(--line); padding: 12px; overflow-x: auto; margin: 0; }
+  pre.code { background: var(--code-bg); border: 1px solid var(--line); padding: 14px 16px; overflow-x: auto; margin: 0; font-family: "JetBrains Mono", monospace; font-size: 13.5px; line-height: 1.5; }
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  footer { border-top: 1px solid var(--line); padding-top: 20px; color: var(--muted); font-size: 14px; }
+  @media (prefers-reduced-motion: no-preference) { .seg .churn { transition: width 400ms ease; } }
+
+  /* profile + ladders */
+  .profile th.pick, .profile td.pick { background: color-mix(in srgb, var(--kept-soft) 45%, transparent); }
+  .profile td.pick { font-weight: 600; }
+  .profile td.rowlab { color: var(--muted); font-size: 14px; white-space: nowrap; }
+  .ladder { display: flex; flex-direction: column; gap: 6px; }
+  .rung { display: grid; grid-template-columns: 230px 1fr 110px; gap: 12px; align-items: center; font-size: 14px; }
+  .rung .lab { color: var(--muted); }
+  .rung .bar-wrap { position: relative; height: 16px; background: var(--code-bg); border: 1px solid var(--line); }
+  .rung .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--changed); opacity: 0.8; }
+  .rung.pick .fill { background: var(--accent); opacity: 1; }
+  .rung .val { font-family: "JetBrains Mono", monospace; font-size: 13px; text-align: right; font-variant-numeric: tabular-nums; }
+  .rung.pick .val { color: var(--accent-ink); font-weight: 600; }
+  .note { color: var(--muted); font-size: 14px; max-width: 70ch; margin: 0; }
+  .page { gap: 44px; }
+  @media (max-width: 640px) { .rung { grid-template-columns: 1fr; gap: 4px; } }
+</style>
+
+<div class="page">
+  <header>
+    <div class="eyebrow">Design brief · 2026-08-26 · design phase: codec prototyped and measured, no product code yet</div>
+    <h1>binsync <em>ships an incremental release of a 94 MB Go server as 0.11 MB</em> — encoded in two seconds, across a lossy 20 Mbit/s link in one.</h1>
+    <p class="lede">Software often needs to fly across the world: a fleet of servers all running one large, monolithic Go binary, rebuilt many times a day, reached over links where packet loss and congestion turn a big download into a crawl. The way out is to ship only what changed. binsync is an experiment in pushing that further than a compressed archive, a content-defined-chunk store or a general binary diff can go, using the idea behind Google's <a href="https://www.chromium.org/developers/design-documents/software-updates-courgette/">Courgette</a>: read the structure the compiler left behind and predict where everything moved, instead of diffing bytes. A stripped Go binary still carries its function table; binsync aligns old and new release by function name, predicts the new layout, and sends only the correction — then installs the verified result and re-execs the service with its sockets handed over. This page condenses <code>README.md</code>, <code>docs/DESIGN.md</code> and <code>docs/research/</code>.</p>
+  </header>
+
+  <section>
+    <h2>The performance profile</h2>
+    <p>One real incremental release — prometheus 3.13.1 → 3.13.2, a 94 MB stripped linux/amd64 binary built with Go 1.27 — encoded once by the publisher and fetched by a target over a medium-quality link: 20 Mbit/s, 200 ms RTT, 1 % packet loss. Three numbers decide how fast a release lands: encoder cost, bytes on the wire, and what those bytes cost on the link.</p>
+    <div class="stats">
+      <div class="stat"><div class="n kept">0.11 MB</div><div class="l">on the wire — 185× less than the 20.6 MB full download, 24× less than the best generic delta (hdiffz, 2.7 MB)</div></div>
+      <div class="stat"><div class="n kept">2.1 s · 0.65 GB</div><div class="l">to encode, prototype — bsdiff needs ≈ 40 s and 0.8 GB for the same pair, hdiffz 7.4 s on 8 threads, a plain <code>zstd -19</code> of the file 9.4 s</div></div>
+      <div class="stat"><div class="n kept">≈ 1.2 s</div><div class="l">to cross the lossy 20 Mbit/s link, versus ≈ 15 s for the generic patch and ≈ 2.4 min for the full download on one stream</div></div>
+    </div>
+    <div class="tbl profile">
+      <table>
+        <thead><tr><th></th><th class="num">Full download<br><span class="tag">zstd -19, 1 stream</span></th><th class="num">Full blob<br><span class="tag">binsync 8-way ranges</span></th><th class="num">bsdiff</th><th class="num">hdiffz -p-8</th><th class="num pick">binsync<br><span class="tag pick">Go-aware</span></th></tr></thead>
+        <tbody>
+          <tr><td class="rowlab">bytes sent</td><td class="num">20.6 MB</td><td class="num">20.6 MB</td><td class="num">2.69 MB</td><td class="num">2.72 MB</td><td class="num pick">0.11 MB</td></tr>
+          <tr><td class="rowlab">encode wall-clock · peak RSS</td><td class="num">9.4 s · 364 MB</td><td class="num">9.4 s · 364 MB</td><td class="num">42.7 s · 805 MB</td><td class="num">7.4 s · 388 MB</td><td class="num pick">2.1 s · 654 MB</td></tr>
+          <tr><td class="rowlab">apply on target · RSS</td><td class="num">0.07 s · 13 MB</td><td class="num">0.07 s · 13 MB</td><td class="num">0.47 s · 192 MB</td><td class="num">0.08 s · 25 MB</td><td class="num pick">1.0 s · 636 MB</td></tr>
+          <tr class="pick"><td class="rowlab">transfer, 20 Mbit/s · 200 ms · 1 % loss</td><td class="num">≈ 145 s</td><td class="num">≈ 20 s</td><td class="num">≈ 15 s</td><td class="num">≈ 15 s</td><td class="num pick">≈ 1.2 s</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Encoder timings are single runs on a 24-thread workstation: zstd -19 with all threads, hdiffz with 8, bsdiff one; the Go-aware prototype decodes x86 on all cores and does everything else on one. Transfer times are interpolated from netem measurements of the same link (TCP cubic, HTTP/1.1); with 1 % loss a single stream carries ≈ 1.2 Mbit/s whatever the link rate, which is why the full download is fetched as 8 parallel ranges. Sources: <code>docs/research/go-aware-transform.md</code> §11, <code>benchmark-scale.md</code> §6 and §10.</p>
+    <p>The encoder is faster than the generic tools because it never builds a suffix array over the file. What is still the prototype's is memory: encoder and decoder hold old, predicted and new in RAM (≈ 7× the file); working section by section brings that to ≈ 2×. The same codec turns a one-line change of a 30 MB binary into 2.2 KB (bsdiff 150 KB) and a multi-package edit into 2.7 KB (bsdiff 145 KB); on a minor release that adds thousands of functions the gain drops to 1.6×, which is the correct result — the codec removes layout churn, and cannot remove code.</p>
+  </section>
+
+  <section>
+    <h2>Against the naive options</h2>
+    <p>Bytes on the wire for the same two changes, from "just compress the file" down. Bars are log-scaled; each rung is a technique that understands more of the binary. Both binaries were built with Go 1.27.</p>
+    <div class="two">
+      <div>
+        <h3>One-line change, 30 MB binary</h3>
+        <div class="ladder">
+          <div class="rung"><span class="lab">whole file, <code>zstd -19</code></span><div class="bar-wrap"><div class="fill" style="width: 100%"></div></div><span class="val">8.66 MB</span></div>
+          <div class="rung"><span class="lab">chunk store (casync/desync CDC)</span><div class="bar-wrap"><div class="fill" style="width: 99.5%"></div></div><span class="val">8.02 MB</span></div>
+          <div class="rung"><span class="lab">whole file, <code>xz -9</code></span><div class="bar-wrap"><div class="fill" style="width: 99.4%"></div></div><span class="val">7.92 MB</span></div>
+          <div class="rung"><span class="lab"><code>xdelta3 -9</code></span><div class="bar-wrap"><div class="fill" style="width: 90.6%"></div></div><span class="val">1.93 MB</span></div>
+          <div class="rung"><span class="lab"><code>zstd --patch-from</code></span><div class="bar-wrap"><div class="fill" style="width: 82.6%"></div></div><span class="val">538 KB</span></div>
+          <div class="rung"><span class="lab">hdiffz / bsdiff</span><div class="bar-wrap"><div class="fill" style="width: 74.6%"></div></div><span class="val">177 / 150 KB</span></div>
+          <div class="rung pick"><span class="lab">binsync</span><div class="bar-wrap"><div class="fill" style="width: 48.2%"></div></div><span class="val">2.2 KB</span></div>
+        </div>
+      </div>
+      <div>
+        <h3>prometheus 3.13.1 → 3.13.2, 94 MB</h3>
+        <div class="ladder">
+          <div class="rung"><span class="lab">chunk store (casync/desync CDC)</span><div class="bar-wrap"><div class="fill" style="width: 100%"></div></div><span class="val">25.7 MB</span></div>
+          <div class="rung"><span class="lab">whole file, <code>zstd -19</code></span><div class="bar-wrap"><div class="fill" style="width: 98.7%"></div></div><span class="val">20.6 MB</span></div>
+          <div class="rung"><span class="lab">whole file, <code>xz -9</code></span><div class="bar-wrap"><div class="fill" style="width: 98.0%"></div></div><span class="val">18.4 MB</span></div>
+          <div class="rung"><span class="lab"><code>xdelta3 -9</code></span><div class="bar-wrap"><div class="fill" style="width: 96.9%"></div></div><span class="val">15.2 MB</span></div>
+          <div class="rung"><span class="lab"><code>zstd --patch-from</code></span><div class="bar-wrap"><div class="fill" style="width: 93.5%"></div></div><span class="val">8.5 MB</span></div>
+          <div class="rung"><span class="lab">hdiffz / bsdiff</span><div class="bar-wrap"><div class="fill" style="width: 86.8%"></div></div><span class="val">2.72 / 2.69 MB</span></div>
+          <div class="rung pick"><span class="lab">binsync</span><div class="bar-wrap"><div class="fill" style="width: 68.1%"></div></div><span class="val">0.11 MB</span></div>
+        </div>
+      </div>
+    </div>
+    <p>Why the ladder looks like this: a Go code change that grows one function by a few bytes shifts every later function and rewrites every reference that crosses the shift, so the file changes almost everywhere while almost nothing changed. Whole-file compressors and chunk stores see only bytes — a one-liner rewrites 13 % of them and a real release 79–87 %, in runs a few bytes long, so no chunk survives and a chunk store re-sends more than a fresh archive. Exact-match delta coders (zstd <code>--patch-from</code>, xdelta3) find the moved code but pay for every shifted operand. Approximate matchers (bsdiff, hdiffz) absorb the shifted operands as cheap byte differences and are several times better, at the price of a suffix array over the whole file. binsync reads the function table the Go linker leaves in a stripped binary and predicts the shift instead of encoding it. Go 1.27 makes the gap wider: its new sorted type-descriptor section is full of code offsets, which makes generic deltas of a one-liner 2.5× larger than on Go 1.26 and leaves binsync's patch unchanged.</p>
+  </section>
+
+  <section>
+    <h2>Predict, then correct</h2>
+    <p>A stripped Go binary keeps <code>.gopclntab</code> — every function's name, entry and size — plus moduledata and the type tables. That is enough for the decoder to rebuild the new binary's layout from the old one: match functions by name, move each body to its new address, re-target every PC-relative operand (x86 decode via <code>x/arch</code>), re-lay data blocks through shift maps, regenerate the offset-based pclntab with its pc tables, and the type descriptors. The patch carries the new layout (a few KB) plus a positional correction of whatever the prediction got wrong. Prediction only has to be deterministic, not right: the decoder hashes the predicted base and the result, so a bad guess costs bytes, never correctness.</p>
+    <pre class="code">old binary ─┬─ parse pclntab (names, entries, sizes) ─▶ match by name ─▶ layout table + data maps   ← sent (0.4–6 KB)
+            ├─ .text: copy matched bodies to new entries, relocate rip-rel/rel32 operands
+            ├─ .rodata/.data/.go.type: re-lay blocks via shift maps, regenerate type-descriptor offsets
+            ├─ .bss: symbol-order shift tables   .gopclntab: regenerate functab/findfunctab/_func and the pc tables
+            └─ predicted new binary ──▶ correction = new ⊖ predicted, positional, zstd  ← sent</pre>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Pair (all built with Go 1.27)</th><th class="num">bsdiff</th><th class="num">hdiffz</th><th class="num pick">binsync</th><th class="num">vs bsdiff</th></tr></thead>
+        <tbody>
+          <tr><td>one-line change, 30 MB</td><td class="num">150,475</td><td class="num">176,929</td><td class="num pick">2,207</td><td class="num">68×</td></tr>
+          <tr><td>multi-package edit (+2.3 KB code), 30 MB</td><td class="num">145,205</td><td class="num">171,760</td><td class="num pick">2,733</td><td class="num">53×</td></tr>
+          <tr><td>second multi-package step (v3 → v4), 30 MB</td><td class="num">30,196</td><td class="num">40,523</td><td class="num pick">578</td><td class="num">52×</td></tr>
+          <tr class="pick"><td>prometheus 3.13.1 → 3.13.2, 94 MB</td><td class="num">2,691,644</td><td class="num">2,719,152</td><td class="num pick">111,552</td><td class="num">24×</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Every row is encode → patch → decode → byte-exact compare, with all tables counted in the patch. What the prometheus patch still carries: the changed code itself (63 KB of 112 KB), 45 KB of type descriptors (two-thirds genuinely new ones), and the pc tables of the functions that changed (14 KB); layout tables are 11 KB. A hdiffz correction stage instead of positional runs gets it to 94 KB, which bounds what a local approximate match inside changed functions can add. Unsupported inputs (non-Go, arm64, PIE, a Go release the deployed decoder does not know) fall back to a plain bsdiff-class codec up to 256 MB, or to the full blob — never to a failure.</p>
+  </section>
+
+  <section>
+    <h2>Decisions</h2>
+    <div class="dec">
+      <div class="d"><div class="id">D1–D3</div><div class="body"><b>Delta patches; Go-aware predict-then-correct as the codec; positional correction after a layout-exact prediction.</b><span>CDC/CAS re-sends ~100 %; bsdiff cannot scale to 1 GB (9–12× RAM, minutes); function-name alignment from pclntab removes the layout churn and the need for a suffix array. Plain bsdiff-class fallback (≤ 256 MB) for anything the transform cannot parse.</span></div></div>
+      <div class="d"><div class="id">D4–D5</div><div class="body"><b>One mutable pointer, immutable content-addressed objects, a chain of prev → head patches, 8 MiB hashed frames.</b><span>One conditional GET to poll; CAS on the pointer prevents forks; a target ≤ 8 releases behind follows the chain, otherwise takes the blob; frames give parallel ranged fetch (S3/GCS have no multi-range) and resume.</span></div></div>
+      <div class="d"><div class="id">D6</div><div class="body"><b>No signing key. Authenticity from the endpoint (TLS, SigV4, SSH, local fs); integrity from BLAKE3 hashes reachable from the pointer; replay protection from a monotonic <code>seq</code>.</b><span>Same trust model as <code>go install</code> and registries; a signature can be added as a pointer field later without changing the layout.</span></div></div>
+      <div class="d"><div class="id">D7–D10</div><div class="body"><b>Two hooks (<code>--restart</code>, <code>--healthy</code>) or two calls (<code>Ready()</code>, <code>OnShutdown</code>); same-socket fd inheritance run by the old process; hardlink + rename install; exec by path.</b><span>Three outcomes per update — ready, reverted, or failed-and-skipped — with no state machine or probation window. Sharing one accept queue is the only loss-free handoff on every kernel (<code>SO_REUSEPORT</code> drops connections below 5.14); <code>/proc/self/exe</code> is the old inode after a rename.</span></div></div>
+      <div class="d"><div class="id">D11–D12</div><div class="body"><b><code>-s -w</code> required; poll only.</b><span>DWARF makes every patch ≈ a full download; a 304 costs one RTT and the workstation case is <code>file://</code> polled at 1 s. No signing keys, control socket, inline patches, direct edges, channels, or systemd-notify.</span></div></div>
+      <div class="d"><div class="id">D13</div><div class="body"><b>Publish order: patch → pointer → blob. A blob that is still uploading is retried, not an error.</b><span>Every steady-state target needs only the patch, so the pointer goes live after hundreds of KB instead of tens of MB — from a workstation over one lossy SSH stream that is seconds instead of minutes. Drifted targets that 404 on the blob back off and are healed by the next publish.</span></div></div>
+      <div class="d"><div class="id">D14</div><div class="body"><b>The Go-aware codec targets the current stable Go release (1.27) only; other toolchains get the plain codec.</b><span>pclntab and type-descriptor layouts change between Go minors; one supported version, gated by a byte-exact self-prediction check of the old binary, keeps the codec small and honest. The publisher picks the transform the <em>deployed</em> decoder can read.</span></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>How an update runs</h2>
+    <pre class="code">&lt;store&gt;/latest.json               { seq, head {hash, version, size, blob}, chain [{from, to, key, size, b3} …] }   no-store
+&lt;store&gt;/patches/&lt;from&gt;-&lt;to&gt;.bsz   transform id, layout tables, correction; 8 MiB hashed frames                  immutable
+&lt;store&gt;/blobs/&lt;hash&gt;.zst          full binary in independent 8 MiB zstd frames (parallel ranged fetch)           immutable
+
+publish:  hash · encode vs previous head (local cache) · put patch → pointer (If-Match CAS) → blob frames
+agent:    GET latest.json (If-None-Match) ──304──▶ sleep
+                                         ──200──▶ seq ↑ ▶ hash current file (cached by inode) ▶ chain suffix or blob
+                                                  ▶ fetch frames (verify each) ▶ apply ▶ verify b3 ▶ install ▶ restart ▶ ready | revert
+
+install:  write &lt;path&gt;.tmp (fsync, verify b3) · link(&lt;path&gt;, &lt;path&gt;.old) · create &lt;path&gt;.pending · rename(tmp, &lt;path&gt;) · fsync(dir)
+embedded: old process execs &lt;path&gt; with listeners as inherited fds
+          ├─ child calls Ready()   → child unlinks .pending; old stops accepting, runs OnShutdown (drain ≤ 30 s), exits
+          └─ child exits / 60 s    → SIGTERM…SIGKILL; rename(.old, &lt;path&gt;); record failed; old keeps serving
+external: run --restart CMD → [--healthy URL|CMD until 60 s] → ok: unlink .pending · not ok: revert, restart again, record failed
+any start: .pending exists ∧ not launched by a parent ∧ .old exists → revert, record failed, exec &lt;path&gt;</pre>
+    <div class="two">
+      <div>
+        <h3>Invariants</h3>
+        <ul>
+          <li><code>&lt;path&gt;</code> is byte-for-byte the head release once visible, and a valid executable at every instant.</li>
+          <li>Nothing queued on a listening socket is lost: both processes accept until <code>Ready()</code>.</li>
+          <li>One update in flight per target; a reverted release is skipped until the pointer changes.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>What the user writes</h3>
+        <pre class="code">up := selfupdate.Start(selfupdate.Config{Store: "s3://b/releases/app"})
+ln, _ := up.Listen("tcp", ":8080")
+up.OnShutdown(func() { srv.Shutdown(ctx) })
+go srv.Serve(ln)
+up.Ready()
+&lt;-up.Done()</pre>
+        <p class="note">Or, without linking: <code>binsync agent s3://b/releases/app /srv/app --restart 'systemctl restart app' --healthy http://127.0.0.1:8080/healthz</code>. Build releases with <code>CGO_ENABLED=0 go build -trimpath -buildvcs=false -ldflags="-s -w -buildid="</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Not in v1: signed manifests, push notifications, channels, direct patches, arm64/PIE/older-toolchain Go-aware codec (plain codec meanwhile), Windows, multi-file bundles, P2P fan-out. Sources: <code>README.md</code> · <code>docs/DESIGN.md</code> · <code>docs/research/</code> · prototype <code>bench/gotransform/</code>.
+  </footer>
+</div>

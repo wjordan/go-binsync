@@ -1,0 +1,1063 @@
+=== PAIR ../out/bin127/v1-F2 -> ../out/bin127/v2s-F2  (Wed Aug 26 14:54:16 PDT 2026)
+--- baseline bsdiff
+TIME_WALL=4.71 TIME_USER=4.61 TIME_SYS=0.09 MAXRSS_KB=264884
+SIZE bsdiff=351
+--- baseline bspatch
+TIME_WALL=0.09 TIME_USER=0.06 TIME_SYS=0.03 MAXRSS_KB=62004
+bspatch OK
+--- baseline hdiffz -m-6 -p-8
+old : "../out/bin127/v1-F2"
+new : "../out/bin127/v2s-F2"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hdiff"
+create single compressed diffData!
+  compress plugin: "zstd"
+oldDataSize : 29995271
+newDataSize : 29995271
+  match covers by block ...
+    create blocks's match table ...
+    search covers by match table ...
+  load new data into memory from new stream ...
+  load old data into memory from old stream ...
+  match covers by suffix string ...
+    create suffix string ...
+    search covers by suffix string ...
+  serialize single compressed diffData ...
+    (used one zstd dictSize: 1024  (input data: 134))
+diffDataSize: 163
+diff    time: 0.107 s
+  out diff file ok!
+TIME_WALL=0.10 TIME_USER=0.11 TIME_SYS=0.01 MAXRSS_KB=8228
+SIZE hdiffz=163
+--- baseline hpatchz
+old : "../out/bin127/v1-F2"
+diff: "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hdiff"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hout"
+  input oldDataSize: 29995271
+       diffDataSize: 163
+       diffDataType: SHDiff 
+  saved oldDataSize: 29995271
+  saved newDataSize: 29995271
+       compressType: "zstd" (need decompress 0)
+        stepMemSize: 24
+
+  patch ok!
+
+hpatchz time: 0.011 s
+TIME_WALL=0.01 TIME_USER=0.00 TIME_SYS=0.01 MAXRSS_KB=2240
+hpatchz OK
+--- goaware encode -s1 h -s2 p
+  [  0.03s] loaded v1-F2 (go1.27, 29995271 B) -> v2s-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.09s] content map .go.type
+  [  0.09s] content map .go.func
+  [  0.11s] content map .noptrdata
+  [  0.13s] content map .data
+  [  0.17s] shift tables
+  datamap .rodata: blocks=49196 matched=49194 ambiguous=0 unmatched=2 shift-changes=0; rle 9 B
+  datamap .go.type: blocks=169423 matched=169422 ambiguous=0 unmatched=1 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9286 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39228 samples, 0 B raw:
+  [  0.17s] content maps + shift tables
+  [  0.25s] overrides: pointers=121546 fields=107687 targets=76712 mispredicted=0 block-fixes=0 overrides=0 (0 votes)
+  [  0.25s] layout: 32652 funcs, 0 rec shapes, raw 65577 B, zstd 141 B
+  [  0.27s] stage 1a (h): funcnametab+filetab 2144760 -> 2144760 B, delta 39 B
+  [  0.37s] stage 1b (h): cutab+pctab+go:func.* predicted 5387424 -> 5387424 B, delta 39 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  0.50s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=103 in 8 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  stage-2 differing bytes by section: .note.go.buildid=78(6 runs) .note.gnu.build-id=20(1 runs) .rodata=5(1 runs)
+  [  0.53s] stage 2 (positional): raw 122 B, zstd 135 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.gtp: 466 B = header 112 + layout 141 + stage1(h) 78 (1a 39 + 1b 39) + stage2(p) 135  [encode 0.56s]
+TIME_WALL=0.58 TIME_USER=2.79 TIME_SYS=0.20 MAXRSS_KB=272348
+--- goaware decode (positional)
+  [  0.03s] loaded old (go1.27) and patch: 466 B, layout 65577 B
+  [  0.14s] stage 1 applied: 2144760 + 5387424 B of pclntab tables; skeleton 32652 funcs
+  [  0.28s] prediction: 29995271 B, hash verified
+  [  0.31s] stage 2 (p) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.out: 29995271 B [decode 0.31s]
+TIME_WALL=0.32 TIME_USER=1.62 TIME_SYS=0.16 MAXRSS_KB=216772
+decode positional OK
+--- goaware encode -s1 h -s2 h
+  [  0.03s] loaded v1-F2 (go1.27, 29995271 B) -> v2s-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.09s] content map .go.type
+  [  0.09s] content map .go.func
+  [  0.11s] content map .noptrdata
+  [  0.12s] content map .data
+  [  0.17s] shift tables
+  datamap .rodata: blocks=49196 matched=49194 ambiguous=0 unmatched=2 shift-changes=0; rle 9 B
+  datamap .go.type: blocks=169423 matched=169422 ambiguous=0 unmatched=1 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9286 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39228 samples, 0 B raw:
+  [  0.17s] content maps + shift tables
+  [  0.24s] overrides: pointers=121546 fields=107687 targets=76712 mispredicted=0 block-fixes=0 overrides=0 (0 votes)
+  [  0.25s] layout: 32652 funcs, 0 rec shapes, raw 65577 B, zstd 141 B
+  [  0.27s] stage 1a (h): funcnametab+filetab 2144760 -> 2144760 B, delta 39 B
+  [  0.38s] stage 1b (h): cutab+pctab+go:func.* predicted 5387424 -> 5387424 B, delta 39 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  0.51s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=103 in 8 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  [  0.65s] stage 2 (h): 163 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.gtp: 494 B = header 112 + layout 141 + stage1(h) 78 (1a 39 + 1b 39) + stage2(h) 163  [encode 0.68s]
+TIME_WALL=0.69 TIME_USER=2.99 TIME_SYS=0.25 MAXRSS_KB=252988
+--- goaware decode (hdiffz)
+  [  0.04s] loaded old (go1.27) and patch: 494 B, layout 65577 B
+  [  0.16s] stage 1 applied: 2144760 + 5387424 B of pclntab tables; skeleton 32652 funcs
+  [  0.29s] prediction: 29995271 B, hash verified
+  [  0.35s] stage 2 (h) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.out: 29995271 B [decode 0.35s]
+TIME_WALL=0.36 TIME_USER=1.68 TIME_SYS=0.20 MAXRSS_KB=216476
+decode hdiffz OK
+--- goaware encode -s1 b -s2 b
+  [  0.03s] loaded v1-F2 (go1.27, 29995271 B) -> v2s-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.11s] content map .noptrdata
+  [  0.13s] content map .data
+  [  0.17s] shift tables
+  datamap .rodata: blocks=49196 matched=49194 ambiguous=0 unmatched=2 shift-changes=0; rle 9 B
+  datamap .go.type: blocks=169423 matched=169422 ambiguous=0 unmatched=1 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9286 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39228 samples, 0 B raw:
+  [  0.17s] content maps + shift tables
+  [  0.24s] overrides: pointers=121546 fields=107687 targets=76712 mispredicted=0 block-fixes=0 overrides=0 (0 votes)
+  [  0.25s] layout: 32652 funcs, 0 rec shapes, raw 65577 B, zstd 141 B
+  [  0.46s] stage 1a (b): funcnametab+filetab 2144760 -> 2144760 B, delta 146 B
+  [  1.13s] stage 1b (b): cutab+pctab+go:func.* predicted 5387424 -> 5387424 B, delta 146 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  1.28s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=103 in 8 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  [  5.91s] stage 2 (b): 351 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.gtp: 898 B = header 114 + layout 141 + stage1(b) 292 (1a 146 + 1b 146) + stage2(b) 351  [encode 5.95s]
+TIME_WALL=5.96 TIME_USER=8.07 TIME_SYS=0.32 MAXRSS_KB=279848
+--- goaware decode (bsdiff)
+  [  0.04s] loaded old (go1.27) and patch: 898 B, layout 65577 B
+  [  0.15s] stage 1 applied: 2144760 + 5387424 B of pclntab tables; skeleton 32652 funcs
+  [  0.30s] prediction: 29995271 B, hash verified
+  [  0.45s] stage 2 (b) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.out: 29995271 B [decode 0.45s]
+TIME_WALL=0.46 TIME_USER=1.72 TIME_SYS=0.22 MAXRSS_KB=216884
+decode bsdiff OK
+=== PAIR ../out/bin127/v1-F2 -> ../out/bin127/v2l-F2  (Wed Aug 26 14:54:30 PDT 2026)
+--- baseline bsdiff
+TIME_WALL=4.89 TIME_USER=4.79 TIME_SYS=0.09 MAXRSS_KB=264760
+SIZE bsdiff=24874
+--- baseline bspatch
+TIME_WALL=0.08 TIME_USER=0.05 TIME_SYS=0.03 MAXRSS_KB=62580
+bspatch OK
+--- baseline hdiffz -m-6 -p-8
+old : "../out/bin127/v1-F2"
+new : "../out/bin127/v2l-F2"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hdiff"
+create single compressed diffData!
+  compress plugin: "zstd"
+oldDataSize : 29995271
+newDataSize : 29995271
+  match covers by block ...
+    create blocks's match table ...
+    search covers by match table ...
+  load new data into memory from new stream ...
+    build cache for search invalid oldData ranges ...
+    search invalid oldData ranges for skip ...
+  load old data into memory from old stream ...
+  match covers by suffix string ...
+    create suffix string ...
+    search covers by suffix string ...
+  serialize single compressed diffData ...
+    (used one zstd dictSize: 131072  (input data: 93899))
+diffDataSize: 33713
+diff    time: 0.246 s
+  out diff file ok!
+TIME_WALL=0.24 TIME_USER=0.50 TIME_SYS=0.05 MAXRSS_KB=40196
+SIZE hdiffz=33713
+--- baseline hpatchz
+old : "../out/bin127/v1-F2"
+diff: "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hdiff"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hout"
+  input oldDataSize: 29995271
+       diffDataSize: 33713
+       diffDataType: SHDiff 
+  saved oldDataSize: 29995271
+  saved newDataSize: 29995271
+       compressType: "zstd" (need decompress 1)
+        stepMemSize: 92943
+
+  patch ok!
+
+hpatchz time: 0.016 s
+TIME_WALL=0.01 TIME_USER=0.00 TIME_SYS=0.01 MAXRSS_KB=10344
+hpatchz OK
+--- goaware encode -s1 h -s2 p
+  [  0.03s] loaded v1-F2 (go1.27, 29995271 B) -> v2l-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.09s] content map .go.type
+  [  0.09s] content map .go.func
+  [  0.11s] content map .noptrdata
+  [  0.12s] content map .data
+  [  0.16s] shift tables
+  datamap .rodata: blocks=49196 matched=49191 ambiguous=0 unmatched=5 shift-changes=3; rle 19 B
+  datamap .go.type: blocks=169423 matched=169422 ambiguous=0 unmatched=1 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39228 samples, 0 B raw:
+  [  0.16s] content maps + shift tables
+  [  0.24s] overrides: pointers=121546 fields=107687 targets=76712 mispredicted=0 block-fixes=0 overrides=0 (0 votes)
+  [  0.24s] layout: 32652 funcs, 0 rec shapes, raw 65587 B, zstd 153 B
+  [  0.26s] stage 1a (h): funcnametab+filetab 2144760 -> 2144760 B, delta 39 B
+  [  0.36s] stage 1b (h): cutab+pctab+go:func.* predicted 5387424 -> 5387424 B, delta 39 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  0.50s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=165 in 17 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  stage-2 differing bytes by section: .note.go.buildid=77(7 runs) .note.gnu.build-id=20(1 runs) .text=7(5 runs) .rodata=29(3 runs) .go.fipsinfo=32(1 runs)
+  [  0.53s] stage 2 (positional): raw 210 B, zstd 223 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.gtp: 566 B = header 112 + layout 153 + stage1(h) 78 (1a 39 + 1b 39) + stage2(p) 223  [encode 0.56s]
+TIME_WALL=0.57 TIME_USER=2.86 TIME_SYS=0.17 MAXRSS_KB=282192
+--- goaware decode (positional)
+  [  0.03s] loaded old (go1.27) and patch: 566 B, layout 65587 B
+  [  0.14s] stage 1 applied: 2144760 + 5387424 B of pclntab tables; skeleton 32652 funcs
+  [  0.28s] prediction: 29995271 B, hash verified
+  [  0.31s] stage 2 (p) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.out: 29995271 B [decode 0.31s]
+TIME_WALL=0.32 TIME_USER=1.62 TIME_SYS=0.14 MAXRSS_KB=262364
+decode positional OK
+--- goaware encode -s1 h -s2 h
+  [  0.03s] loaded v1-F2 (go1.27, 29995271 B) -> v2l-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.09s] content map .go.type
+  [  0.09s] content map .go.func
+  [  0.11s] content map .noptrdata
+  [  0.12s] content map .data
+  [  0.17s] shift tables
+  datamap .rodata: blocks=49196 matched=49191 ambiguous=0 unmatched=5 shift-changes=3; rle 19 B
+  datamap .go.type: blocks=169423 matched=169422 ambiguous=0 unmatched=1 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39228 samples, 0 B raw:
+  [  0.17s] content maps + shift tables
+  [  0.24s] overrides: pointers=121546 fields=107687 targets=76712 mispredicted=0 block-fixes=0 overrides=0 (0 votes)
+  [  0.24s] layout: 32652 funcs, 0 rec shapes, raw 65587 B, zstd 153 B
+  [  0.27s] stage 1a (h): funcnametab+filetab 2144760 -> 2144760 B, delta 39 B
+  [  0.38s] stage 1b (h): cutab+pctab+go:func.* predicted 5387424 -> 5387424 B, delta 39 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  0.53s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=165 in 17 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  [  0.67s] stage 2 (h): 254 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.gtp: 597 B = header 112 + layout 153 + stage1(h) 78 (1a 39 + 1b 39) + stage2(h) 254  [encode 0.70s]
+TIME_WALL=0.71 TIME_USER=2.96 TIME_SYS=0.21 MAXRSS_KB=281620
+--- goaware decode (hdiffz)
+  [  0.04s] loaded old (go1.27) and patch: 597 B, layout 65587 B
+  [  0.14s] stage 1 applied: 2144760 + 5387424 B of pclntab tables; skeleton 32652 funcs
+  [  0.28s] prediction: 29995271 B, hash verified
+  [  0.34s] stage 2 (h) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.out: 29995271 B [decode 0.34s]
+TIME_WALL=0.35 TIME_USER=1.67 TIME_SYS=0.17 MAXRSS_KB=220700
+decode hdiffz OK
+--- goaware encode -s1 b -s2 b
+  [  0.03s] loaded v1-F2 (go1.27, 29995271 B) -> v2l-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.09s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.11s] content map .noptrdata
+  [  0.12s] content map .data
+  [  0.17s] shift tables
+  datamap .rodata: blocks=49196 matched=49191 ambiguous=0 unmatched=5 shift-changes=3; rle 19 B
+  datamap .go.type: blocks=169423 matched=169422 ambiguous=0 unmatched=1 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39228 samples, 0 B raw:
+  [  0.17s] content maps + shift tables
+  [  0.24s] overrides: pointers=121546 fields=107687 targets=76712 mispredicted=0 block-fixes=0 overrides=0 (0 votes)
+  [  0.25s] layout: 32652 funcs, 0 rec shapes, raw 65587 B, zstd 153 B
+  [  0.48s] stage 1a (b): funcnametab+filetab 2144760 -> 2144760 B, delta 146 B
+  [  1.18s] stage 1b (b): cutab+pctab+go:func.* predicted 5387424 -> 5387424 B, delta 146 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  1.32s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=165 in 17 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  [  6.18s] stage 2 (b): 459 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.gtp: 1018 B = header 114 + layout 153 + stage1(b) 292 (1a 146 + 1b 146) + stage2(b) 459  [encode 6.21s]
+TIME_WALL=6.23 TIME_USER=8.41 TIME_SYS=0.32 MAXRSS_KB=264712
+--- goaware decode (bsdiff)
+  [  0.03s] loaded old (go1.27) and patch: 1018 B, layout 65587 B
+  [  0.16s] stage 1 applied: 2144760 + 5387424 B of pclntab tables; skeleton 32652 funcs
+  [  0.30s] prediction: 29995271 B, hash verified
+  [  0.44s] stage 2 (b) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.out: 29995271 B [decode 0.44s]
+TIME_WALL=0.45 TIME_USER=1.71 TIME_SYS=0.21 MAXRSS_KB=217436
+decode bsdiff OK
+=== PAIR ../out/bin127/v1-F2 -> ../out/bin127/v2c-F2  (Wed Aug 26 14:54:44 PDT 2026)
+--- baseline bsdiff
+TIME_WALL=5.70 TIME_USER=5.59 TIME_SYS=0.10 MAXRSS_KB=264504
+SIZE bsdiff=150475
+--- baseline bspatch
+TIME_WALL=0.10 TIME_USER=0.07 TIME_SYS=0.03 MAXRSS_KB=63476
+bspatch OK
+--- baseline hdiffz -m-6 -p-8
+old : "../out/bin127/v1-F2"
+new : "../out/bin127/v2c-F2"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hdiff"
+create single compressed diffData!
+  compress plugin: "zstd"
+oldDataSize : 29995271
+newDataSize : 29995271
+  match covers by block ...
+    create blocks's match table ...
+    search covers by match table ...
+  load new data into memory from new stream ...
+    build cache for search invalid oldData ranges ...
+    search invalid oldData ranges for skip ...
+  load old data into memory from old stream ...
+  match covers by suffix string ...
+    create suffix string ...
+    search covers by suffix string ...
+  serialize single compressed diffData ...
+    (used one zstd dictSize: 1048576  (input data: 986547))
+diffDataSize: 176929
+diff    time: 0.765 s
+  out diff file ok!
+TIME_WALL=0.76 TIME_USER=1.63 TIME_SYS=0.09 MAXRSS_KB=108924
+SIZE hdiffz=176929
+--- baseline hpatchz
+old : "../out/bin127/v1-F2"
+diff: "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hdiff"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hout"
+  input oldDataSize: 29995271
+       diffDataSize: 176929
+       diffDataType: SHDiff 
+  saved oldDataSize: 29995271
+  saved newDataSize: 29995271
+       compressType: "zstd" (need decompress 1)
+        stepMemSize: 261546
+
+  patch ok!
+
+hpatchz time: 0.021 s
+TIME_WALL=0.02 TIME_USER=0.00 TIME_SYS=0.01 MAXRSS_KB=11320
+hpatchz OK
+--- goaware encode -s1 h -s2 p
+  [  0.04s] loaded v1-F2 (go1.27, 29995271 B) -> v2c-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.12s] content map .noptrdata
+  [  0.13s] content map .data
+  [  0.17s] shift tables
+  datamap .rodata: blocks=49196 matched=49193 ambiguous=0 unmatched=3 shift-changes=4; rle 21 B
+  datamap .go.type: blocks=169423 matched=169123 ambiguous=135 unmatched=165 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39226 samples, 0 B raw:
+  [  0.17s] content maps + shift tables
+  [  0.26s] overrides: pointers=121546 fields=107687 targets=76712 mispredicted=22 block-fixes=0 overrides=1 (2 votes)
+  [  0.26s] layout: 32652 funcs, 0 rec shapes, raw 65626 B, zstd 213 B
+  [  0.29s] stage 1a (h): funcnametab+filetab 2144760 -> 2144760 B, delta 39 B
+  [  0.39s] stage 1b (h): cutab+pctab+go:func.* predicted 5387504 -> 5387504 B, delta 284 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  0.54s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=1258 in 392 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  stage-2 differing bytes by section: .note.go.buildid=80(4 runs) .note.gnu.build-id=20(1 runs) .text=966(298 runs) .rodata=31(14 runs) .gopclntab=18(10 runs) .go.type=5(4 runs) .go.fipsinfo=32(1 runs) .go.module=10(7 runs) .noptrdata=2(2 runs)
+  [  0.56s] stage 2 (positional): raw 2121 B, zstd 1558 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.gtp: 2207 B = header 113 + layout 213 + stage1(h) 323 (1a 39 + 1b 284) + stage2(p) 1558  [encode 0.60s]
+TIME_WALL=0.61 TIME_USER=2.87 TIME_SYS=0.22 MAXRSS_KB=270412
+--- goaware decode (positional)
+  [  0.03s] loaded old (go1.27) and patch: 2207 B, layout 65626 B
+  [  0.14s] stage 1 applied: 2144760 + 5387504 B of pclntab tables; skeleton 32652 funcs
+  [  0.29s] prediction: 29995271 B, hash verified
+  [  0.32s] stage 2 (p) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.out: 29995271 B [decode 0.32s]
+TIME_WALL=0.33 TIME_USER=1.69 TIME_SYS=0.15 MAXRSS_KB=226076
+decode positional OK
+--- goaware encode -s1 h -s2 h
+  [  0.03s] loaded v1-F2 (go1.27, 29995271 B) -> v2c-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.11s] content map .noptrdata
+  [  0.13s] content map .data
+  [  0.17s] shift tables
+  datamap .rodata: blocks=49196 matched=49193 ambiguous=0 unmatched=3 shift-changes=4; rle 21 B
+  datamap .go.type: blocks=169423 matched=169123 ambiguous=135 unmatched=165 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39226 samples, 0 B raw:
+  [  0.17s] content maps + shift tables
+  [  0.24s] overrides: pointers=121546 fields=107687 targets=76712 mispredicted=22 block-fixes=0 overrides=1 (2 votes)
+  [  0.25s] layout: 32652 funcs, 0 rec shapes, raw 65626 B, zstd 213 B
+  [  0.27s] stage 1a (h): funcnametab+filetab 2144760 -> 2144760 B, delta 39 B
+  [  0.38s] stage 1b (h): cutab+pctab+go:func.* predicted 5387504 -> 5387504 B, delta 284 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  0.52s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=1258 in 392 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  [  0.63s] stage 2 (h): 1281 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.gtp: 1930 B = header 113 + layout 213 + stage1(h) 323 (1a 39 + 1b 284) + stage2(h) 1281  [encode 0.66s]
+TIME_WALL=0.68 TIME_USER=2.97 TIME_SYS=0.25 MAXRSS_KB=266232
+--- goaware decode (hdiffz)
+  [  0.04s] loaded old (go1.27) and patch: 1930 B, layout 65626 B
+  [  0.17s] stage 1 applied: 2144760 + 5387504 B of pclntab tables; skeleton 32652 funcs
+  [  0.33s] prediction: 29995271 B, hash verified
+  [  0.39s] stage 2 (h) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.out: 29995271 B [decode 0.39s]
+TIME_WALL=0.40 TIME_USER=1.69 TIME_SYS=0.22 MAXRSS_KB=212512
+decode hdiffz OK
+--- goaware encode -s1 b -s2 b
+  [  0.04s] loaded v1-F2 (go1.27, 29995271 B) -> v2c-F2 (go1.27, 29995271 B)
+  [  0.05s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.07s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.12s] content map .noptrdata
+  [  0.13s] content map .data
+  [  0.17s] shift tables
+  datamap .rodata: blocks=49196 matched=49193 ambiguous=0 unmatched=3 shift-changes=4; rle 21 B
+  datamap .go.type: blocks=169423 matched=169123 ambiguous=135 unmatched=165 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39226 samples, 0 B raw:
+  [  0.18s] content maps + shift tables
+  [  0.25s] overrides: pointers=121546 fields=107687 targets=76712 mispredicted=22 block-fixes=0 overrides=1 (2 votes)
+  [  0.26s] layout: 32652 funcs, 0 rec shapes, raw 65626 B, zstd 213 B
+  [  0.47s] stage 1a (b): funcnametab+filetab 2144760 -> 2144760 B, delta 146 B
+  [  1.21s] stage 1b (b): cutab+pctab+go:func.* predicted 5387504 -> 5387504 B, delta 454 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  1.35s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=1258 in 392 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  [  6.42s] stage 2 (b): 1491 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.gtp: 2418 B = header 114 + layout 213 + stage1(b) 600 (1a 146 + 1b 454) + stage2(b) 1491  [encode 6.45s]
+TIME_WALL=6.47 TIME_USER=8.64 TIME_SYS=0.32 MAXRSS_KB=265264
+--- goaware decode (bsdiff)
+  [  0.04s] loaded old (go1.27) and patch: 2418 B, layout 65626 B
+  [  0.16s] stage 1 applied: 2144760 + 5387504 B of pclntab tables; skeleton 32652 funcs
+  [  0.30s] prediction: 29995271 B, hash verified
+  [  0.45s] stage 2 (b) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.out: 29995271 B [decode 0.45s]
+TIME_WALL=0.45 TIME_USER=1.74 TIME_SYS=0.25 MAXRSS_KB=205460
+decode bsdiff OK
+=== PAIR ../out/bin127/v1-F2 -> ../out/bin127/v2p-F2  (Wed Aug 26 14:55:00 PDT 2026)
+--- baseline bsdiff
+TIME_WALL=5.57 TIME_USER=5.46 TIME_SYS=0.10 MAXRSS_KB=264952
+SIZE bsdiff=109940
+--- baseline bspatch
+TIME_WALL=0.09 TIME_USER=0.06 TIME_SYS=0.03 MAXRSS_KB=63156
+bspatch OK
+--- baseline hdiffz -m-6 -p-8
+old : "../out/bin127/v1-F2"
+new : "../out/bin127/v2p-F2"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hdiff"
+create single compressed diffData!
+  compress plugin: "zstd"
+oldDataSize : 29995271
+newDataSize : 29995271
+  match covers by block ...
+    create blocks's match table ...
+    search covers by match table ...
+  load new data into memory from new stream ...
+    build cache for search invalid oldData ranges ...
+    search invalid oldData ranges for skip ...
+  load old data into memory from old stream ...
+  match covers by suffix string ...
+    create suffix string ...
+    search covers by suffix string ...
+  serialize single compressed diffData ...
+    (used one zstd dictSize: 1048576  (input data: 602871))
+diffDataSize: 130642
+diff    time: 0.548 s
+  out diff file ok!
+TIME_WALL=0.55 TIME_USER=1.09 TIME_SYS=0.08 MAXRSS_KB=87104
+SIZE hdiffz=130642
+--- baseline hpatchz
+old : "../out/bin127/v1-F2"
+diff: "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hdiff"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hout"
+  input oldDataSize: 29995271
+       diffDataSize: 130642
+       diffDataType: SHDiff 
+  saved oldDataSize: 29995271
+  saved newDataSize: 29995271
+       compressType: "zstd" (need decompress 1)
+        stepMemSize: 261368
+
+  patch ok!
+
+hpatchz time: 0.018 s
+TIME_WALL=0.01 TIME_USER=0.00 TIME_SYS=0.01 MAXRSS_KB=11464
+hpatchz OK
+--- goaware encode -s1 h -s2 p
+  [  0.04s] loaded v1-F2 (go1.27, 29995271 B) -> v2p-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.11s] content map .noptrdata
+  [  0.13s] content map .data
+  [  0.17s] shift tables
+  datamap .rodata: blocks=49196 matched=49191 ambiguous=2 unmatched=3 shift-changes=4; rle 19 B
+  datamap .go.type: blocks=169423 matched=169123 ambiguous=135 unmatched=165 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39228 samples, 0 B raw:
+  [  0.17s] content maps + shift tables
+  [  0.25s] overrides: pointers=121546 fields=107687 targets=76712 mispredicted=21 block-fixes=2 overrides=3 (8 votes)
+  [  0.26s] layout: 32652 funcs, 0 rec shapes, raw 65637 B, zstd 221 B
+  [  0.28s] stage 1a (h): funcnametab+filetab 2144760 -> 2144792 B, delta 67 B
+  [  0.39s] stage 1b (h): cutab+pctab+go:func.* predicted 5387472 -> 5387472 B, delta 240 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  0.52s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=812 in 153 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  stage-2 differing bytes by section: .note.go.buildid=79(4 runs) .note.gnu.build-id=20(1 runs) .text=527(67 runs) .rodata=35(14 runs) .gopclntab=8(6 runs) .go.type=1(1 runs) .go.fipsinfo=32(1 runs) .go.module=16(13 runs) .data=1(1 runs)
+  [  0.54s] stage 2 (positional): raw 1237 B, zstd 1043 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.gtp: 1684 B = header 113 + layout 221 + stage1(h) 307 (1a 67 + 1b 240) + stage2(p) 1043  [encode 0.58s]
+TIME_WALL=0.59 TIME_USER=2.98 TIME_SYS=0.20 MAXRSS_KB=271504
+--- goaware decode (positional)
+  [  0.04s] loaded old (go1.27) and patch: 1684 B, layout 65637 B
+  [  0.15s] stage 1 applied: 2144792 + 5387472 B of pclntab tables; skeleton 32652 funcs
+  [  0.32s] prediction: 29995271 B, hash verified
+  [  0.35s] stage 2 (p) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.out: 29995271 B [decode 0.35s]
+TIME_WALL=0.36 TIME_USER=1.76 TIME_SYS=0.18 MAXRSS_KB=222684
+decode positional OK
+--- goaware encode -s1 h -s2 h
+  [  0.04s] loaded v1-F2 (go1.27, 29995271 B) -> v2p-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.11s] content map .noptrdata
+  [  0.13s] content map .data
+  [  0.18s] shift tables
+  datamap .rodata: blocks=49196 matched=49191 ambiguous=2 unmatched=3 shift-changes=4; rle 19 B
+  datamap .go.type: blocks=169423 matched=169123 ambiguous=135 unmatched=165 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39228 samples, 0 B raw:
+  [  0.18s] content maps + shift tables
+  [  0.26s] overrides: pointers=121546 fields=107687 targets=76712 mispredicted=21 block-fixes=2 overrides=3 (8 votes)
+  [  0.26s] layout: 32652 funcs, 0 rec shapes, raw 65637 B, zstd 221 B
+  [  0.29s] stage 1a (h): funcnametab+filetab 2144760 -> 2144792 B, delta 67 B
+  [  0.39s] stage 1b (h): cutab+pctab+go:func.* predicted 5387472 -> 5387472 B, delta 240 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  0.54s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=812 in 153 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  [  0.64s] stage 2 (h): 981 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.gtp: 1622 B = header 113 + layout 221 + stage1(h) 307 (1a 67 + 1b 240) + stage2(h) 981  [encode 0.68s]
+TIME_WALL=0.69 TIME_USER=2.99 TIME_SYS=0.24 MAXRSS_KB=283592
+--- goaware decode (hdiffz)
+  [  0.04s] loaded old (go1.27) and patch: 1622 B, layout 65637 B
+  [  0.15s] stage 1 applied: 2144792 + 5387472 B of pclntab tables; skeleton 32652 funcs
+  [  0.30s] prediction: 29995271 B, hash verified
+  [  0.35s] stage 2 (h) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.out: 29995271 B [decode 0.35s]
+TIME_WALL=0.36 TIME_USER=1.73 TIME_SYS=0.20 MAXRSS_KB=215856
+decode hdiffz OK
+--- goaware encode -s1 b -s2 b
+  [  0.03s] loaded v1-F2 (go1.27, 29995271 B) -> v2p-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.11s] content map .noptrdata
+  [  0.13s] content map .data
+  [  0.17s] shift tables
+  datamap .rodata: blocks=49196 matched=49191 ambiguous=2 unmatched=3 shift-changes=4; rle 19 B
+  datamap .go.type: blocks=169423 matched=169123 ambiguous=135 unmatched=165 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39228 samples, 0 B raw:
+  [  0.17s] content maps + shift tables
+  [  0.25s] overrides: pointers=121546 fields=107687 targets=76712 mispredicted=21 block-fixes=2 overrides=3 (8 votes)
+  [  0.25s] layout: 32652 funcs, 0 rec shapes, raw 65637 B, zstd 221 B
+  [  0.47s] stage 1a (b): funcnametab+filetab 2144760 -> 2144792 B, delta 220 B
+  [  1.17s] stage 1b (b): cutab+pctab+go:func.* predicted 5387472 -> 5387472 B, delta 413 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  1.32s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=812 in 153 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  [  6.33s] stage 2 (b): 1247 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.gtp: 2215 B = header 114 + layout 221 + stage1(b) 633 (1a 220 + 1b 413) + stage2(b) 1247  [encode 6.36s]
+TIME_WALL=6.37 TIME_USER=8.64 TIME_SYS=0.34 MAXRSS_KB=289776
+--- goaware decode (bsdiff)
+  [  0.04s] loaded old (go1.27) and patch: 2215 B, layout 65637 B
+  [  0.17s] stage 1 applied: 2144792 + 5387472 B of pclntab tables; skeleton 32652 funcs
+  [  0.33s] prediction: 29995271 B, hash verified
+  [  0.47s] stage 2 (b) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.out: 29995271 B [decode 0.47s]
+TIME_WALL=0.48 TIME_USER=1.83 TIME_SYS=0.27 MAXRSS_KB=235904
+decode bsdiff OK
+=== PAIR ../out/bin127/v1-F2 -> ../out/bin127/v3-F2  (Wed Aug 26 14:55:16 PDT 2026)
+--- baseline bsdiff
+TIME_WALL=5.66 TIME_USER=5.56 TIME_SYS=0.09 MAXRSS_KB=264756
+SIZE bsdiff=142634
+--- baseline bspatch
+TIME_WALL=0.09 TIME_USER=0.06 TIME_SYS=0.03 MAXRSS_KB=63476
+bspatch OK
+--- baseline hdiffz -m-6 -p-8
+old : "../out/bin127/v1-F2"
+new : "../out/bin127/v3-F2"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hdiff"
+create single compressed diffData!
+  compress plugin: "zstd"
+oldDataSize : 29995271
+newDataSize : 29995271
+  match covers by block ...
+    create blocks's match table ...
+    search covers by match table ...
+  load new data into memory from new stream ...
+    build cache for search invalid oldData ranges ...
+    search invalid oldData ranges for skip ...
+  load old data into memory from old stream ...
+  match covers by suffix string ...
+    create suffix string ...
+    search covers by suffix string ...
+  serialize single compressed diffData ...
+    (used one zstd dictSize: 2097152  (input data: 1070058))
+diffDataSize: 170105
+diff    time: 0.771 s
+  out diff file ok!
+TIME_WALL=0.77 TIME_USER=1.57 TIME_SYS=0.09 MAXRSS_KB=108992
+SIZE hdiffz=170105
+--- baseline hpatchz
+old : "../out/bin127/v1-F2"
+diff: "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hdiff"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hout"
+  input oldDataSize: 29995271
+       diffDataSize: 170105
+       diffDataType: SHDiff 
+  saved oldDataSize: 29995271
+  saved newDataSize: 29995271
+       compressType: "zstd" (need decompress 1)
+        stepMemSize: 259908
+
+  patch ok!
+
+hpatchz time: 0.021 s
+TIME_WALL=0.02 TIME_USER=0.00 TIME_SYS=0.01 MAXRSS_KB=11672
+hpatchz OK
+--- goaware encode -s1 h -s2 p
+  [  0.04s] loaded v1-F2 (go1.27, 29995271 B) -> v3-F2 (go1.27, 29995271 B)
+  [  0.05s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.12s] content map .noptrdata
+  [  0.14s] content map .data
+  [  0.18s] shift tables
+  datamap .rodata: blocks=49196 matched=49189 ambiguous=2 unmatched=5 shift-changes=8; rle 29 B
+  datamap .go.type: blocks=169423 matched=169123 ambiguous=135 unmatched=165 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39226 samples, 0 B raw:
+  [  0.18s] content maps + shift tables
+  [  0.26s] overrides: pointers=121546 fields=107687 targets=76711 mispredicted=32 block-fixes=2 overrides=4 (10 votes)
+  [  0.26s] layout: 32652 funcs, 0 rec shapes, raw 65653 B, zstd 244 B
+  [  0.28s] stage 1a (h): funcnametab+filetab 2144760 -> 2144792 B, delta 67 B
+  [  0.40s] stage 1b (h): cutab+pctab+go:func.* predicted 5387568 -> 5387568 B, delta 374 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  0.54s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=1476 in 462 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  stage-2 differing bytes by section: .note.go.buildid=80(4 runs) .note.gnu.build-id=20(1 runs) .text=1137(358 runs) .rodata=60(24 runs) .gopclntab=29(11 runs) .go.type=5(4 runs) .go.fipsinfo=32(1 runs) .go.module=16(12 runs) .noptrdata=2(2 runs) .data=1(1 runs)
+  [  0.57s] stage 2 (positional): raw 2558 B, zstd 1904 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.gtp: 2702 B = header 113 + layout 244 + stage1(h) 441 (1a 67 + 1b 374) + stage2(p) 1904  [encode 0.60s]
+TIME_WALL=0.61 TIME_USER=2.94 TIME_SYS=0.22 MAXRSS_KB=264480
+--- goaware decode (positional)
+  [  0.04s] loaded old (go1.27) and patch: 2702 B, layout 65653 B
+  [  0.15s] stage 1 applied: 2144792 + 5387568 B of pclntab tables; skeleton 32652 funcs
+  [  0.31s] prediction: 29995271 B, hash verified
+  [  0.33s] stage 2 (p) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.out: 29995271 B [decode 0.33s]
+TIME_WALL=0.34 TIME_USER=1.77 TIME_SYS=0.20 MAXRSS_KB=210480
+decode positional OK
+--- goaware encode -s1 h -s2 h
+  [  0.04s] loaded v1-F2 (go1.27, 29995271 B) -> v3-F2 (go1.27, 29995271 B)
+  [  0.05s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.12s] content map .noptrdata
+  [  0.14s] content map .data
+  [  0.18s] shift tables
+  datamap .rodata: blocks=49196 matched=49189 ambiguous=2 unmatched=5 shift-changes=8; rle 29 B
+  datamap .go.type: blocks=169423 matched=169123 ambiguous=135 unmatched=165 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39226 samples, 0 B raw:
+  [  0.18s] content maps + shift tables
+  [  0.25s] overrides: pointers=121546 fields=107687 targets=76711 mispredicted=32 block-fixes=2 overrides=4 (10 votes)
+  [  0.26s] layout: 32652 funcs, 0 rec shapes, raw 65653 B, zstd 244 B
+  [  0.28s] stage 1a (h): funcnametab+filetab 2144760 -> 2144792 B, delta 67 B
+  [  0.38s] stage 1b (h): cutab+pctab+go:func.* predicted 5387568 -> 5387568 B, delta 374 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  0.53s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=1476 in 462 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  [  0.64s] stage 2 (h): 1708 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.gtp: 2506 B = header 113 + layout 244 + stage1(h) 441 (1a 67 + 1b 374) + stage2(h) 1708  [encode 0.67s]
+TIME_WALL=0.69 TIME_USER=2.94 TIME_SYS=0.25 MAXRSS_KB=279832
+--- goaware decode (hdiffz)
+  [  0.03s] loaded old (go1.27) and patch: 2506 B, layout 65653 B
+  [  0.14s] stage 1 applied: 2144792 + 5387568 B of pclntab tables; skeleton 32652 funcs
+  [  0.31s] prediction: 29995271 B, hash verified
+  [  0.36s] stage 2 (h) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.out: 29995271 B [decode 0.36s]
+TIME_WALL=0.38 TIME_USER=1.71 TIME_SYS=0.24 MAXRSS_KB=235676
+decode hdiffz OK
+--- goaware encode -s1 b -s2 b
+  [  0.04s] loaded v1-F2 (go1.27, 29995271 B) -> v3-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.11s] content map .noptrdata
+  [  0.13s] content map .data
+  [  0.17s] shift tables
+  datamap .rodata: blocks=49196 matched=49189 ambiguous=2 unmatched=5 shift-changes=8; rle 29 B
+  datamap .go.type: blocks=169423 matched=169123 ambiguous=135 unmatched=165 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39226 samples, 0 B raw:
+  [  0.17s] content maps + shift tables
+  [  0.25s] overrides: pointers=121546 fields=107687 targets=76711 mispredicted=32 block-fixes=2 overrides=4 (10 votes)
+  [  0.25s] layout: 32652 funcs, 0 rec shapes, raw 65653 B, zstd 244 B
+  [  0.46s] stage 1a (b): funcnametab+filetab 2144760 -> 2144792 B, delta 220 B
+  [  1.17s] stage 1b (b): cutab+pctab+go:func.* predicted 5387568 -> 5387568 B, delta 548 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  1.31s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=1476 in 462 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  [  6.38s] stage 2 (b): 1924 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.gtp: 3050 B = header 114 + layout 244 + stage1(b) 768 (1a 220 + 1b 548) + stage2(b) 1924  [encode 6.41s]
+TIME_WALL=6.43 TIME_USER=8.56 TIME_SYS=0.39 MAXRSS_KB=276364
+--- goaware decode (bsdiff)
+  [  0.04s] loaded old (go1.27) and patch: 3050 B, layout 65653 B
+  [  0.18s] stage 1 applied: 2144792 + 5387568 B of pclntab tables; skeleton 32652 funcs
+  [  0.34s] prediction: 29995271 B, hash verified
+  [  0.47s] stage 2 (b) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.out: 29995271 B [decode 0.47s]
+TIME_WALL=0.48 TIME_USER=1.82 TIME_SYS=0.25 MAXRSS_KB=205816
+decode bsdiff OK
+=== PAIR ../out/bin127/v1-F2 -> ../out/bin127/v4-F2  (Wed Aug 26 14:55:32 PDT 2026)
+--- baseline bsdiff
+TIME_WALL=5.95 TIME_USER=5.85 TIME_SYS=0.09 MAXRSS_KB=264504
+SIZE bsdiff=145205
+--- baseline bspatch
+TIME_WALL=0.10 TIME_USER=0.06 TIME_SYS=0.03 MAXRSS_KB=63540
+bspatch OK
+--- baseline hdiffz -m-6 -p-8
+old : "../out/bin127/v1-F2"
+new : "../out/bin127/v4-F2"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hdiff"
+create single compressed diffData!
+  compress plugin: "zstd"
+oldDataSize : 29995271
+newDataSize : 29995271
+  match covers by block ...
+    create blocks's match table ...
+    search covers by match table ...
+  load new data into memory from new stream ...
+    build cache for search invalid oldData ranges ...
+    search invalid oldData ranges for skip ...
+  load old data into memory from old stream ...
+  match covers by suffix string ...
+    create suffix string ...
+    search covers by suffix string ...
+  serialize single compressed diffData ...
+    (used one zstd dictSize: 2097152  (input data: 1065011))
+diffDataSize: 171760
+diff    time: 0.744 s
+  out diff file ok!
+TIME_WALL=0.74 TIME_USER=1.55 TIME_SYS=0.09 MAXRSS_KB=109340
+SIZE hdiffz=171760
+--- baseline hpatchz
+old : "../out/bin127/v1-F2"
+diff: "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hdiff"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hout"
+  input oldDataSize: 29995271
+       diffDataSize: 171760
+       diffDataType: SHDiff 
+  saved oldDataSize: 29995271
+  saved newDataSize: 29995271
+       compressType: "zstd" (need decompress 1)
+        stepMemSize: 259478
+
+  patch ok!
+
+hpatchz time: 0.019 s
+TIME_WALL=0.01 TIME_USER=0.00 TIME_SYS=0.01 MAXRSS_KB=11652
+hpatchz OK
+--- goaware encode -s1 h -s2 p
+  [  0.03s] loaded v1-F2 (go1.27, 29995271 B) -> v4-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.11s] content map .noptrdata
+  [  0.13s] content map .data
+  [  0.17s] shift tables
+  datamap .rodata: blocks=49196 matched=49185 ambiguous=2 unmatched=9 shift-changes=11; rle 36 B
+  datamap .go.type: blocks=169423 matched=169123 ambiguous=135 unmatched=165 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39226 samples, 0 B raw:
+  [  0.17s] content maps + shift tables
+  [  0.25s] overrides: pointers=121546 fields=107687 targets=76711 mispredicted=34 block-fixes=3 overrides=6 (27 votes)
+  [  0.25s] layout: 32652 funcs, 0 rec shapes, raw 65668 B, zstd 259 B
+  [  0.27s] stage 1a (h): funcnametab+filetab 2144760 -> 2144792 B, delta 67 B
+  [  0.38s] stage 1b (h): cutab+pctab+go:func.* predicted 5387568 -> 5387568 B, delta 374 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  0.53s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=1483 in 464 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  stage-2 differing bytes by section: .note.go.buildid=80(4 runs) .note.gnu.build-id=20(1 runs) .text=1137(358 runs) .rodata=67(26 runs) .gopclntab=29(11 runs) .go.type=5(4 runs) .go.fipsinfo=32(1 runs) .go.module=16(12 runs) .noptrdata=2(2 runs) .data=1(1 runs)
+  [  0.55s] stage 2 (positional): raw 2570 B, zstd 1920 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.gtp: 2733 B = header 113 + layout 259 + stage1(h) 441 (1a 67 + 1b 374) + stage2(p) 1920  [encode 0.58s]
+TIME_WALL=0.60 TIME_USER=2.88 TIME_SYS=0.15 MAXRSS_KB=260664
+--- goaware decode (positional)
+  [  0.03s] loaded old (go1.27) and patch: 2733 B, layout 65668 B
+  [  0.14s] stage 1 applied: 2144792 + 5387568 B of pclntab tables; skeleton 32652 funcs
+  [  0.29s] prediction: 29995271 B, hash verified
+  [  0.31s] stage 2 (p) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.out: 29995271 B [decode 0.31s]
+TIME_WALL=0.32 TIME_USER=1.66 TIME_SYS=0.19 MAXRSS_KB=234580
+decode positional OK
+--- goaware encode -s1 h -s2 h
+  [  0.04s] loaded v1-F2 (go1.27, 29995271 B) -> v4-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.11s] content map .noptrdata
+  [  0.13s] content map .data
+  [  0.17s] shift tables
+  datamap .rodata: blocks=49196 matched=49185 ambiguous=2 unmatched=9 shift-changes=11; rle 36 B
+  datamap .go.type: blocks=169423 matched=169123 ambiguous=135 unmatched=165 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39226 samples, 0 B raw:
+  [  0.17s] content maps + shift tables
+  [  0.25s] overrides: pointers=121546 fields=107687 targets=76711 mispredicted=34 block-fixes=3 overrides=6 (27 votes)
+  [  0.25s] layout: 32652 funcs, 0 rec shapes, raw 65668 B, zstd 259 B
+  [  0.27s] stage 1a (h): funcnametab+filetab 2144760 -> 2144792 B, delta 67 B
+  [  0.38s] stage 1b (h): cutab+pctab+go:func.* predicted 5387568 -> 5387568 B, delta 374 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  0.52s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=1483 in 464 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  [  0.62s] stage 2 (h): 1732 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.gtp: 2545 B = header 113 + layout 259 + stage1(h) 441 (1a 67 + 1b 374) + stage2(h) 1732  [encode 0.66s]
+TIME_WALL=0.67 TIME_USER=2.96 TIME_SYS=0.22 MAXRSS_KB=252868
+--- goaware decode (hdiffz)
+  [  0.03s] loaded old (go1.27) and patch: 2545 B, layout 65668 B
+  [  0.14s] stage 1 applied: 2144792 + 5387568 B of pclntab tables; skeleton 32652 funcs
+  [  0.29s] prediction: 29995271 B, hash verified
+  [  0.34s] stage 2 (h) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.out: 29995271 B [decode 0.34s]
+TIME_WALL=0.35 TIME_USER=1.70 TIME_SYS=0.17 MAXRSS_KB=215260
+decode hdiffz OK
+--- goaware encode -s1 b -s2 b
+  [  0.03s] loaded v1-F2 (go1.27, 29995271 B) -> v4-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.11s] content map .noptrdata
+  [  0.13s] content map .data
+  [  0.17s] shift tables
+  datamap .rodata: blocks=49196 matched=49185 ambiguous=2 unmatched=9 shift-changes=11; rle 36 B
+  datamap .go.type: blocks=169423 matched=169123 ambiguous=135 unmatched=165 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39226 samples, 0 B raw:
+  [  0.17s] content maps + shift tables
+  [  0.25s] overrides: pointers=121546 fields=107687 targets=76711 mispredicted=34 block-fixes=3 overrides=6 (27 votes)
+  [  0.26s] layout: 32652 funcs, 0 rec shapes, raw 65668 B, zstd 259 B
+  [  0.46s] stage 1a (b): funcnametab+filetab 2144760 -> 2144792 B, delta 220 B
+  [  1.14s] stage 1b (b): cutab+pctab+go:func.* predicted 5387568 -> 5387568 B, delta 548 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78801 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  1.28s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=1483 in 464 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  [  5.84s] stage 2 (b): 1924 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.gtp: 3065 B = header 114 + layout 259 + stage1(b) 768 (1a 220 + 1b 548) + stage2(b) 1924  [encode 5.88s]
+TIME_WALL=5.89 TIME_USER=8.08 TIME_SYS=0.33 MAXRSS_KB=270520
+--- goaware decode (bsdiff)
+  [  0.04s] loaded old (go1.27) and patch: 3065 B, layout 65668 B
+  [  0.18s] stage 1 applied: 2144792 + 5387568 B of pclntab tables; skeleton 32652 funcs
+  [  0.34s] prediction: 29995271 B, hash verified
+  [  0.46s] stage 2 (b) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.out: 29995271 B [decode 0.46s]
+TIME_WALL=0.47 TIME_USER=1.70 TIME_SYS=0.22 MAXRSS_KB=198036
+decode bsdiff OK
+=== PAIR ../out/bin127/v3-F2 -> ../out/bin127/v4-F2  (Wed Aug 26 14:55:48 PDT 2026)
+--- baseline bsdiff
+TIME_WALL=4.99 TIME_USER=4.90 TIME_SYS=0.08 MAXRSS_KB=264856
+SIZE bsdiff=30196
+--- baseline bspatch
+TIME_WALL=0.09 TIME_USER=0.05 TIME_SYS=0.03 MAXRSS_KB=62900
+bspatch OK
+--- baseline hdiffz -m-6 -p-8
+old : "../out/bin127/v3-F2"
+new : "../out/bin127/v4-F2"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hdiff"
+create single compressed diffData!
+  compress plugin: "zstd"
+oldDataSize : 29995271
+newDataSize : 29995271
+  match covers by block ...
+    create blocks's match table ...
+    search covers by match table ...
+  load new data into memory from new stream ...
+    build cache for search invalid oldData ranges ...
+    search invalid oldData ranges for skip ...
+  load old data into memory from old stream ...
+  match covers by suffix string ...
+    create suffix string ...
+    search covers by suffix string ...
+  serialize single compressed diffData ...
+    (used one zstd dictSize: 131072  (input data: 124435))
+diffDataSize: 40523
+diff    time: 0.304 s
+  out diff file ok!
+TIME_WALL=0.30 TIME_USER=0.63 TIME_SYS=0.06 MAXRSS_KB=47948
+SIZE hdiffz=40523
+--- baseline hpatchz
+old : "../out/bin127/v3-F2"
+diff: "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hdiff"
+out : "/tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/base.hout"
+  input oldDataSize: 29995271
+       diffDataSize: 40523
+       diffDataType: SHDiff 
+  saved oldDataSize: 29995271
+  saved newDataSize: 29995271
+       compressType: "zstd" (need decompress 1)
+        stepMemSize: 123489
+
+  patch ok!
+
+hpatchz time: 0.018 s
+TIME_WALL=0.01 TIME_USER=0.00 TIME_SYS=0.01 MAXRSS_KB=10604
+hpatchz OK
+--- goaware encode -s1 h -s2 p
+  [  0.04s] loaded v3-F2 (go1.27, 29995271 B) -> v4-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.12s] content map .noptrdata
+  [  0.13s] content map .data
+  [  0.18s] shift tables
+  datamap .rodata: blocks=49198 matched=49193 ambiguous=0 unmatched=5 shift-changes=4; rle 20 B
+  datamap .go.type: blocks=169423 matched=169422 ambiguous=0 unmatched=1 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39228 samples, 0 B raw:
+  [  0.18s] content maps + shift tables
+  [  0.27s] overrides: pointers=121546 fields=107687 targets=76711 mispredicted=1 block-fixes=2 overrides=1 (10 votes)
+  [  0.27s] layout: 32652 funcs, 0 rec shapes, raw 65594 B, zstd 160 B
+  [  0.29s] stage 1a (h): funcnametab+filetab 2144792 -> 2144792 B, delta 39 B
+  [  0.40s] stage 1b (h): cutab+pctab+go:func.* predicted 5387568 -> 5387568 B, delta 39 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78804 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  0.54s] prediction: 29995271 B (new 29995271 B), insns=3735084 decode-failures=1867, differing bytes=163 in 17 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  stage-2 differing bytes by section: .note.go.buildid=79(5 runs) .note.gnu.build-id=20(1 runs) .text=8(6 runs) .rodata=24(4 runs) .go.fipsinfo=32(1 runs)
+  [  0.56s] stage 2 (positional): raw 215 B, zstd 228 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.gtp: 578 B = header 112 + layout 160 + stage1(h) 78 (1a 39 + 1b 39) + stage2(p) 228  [encode 0.59s]
+TIME_WALL=0.60 TIME_USER=2.89 TIME_SYS=0.27 MAXRSS_KB=279016
+--- goaware decode (positional)
+  [  0.03s] loaded old (go1.27) and patch: 578 B, layout 65594 B
+  [  0.14s] stage 1 applied: 2144792 + 5387568 B of pclntab tables; skeleton 32652 funcs
+  [  0.28s] prediction: 29995271 B, hash verified
+  [  0.32s] stage 2 (p) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/p.out: 29995271 B [decode 0.32s]
+TIME_WALL=0.32 TIME_USER=1.62 TIME_SYS=0.17 MAXRSS_KB=221660
+decode positional OK
+--- goaware encode -s1 h -s2 h
+  [  0.03s] loaded v3-F2 (go1.27, 29995271 B) -> v4-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.11s] content map .noptrdata
+  [  0.13s] content map .data
+  [  0.17s] shift tables
+  datamap .rodata: blocks=49198 matched=49193 ambiguous=0 unmatched=5 shift-changes=4; rle 20 B
+  datamap .go.type: blocks=169423 matched=169422 ambiguous=0 unmatched=1 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39228 samples, 0 B raw:
+  [  0.17s] content maps + shift tables
+  [  0.25s] overrides: pointers=121546 fields=107687 targets=76711 mispredicted=1 block-fixes=2 overrides=1 (10 votes)
+  [  0.25s] layout: 32652 funcs, 0 rec shapes, raw 65594 B, zstd 160 B
+  [  0.27s] stage 1a (h): funcnametab+filetab 2144792 -> 2144792 B, delta 39 B
+  [  0.38s] stage 1b (h): cutab+pctab+go:func.* predicted 5387568 -> 5387568 B, delta 39 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78804 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  0.50s] prediction: 29995271 B (new 29995271 B), insns=3735084 decode-failures=1867, differing bytes=163 in 17 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  [  0.64s] stage 2 (h): 263 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.gtp: 613 B = header 112 + layout 160 + stage1(h) 78 (1a 39 + 1b 39) + stage2(h) 263  [encode 0.67s]
+TIME_WALL=0.68 TIME_USER=3.00 TIME_SYS=0.23 MAXRSS_KB=257808
+--- goaware decode (hdiffz)
+  [  0.04s] loaded old (go1.27) and patch: 613 B, layout 65594 B
+  [  0.15s] stage 1 applied: 2144792 + 5387568 B of pclntab tables; skeleton 32652 funcs
+  [  0.30s] prediction: 29995271 B, hash verified
+  [  0.36s] stage 2 (h) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/h.out: 29995271 B [decode 0.36s]
+TIME_WALL=0.37 TIME_USER=1.71 TIME_SYS=0.21 MAXRSS_KB=209944
+decode hdiffz OK
+--- goaware encode -s1 b -s2 b
+  [  0.04s] loaded v3-F2 (go1.27, 29995271 B) -> v4-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  [  0.06s] content map .rodata
+  [  0.10s] content map .go.type
+  [  0.10s] content map .go.func
+  [  0.12s] content map .noptrdata
+  [  0.13s] content map .data
+  [  0.18s] shift tables
+  datamap .rodata: blocks=49198 matched=49193 ambiguous=0 unmatched=5 shift-changes=4; rle 20 B
+  datamap .go.type: blocks=169423 matched=169422 ambiguous=0 unmatched=1 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39228 samples, 0 B raw:
+  [  0.18s] content maps + shift tables
+  [  0.26s] overrides: pointers=121546 fields=107687 targets=76711 mispredicted=1 block-fixes=2 overrides=1 (10 votes)
+  [  0.26s] layout: 32652 funcs, 0 rec shapes, raw 65594 B, zstd 160 B
+  [  0.48s] stage 1a (b): funcnametab+filetab 2144792 -> 2144792 B, delta 146 B
+  [  1.23s] stage 1b (b): cutab+pctab+go:func.* predicted 5387568 -> 5387568 B, delta 145 B; pc tables=114251 (dedup 0) funcdata syms=27990 inline nameOff=78804 stackobj gcdata=5312 wrapinfo=167 cutab entries=17892 mapped=17892
+  [  1.40s] prediction: 29995271 B (new 29995271 B), insns=3735084 decode-failures=1867, differing bytes=163 in 17 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 (name 0, type 3059, text 0: unmatched-fn 0 outside 0) bad=0
+  [  6.42s] stage 2 (b): 459 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.gtp: 1024 B = header 114 + layout 160 + stage1(b) 291 (1a 146 + 1b 145) + stage2(b) 459  [encode 6.45s]
+TIME_WALL=6.46 TIME_USER=8.71 TIME_SYS=0.32 MAXRSS_KB=264612
+--- goaware decode (bsdiff)
+  [  0.04s] loaded old (go1.27) and patch: 1024 B, layout 65594 B
+  [  0.16s] stage 1 applied: 2144792 + 5387568 B of pclntab tables; skeleton 32652 funcs
+  [  0.31s] prediction: 29995271 B, hash verified
+  [  0.45s] stage 2 (b) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/run-syn127/b.out: 29995271 B [decode 0.45s]
+TIME_WALL=0.46 TIME_USER=1.69 TIME_SYS=0.23 MAXRSS_KB=263296
+decode bsdiff OK
+=== ALL DONE Wed Aug 26 14:56:03 PDT 2026

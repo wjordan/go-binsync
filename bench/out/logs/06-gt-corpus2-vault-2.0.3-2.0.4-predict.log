@@ -1,0 +1,22 @@
+== predict .text ../out/corpus/vault/2.0.3/vault.stripped -> ../out/corpus/vault/2.0.4/vault.stripped
+match: exact=500852 normalised=1 content=23 unmatched-new=619 unmatched-old=41
+layout table: raw 1058171 B, zstd 9028 B
+x86asm decode of old .text: 42172592 insns, 16000 failures, 5.990s => 26.5 MB/s single-thread
+datamap .rodata (block 16, masked pointers=2031941): blocks=5930044 matched=5134158 ambiguous=8844 unmatched=787042 shift-changes=6426
+datamap .noptrdata (block 16, masked pointers=10628): blocks=87365 matched=87354 ambiguous=5 unmatched=6 shift-changes=15
+datamap .data (block 16, masked pointers=99028): blocks=109687 matched=109330 ambiguous=354 unmatched=3 shift-changes=31
+datamap build time: 9.549s
+shift table .bss: 26 breakpoints from 97877 samples, 87 B raw: @1600:+16 @5896:+24 @15288:+32 @15472:+40 @20192:+56 @31104:+72
+shift table .noptrbss: 14 breakpoints from 507654 samples, 43 B raw: @160:-1 @161:+0 @169:+2 @238:+4 @1696:+0 @2840:+8
+shift tables raw total: 130 B
+BASELINE old.text -> new.text: bsdiff=0 hdiffz=3887504 zstd=0 rawdiff=150221698 runs=4410556 (bsdiff 0.0s hdiffz 31.5s zstd 0.0s)
+P0 layout-copy (no relocation)     bsdiff=0 hdiffz=3891639 zstd=0 rawdiff=14130675 runs=4708216  predict-time=0.50s
+P1 reloc, M=section-identity       bsdiff=0 hdiffz=2496519 zstd=0 rawdiff=5701160 runs=2399885  predict-time=1.82s
+    insns=42163547 decode-failures=16000 refs: text-self=3298435 text-matched=2679098 text-unmatched=29 rodata=1634082 noptrdata=4765 data=149139 bss/noptrbss=613336 other-section=48 outside-image=1131
+P2 reloc, M=content-map+bss-shift  bsdiff=0 hdiffz=318691 zstd=0 rawdiff=851140 runs=79698  predict-time=1.78s
+    insns=42163547 decode-failures=16000 refs: text-self=3298435 text-matched=2679098 text-unmatched=29 rodata=1634082 noptrdata=4765 data=149139 bss/noptrbss=613336 other-section=48 outside-image=1131
+residual breakdown (P2): total differing bytes in functions=851140: changed-function content=515052, new functions=249939, mispredicted refs: text-matched=147 text-unmatched=4 rodata=77925 noptrdata=2 data=8035 other-section=36, non-reference bytes in unchanged functions=0, outside functions=0
+functions with residual differences: 29135; top: github.com/hashicorp/vault/vault.init.func16=36352 github.com/hashicorp/vault/command.(*ServerCommand).Run=20875 github.com/hashicorp/vault/command/agentproxyshared/auth.(*AuthHandler).Run=11503 go.opentelemetry.io/otel/sdk/trace/internal/observ.init=8842 google.golang.org/grpc/internal/transport.(*http2Client).operateHeaders=7555 google.golang.org/grpc/internal/xds/xdsclient/xdsresource.validateClusterAndConstructClusterUpdate=7478 github.com/hashicorp/vault/builtin/logical/transit.(*backend).pathRewrapWrite=7364 crypto/tls.(*clientHelloMsg).marshalMsg=7055 github.com/hashicorp/vault/builtin/credential/approle.(*backend).pathLoginUpdate=6741 google.golang.org/grpc/internal/transport.NewHTTP2Client=6220 google.golang.org/grpc/internal/xds/xdsclient/xdsresource.routesProtoToSlice=6169 github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common.(*Client).sendWithSignatureV3=6102 github.com/hashicorp/vault/vault.(*ActivityLog).writeExport=5994 github.com/hashicorp/vault/vault.(*IdentityStore).invalidateLocalAliasesBucket=5467 github.com/hashicorp/vault/vault/seal.(*access).Decrypt=5195
+changed functions (content differs after masking PC-rel fields, or new): 1884, old 2082336 B -> new 2365408 B; delta of just those: bsdiff=0 hdiffz=301524 zstd=0 rawdiff=2265532 runs=68321; new bytes alone zstd=742986
+  changed: internal/runtime/gc/scan.init, expandAVX512_2, expandAVX512_3, expandAVX512_4, expandAVX512_6, expandAVX512_8, expandAVX512_10, expandAVX512_12, expandAVX512_14, expandAVX512_16, expandAVX512_18, expandAVX512_20, expandAVX512_22, expandAVX512_24, expandAVX512_26, expandAVX512_28, expandAVX512_30, expandAVX512_32, expandAVX512_36, expandAVX512_40
+invertibility: relocating NEW->OLD layout: 39623 matched functions differ from OLD, of which 1265 have changed content; unchanged-content mismatches: [internal/cpu.doinit internal/strconv.atof32 internal/runtime/cgroup.FindCPUCgroup internal/runtime/cgroup.FindCPUMountPoint internal/runtime/exithook.Run runtime.chansend runtime.chanrecv runtime.debugCallWrap runtime.debugCallWrap.func1 runtime.debugCallWrap1]; residual bsdiff=0 hdiffz=254848 zstd=0 rawdiff=608039 runs=91545

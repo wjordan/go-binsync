@@ -1,0 +1,16 @@
+go version go1.26.4 linux/amd64
+*** Zstandard CLI (64-bit) v1.5.7, by Yann Collet ***
+Xdelta version 3.2.0, Copyright (C) Joshua MacDonald
+HDiffPatch::hdiffz v5.1.3
+casync 2
+xz (XZ Utils) 5.8.1
+Version: 4.3-23
+Version: 3.0.11-dfsg-1.2
+Error: unknown flag: --version
+Python 3.13.7
+numpy 2.2.4
+GNU objdump (GNU Binutils for Ubuntu) 2.45
+HDiffPatch commit 3b9dca7 Fri Jul 31 13:53:30 2026 +0800
+desync binary date Aug 26 09:45
+	path	github.com/folbricht/desync/cmd/desync
+	mod	github.com/folbricht/desync	v1.1.0	h1:2cUpurc9/ZhBksMTZbmqYXD3TBujjCf4XFHsFSYkHd0=

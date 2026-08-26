@@ -1,0 +1,12 @@
+window=64MiB level=best               patch=   261272 B encode=  0.83s decode= 0.02s roundtrip=true 
+window=64MiB level=better             patch= 10052326 B encode=  0.37s decode= 0.05s roundtrip=true 
+window=64MiB level=default            patch= 10419150 B encode=  0.25s decode= 0.05s roundtrip=true 
+window=128MiB level=best               patch=   261272 B encode=  1.05s decode= 0.01s roundtrip=true 
+window=128MiB level=better             patch= 10052326 B encode=  0.86s decode= 0.06s roundtrip=true 
+window=128MiB level=default            patch= 10419150 B encode=  0.28s decode= 0.05s roundtrip=true 
+window=256MiB level=best               patch=   261272 B encode=  1.25s decode= 0.01s roundtrip=true 
+window=256MiB level=better             patch= 10052326 B encode=  0.77s decode= 0.06s roundtrip=true 
+window=256MiB level=default            patch= 10419150 B encode=  0.46s decode= 0.05s roundtrip=true 
+no-dict SpeedBestCompression: 9497944 B in 2.04s
+wall_8.68_s_maxrss_1298620_KB
+exit=0

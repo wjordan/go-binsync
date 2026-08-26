@@ -1,0 +1,47 @@
+[make 4:16:64] v1: 1762 chunks, 0.17s, 106100 KB
+[make 4:16:64] v2s: 1762 chunks, 0.04s, 63732 KB
+[make 4:16:64] v2l: 1751 chunks, 0.09s, 106116 KB
+[make 4:16:64] v2c: 1746 chunks, 0.12s, 107236 KB
+[make 4:16:64] v2p: 1767 chunks, 0.11s, 101356 KB
+[make 4:16:64] v3: 1756 chunks, 0.11s, 103292 KB
+[make 4:16:64] v4: 1756 chunks, 0.11s, 108352 KB
+[pair 4:16:64] v1->v2s: 1762 chunks, 2 new (0.1%), raw 16,793 B, compressed 8,399 B, extract(seed) 0.04s ok=True
+[pair 4:16:64] v1->v2l: 1751 chunks, 719 new (41.1%), raw 12,897,466 B, compressed 5,130,931 B, extract(seed) 0.04s ok=True
+[pair 4:16:64] v1->v2c: 1746 chunks, 1175 new (67.3%), raw 20,211,219 B, compressed 7,735,822 B, extract(seed) 0.05s ok=True
+[pair 4:16:64] v1->v2p: 1767 chunks, 399 new (22.6%), raw 7,497,598 B, compressed 3,085,247 B, extract(seed) 0.04s ok=True
+[pair 4:16:64] v1->v3: 1756 chunks, 1190 new (67.8%), raw 20,329,276 B, compressed 7,764,431 B, extract(seed) 0.05s ok=True
+[pair 4:16:64] v2c->v3: 1756 chunks, 587 new (33.4%), raw 10,298,646 B, compressed 4,029,615 B, extract(seed) 0.05s ok=True
+[pair 4:16:64] v3->v4: 1756 chunks, 813 new (46.3%), raw 14,387,518 B, compressed 5,562,334 B, extract(seed) 0.05s ok=True
+[pair 4:16:64] v1->v4: 1756 chunks, 1189 new (67.7%), raw 20,322,873 B, compressed 7,774,962 B, extract(seed) 0.05s ok=True
+[make 16:64:256] v1: 388 chunks, 0.13s, 123916 KB
+[make 16:64:256] v2s: 388 chunks, 0.04s, 65284 KB
+[make 16:64:256] v2l: 383 chunks, 0.1s, 128740 KB
+[make 16:64:256] v2c: 386 chunks, 0.13s, 135212 KB
+[make 16:64:256] v2p: 384 chunks, 0.1s, 117532 KB
+[make 16:64:256] v3: 391 chunks, 0.11s, 129760 KB
+[make 16:64:256] v4: 391 chunks, 0.1s, 119776 KB
+[pair 16:64:256] v1->v2s: 388 chunks, 2 new (0.5%), raw 157,138 B, compressed 73,920 B, extract(seed) 0.05s ok=True
+[pair 16:64:256] v1->v2l: 383 chunks, 182 new (47.5%), raw 13,592,077 B, compressed 4,916,997 B, extract(seed) 0.05s ok=True
+[pair 16:64:256] v1->v2c: 386 chunks, 273 new (70.7%), raw 21,434,779 B, compressed 7,725,492 B, extract(seed) 0.06s ok=True
+[pair 16:64:256] v1->v2p: 384 chunks, 148 new (38.5%), raw 12,251,731 B, compressed 4,832,916 B, extract(seed) 0.04s ok=True
+[pair 16:64:256] v1->v3: 391 chunks, 282 new (72.1%), raw 21,709,055 B, compressed 7,806,275 B, extract(seed) 0.04s ok=True
+[pair 16:64:256] v2c->v3: 391 chunks, 191 new (48.8%), raw 15,473,644 B, compressed 5,857,857 B, extract(seed) 0.04s ok=True
+[pair 16:64:256] v3->v4: 391 chunks, 206 new (52.7%), raw 15,476,296 B, compressed 5,415,736 B, extract(seed) 0.05s ok=True
+[pair 16:64:256] v1->v4: 391 chunks, 282 new (72.1%), raw 21,709,055 B, compressed 7,803,569 B, extract(seed) 0.05s ok=True
+[make 64:256:1024] v1: 107 chunks, 0.17s, 234440 KB
+[make 64:256:1024] v2s: 107 chunks, 0.07s, 154512 KB
+[make 64:256:1024] v2l: 107 chunks, 0.16s, 236620 KB
+[make 64:256:1024] v2c: 102 chunks, 0.17s, 216132 KB
+[make 64:256:1024] v2p: 107 chunks, 0.17s, 191728 KB
+[make 64:256:1024] v3: 99 chunks, 0.16s, 239412 KB
+[make 64:256:1024] v4: 102 chunks, 0.12s, 201684 KB
+[pair 64:256:1024] v1->v2s: 107 chunks, 2 new (1.9%), raw 403,713 B, compressed 194,520 B, extract(seed) 0.06s ok=True
+[pair 64:256:1024] v1->v2l: 107 chunks, 49 new (45.8%), raw 14,947,843 B, compressed 5,205,420 B, extract(seed) 0.06s ok=True
+[pair 64:256:1024] v1->v2c: 102 chunks, 78 new (76.5%), raw 22,556,400 B, compressed 7,863,170 B, extract(seed) 0.06s ok=True
+[pair 64:256:1024] v1->v2p: 107 chunks, 59 new (55.1%), raw 17,967,339 B, compressed 6,289,284 B, extract(seed) 0.04s ok=True
+[pair 64:256:1024] v1->v3: 99 chunks, 77 new (77.8%), raw 23,909,761 B, compressed 8,179,261 B, extract(seed) 0.04s ok=True
+[pair 64:256:1024] v2c->v3: 99 chunks, 65 new (65.7%), raw 20,622,051 B, compressed 7,109,631 B, extract(seed) 0.05s ok=True
+[pair 64:256:1024] v3->v4: 102 chunks, 59 new (57.8%), raw 17,501,057 B, compressed 5,893,849 B, extract(seed) 0.06s ok=True
+[pair 64:256:1024] v1->v4: 102 chunks, 80 new (78.4%), raw 23,909,761 B, compressed 8,210,792 B, extract(seed) 0.05s ok=True
+[casync default] v1: 388 chunks 10,852,607 B store; v2c adds 273 chunks, 7,603,934 B compressed; make 0.19s/0.16s
+exit=0

@@ -1,0 +1,9 @@
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/verify/v1-F2-v2c-F2.gtp: 2207 B = header 113 + layout 213 + stage1(h) 323 (1a 39 + 1b 284) + stage2(p) 1558  [encode 0.62s]
+ENCODE v1-F2->v2c-F2 0.70 s RSS 286456 KB
+CMP_OK v1-F2->v2c-F2
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/verify/v1-F2-v4-F2.gtp: 2733 B = header 113 + layout 259 + stage1(h) 441 (1a 67 + 1b 374) + stage2(p) 1920  [encode 0.58s]
+ENCODE v1-F2->v4-F2 0.60 s RSS 282312 KB
+CMP_OK v1-F2->v4-F2
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/verify/v3-F2-v4-F2.gtp: 578 B = header 112 + layout 160 + stage1(h) 78 (1a 39 + 1b 39) + stage2(p) 228  [encode 0.58s]
+ENCODE v3-F2->v4-F2 0.60 s RSS 272824 KB
+CMP_OK v3-F2->v4-F2

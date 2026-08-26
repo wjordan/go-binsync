@@ -1,0 +1,16 @@
+== sectdiff ../out/corpus/terraform/1.15.8/terraform -> ../out/corpus/terraform/1.15.9/terraform
+section                  size    rawdiff       runs     bsdiff     hdiffz       zstd
+.note.go.buildid          100         80          4        244        114        105
+.note.gnu.build-id         36         20          1        191         50         40
+.text                56298929   53169950    1742200    2092232    1999646    5320783
+.rodata              22992953   16061735    2404130    1407168    1231306    2349297
+.typelink              170884     114811      42697      96976      93750      93297
+.itablink               84560      30867      10532       8020      18700      13238
+.gosymtab                   0          0          0          0          0          0
+.gopclntab           36155296   31336085    3259171    1768362    1574266    3131107
+.go.buildinfo           25248       1356         91       1748       1543       1207
+.go.fipsinfo              120         55         10        259        108         97
+.noptrdata            1487521    1614203      47732       5636       5900       7443
+.data                  616202     252172      68894      45623      31203      43819
+SUM(sections)                  102581334    7575462    5426459    4956586   10960433
+WHOLE FILE          117838008  103851887    7072890    5427575    4918933   11320635  (bsdiff 112.9s hdiffz 32.4s zstd 52.2s)

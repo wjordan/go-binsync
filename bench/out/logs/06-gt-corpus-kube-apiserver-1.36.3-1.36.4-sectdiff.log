@@ -1,0 +1,16 @@
+== sectdiff ../out/corpus/kube-apiserver/1.36.3/kube-apiserver -> ../out/corpus/kube-apiserver/1.36.4/kube-apiserver
+section                  size    rawdiff       runs     bsdiff     hdiffz       zstd
+.note.go.buildid          100         78          6        239        114        105
+.note.gnu.build-id         36         20          1        193         50         40
+.text                42306417   34764961    1096485    1016241    1075802    3313176
+.rodata              12657529    8825739    1131460     340444     428194    1175212
+.gopclntab           32425872   25552079    3459181     584968     763836    2097940
+.typelink              119464      75886      29898      66338      65942      66294
+.itablink               42816      13586       5350      11078      12458       8536
+.go.buildinfo            5872         58         15        231        135        101
+.go.fipsinfo              120         54         10        256        101         95
+.go.module                592        105         50        264        183        171
+.noptrdata             579361     258660      25205       3759       4077       7171
+.data                  287922      44776      18025       8394      13709      26342
+SUM(sections)                   69536002    5765686    2032405    2364601    6695183
+WHOLE FILE           88436898   71509396    5740523    2060250    2366695    7078385  (bsdiff 64.0s hdiffz 25.3s zstd 41.9s)

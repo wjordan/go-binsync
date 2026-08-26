@@ -1,0 +1,129 @@
+## v3-F2 -> v4-F2
+old=29,561,097 B new=29,561,097 B; section layout identical: True
+comparison mode: raw file offsets
+
+total differing bytes: 430,675 (1.457% of old)
+differing runs (byte-exact): 52,993; merged with gap<=8: 31,856; gap<=64: 17,479
+differing run length: median 1 B, mean 8.1 B, max 906 B
+largest contiguous unchanged region: 8,758,187 B
+  fraction of file in unchanged runs >=    4 KiB:  64.87%  (19,176,247 B)
+  fraction of file in unchanged runs >=   16 KiB:  54.49%  (16,109,060 B)
+  fraction of file in unchanged runs >=   64 KiB:  48.47%  (14,328,564 B)
+  fraction of file in unchanged runs >=  256 KiB:  48.25%  (14,262,971 B)
+  fraction of file in unchanged runs >= 1024 KiB:  40.37%  (11,932,598 B)
+
+| section | size | differing bytes | % differing | runs (byte-exact) | runs (gap<=8) |
+|---|---:|---:|---:|---:|---:|
+| .note.go.buildid | 100 | 79 | 79.000% | 5 | 1 |
+| .note.gnu.build-id | 36 | 20 | 55.556% | 1 | 1 |
+| .text | 14,782,161 | 25,288 | 0.171% | 24,686 | 24,676 |
+| .rodata | 3,527,449 | 402,784 | 11.419% | 25,870 | 4,747 |
+| .gopclntab | 10,542,147 | 689 | 0.007% | 674 | 674 |
+| .rela.plt | 1,056 | 0 | 0.000% | 0 | 0 |
+| .dynstr | 714 | 0 | 0.000% | 0 | 0 |
+| .dynsym | 1,176 | 0 | 0.000% | 0 | 0 |
+| .typelink | 38,272 | 0 | 0.000% | 0 | 0 |
+| .itablink | 16,600 | 0 | 0.000% | 0 | 0 |
+| .go.buildinfo | 4,128 | 0 | 0.000% | 0 | 0 |
+| .go.fipsinfo | 120 | 32 | 26.667% | 1 | 1 |
+| .go.module | 592 | 0 | 0.000% | 0 | 0 |
+| .noptrdata | 454,273 | 0 | 0.000% | 0 | 0 |
+| .data | 178,258 | 1,783 | 1.000% | 1,756 | 1,756 |
+| .shstrtab | 265 | 0 | 0.000% | 0 | 0 |
+
+.text differing runs categorised by instruction at run start (24,686 runs):
+    24,686  same-insn-displacement/target-changed
+
+20 sampled .text differing runs (evenly spaced):
+  0x401f2a len=1   old=5b               new=60               [same-insn-displacement/target-changed]
+      old: lea 0x10b735b(%rip),%rax
+      new: lea 0x10b7360(%rip),%rax
+  0x473df2 len=1   old=0d               new=12               [same-insn-displacement/target-changed]
+      old: lea 0x106180d(%rip),%rax
+      new: lea 0x1061812(%rip),%rax
+  0x589b90 len=1   old=ba               new=bf               [same-insn-displacement/target-changed]
+      old: lea 0xf635ba(%rip),%rcx
+      new: lea 0xf635bf(%rip),%rcx
+  0x668125 len=1   old=34               new=39               [same-insn-displacement/target-changed]
+      old: lea 0xe6b334(%rip),%rcx
+      new: lea 0xe6b339(%rip),%rcx
+  0x72a343 len=1   old=9c               new=a1               [same-insn-displacement/target-changed]
+      old: lea 0xdaa59c(%rip),%rcx
+      new: lea 0xdaa5a1(%rip),%rcx
+  0x822bd9 len=1   old=48               new=4d               [same-insn-displacement/target-changed]
+      old: lea 0xccb048(%rip),%rsi
+      new: lea 0xccb04d(%rip),%rsi
+  0x916d08 len=1   old=88               new=8d               [same-insn-displacement/target-changed]
+      old: lea 0xba7488(%rip),%rax
+      new: lea 0xba748d(%rip),%rax
+  0x99e759 len=1   old=0e               new=13               [same-insn-displacement/target-changed]
+      old: lea 0xb2d70e(%rip),%rax
+      new: lea 0xb2d713(%rip),%rax
+  0x9f6901 len=1   old=23               new=28               [same-insn-displacement/target-changed]
+      old: lea 0xad5623(%rip),%rax
+      new: lea 0xad5628(%rip),%rax
+  0xa571c2 len=1   old=31               new=36               [same-insn-displacement/target-changed]
+      old: lea 0xa79c31(%rip),%rcx
+      new: lea 0xa79c36(%rip),%rcx
+  0xabc849 len=1   old=da               new=df               [same-insn-displacement/target-changed]
+      old: lea 0xa192da(%rip),%rax
+      new: lea 0xa192df(%rip),%rax
+  0xb22d98 len=1   old=b9               new=be               [same-insn-displacement/target-changed]
+      old: lea 0x9a30b9(%rip),%rdi
+      new: lea 0x9a30be(%rip),%rdi
+  0xb9aabe len=1   old=42               new=47               [same-insn-displacement/target-changed]
+      old: lea 0x943942(%rip),%rax
+      new: lea 0x943947(%rip),%rax
+  0xbfa2bc len=1   old=44               new=49               [same-insn-displacement/target-changed]
+      old: lea 0x8e4144(%rip),%rax
+      new: lea 0x8e4149(%rip),%rax
+  0xc8865a len=1   old=52               new=57               [same-insn-displacement/target-changed]
+      old: lea 0x83c452(%rip),%rax
+      new: lea 0x83c457(%rip),%rax
+  0xced2b5 len=1   old=ba               new=bf               [same-insn-displacement/target-changed]
+      old: lea 0x7e7cba(%rip),%rax
+      new: lea 0x7e7cbf(%rip),%rax
+  0xd78380 len=1   old=a6               new=ab               [same-insn-displacement/target-changed]
+      old: lea 0x7507a6(%rip),%rbx
+      new: lea 0x7507ab(%rip),%rbx
+  0xe6c509 len=1   old=6e               new=73               [same-insn-displacement/target-changed]
+      old: lea 0x65a66e(%rip),%rbx
+      new: lea 0x65a673(%rip),%rbx
+  0x1106e4d len=1   old=e9               new=ee               [same-insn-displacement/target-changed]
+      old: lea 0x3c6be9(%rip),%rax
+      new: lea 0x3c6bee(%rip),%rax
+  0x1219857 len=1   old=8a               new=8f               [same-insn-displacement/target-changed]
+      old: lea 0x2b2d8a(%rip),%r8
+      new: lea 0x2b2d8f(%rip),%r8
+
+objdump --start-address cross-check for 3 samples:
+  v3-F2:
+    401f22:	e8 79 59 05 00       	call   4578a0 <_cgo_topofstack@@Base-0x3f700>
+    401f27:	48 8d 05 5b 73 0b 01 	lea    0x10b735b(%rip),%rax        # 14b9289 <sysconf@plt+0x29f0e9>
+    401f2e:	bb 05 00 00 00       	mov    $0x5,%ebx
+    401f33:	e8 08 64 05 00       	call   458340 <_cgo_topofstack@@Base-0x3ec60>
+  v4-F2:
+    401f22:	e8 79 59 05 00       	call   4578a0 <_cgo_topofstack@@Base-0x3f700>
+    401f27:	48 8d 05 60 73 0b 01 	lea    0x10b7360(%rip),%rax        # 14b928e <sysconf@plt+0x29f0ee>
+    401f2e:	bb 05 00 00 00       	mov    $0x5,%ebx
+    401f33:	e8 08 64 05 00       	call   458340 <_cgo_topofstack@@Base-0x3ec60>
+  v3-F2:
+    916d03:	73 31                	jae    916d36 <crosscall2@@Base+0x3638f6>
+    916d05:	48 8d 05 88 74 ba 00 	lea    0xba7488(%rip),%rax        # 14be194 <sysconf@plt+0x2a3ff4>
+    916d0c:	48 89 fe             	mov    %rdi,%rsi
+    916d0f:	48 89 cf             	mov    %rcx,%rdi
+  v4-F2:
+    916d03:	73 31                	jae    916d36 <crosscall2@@Base+0x3638f6>
+    916d05:	48 8d 05 8d 74 ba 00 	lea    0xba748d(%rip),%rax        # 14be199 <sysconf@plt+0x2a3ff9>
+    916d0c:	48 89 fe             	mov    %rdi,%rsi
+    916d0f:	48 89 cf             	mov    %rcx,%rdi
+  v3-F2:
+    b9aab3:	48 89 94 24 b8 02 00 	mov    %rdx,0x2b8(%rsp)
+    b9aaba:	00
+    b9aabb:	48 8d 05 42 39 94 00 	lea    0x943942(%rip),%rax        # 14de404 <sysconf@plt+0x2c4264>
+    b9aac2:	bb 22 00 00 00       	mov    $0x22,%ebx
+  v4-F2:
+    b9aab3:	48 89 94 24 b8 02 00 	mov    %rdx,0x2b8(%rsp)
+    b9aaba:	00
+    b9aabb:	48 8d 05 47 39 94 00 	lea    0x943947(%rip),%rax        # 14de409 <sysconf@plt+0x2c4269>
+    b9aac2:	bb 22 00 00 00       	mov    $0x22,%ebx

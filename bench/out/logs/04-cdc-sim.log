@@ -1,0 +1,71 @@
+[chunk] v2p fastcdc-4K: 6244 chunks, mean 4734 B, min 1033, max 16384
+[chunk] v2p fastcdc-16K: 1547 chunks, mean 19109 B, min 4121, max 65536
+[chunk] v2p fastcdc-64K: 391 chunks, mean 75604 B, min 17181, max 157174
+[chunk] v2p fastcdc-256K: 100 chunks, mean 295611 B, min 96379, max 559523
+[chunk] v2p fixed-64K: 452 chunks, mean 65401 B, min 4361, max 65536
+[chunk] v4 fastcdc-4K: 6256 chunks, mean 4725 B, min 1033, max 16384
+[chunk] v4 fastcdc-16K: 1547 chunks, mean 19109 B, min 4121, max 65536
+[chunk] v4 fastcdc-64K: 390 chunks, mean 75798 B, min 17181, max 163551
+[chunk] v4 fastcdc-256K: 99 chunks, mean 298597 B, min 107114, max 526076
+[chunk] v4 fixed-64K: 452 chunks, mean 65401 B, min 4361, max 65536
+[chunk] v2c fastcdc-4K: 6253 chunks, mean 4728 B, min 1030, max 16384
+[chunk] v2c fastcdc-16K: 1544 chunks, mean 19146 B, min 4104, max 65536
+[chunk] v2c fastcdc-64K: 390 chunks, mean 75798 B, min 17181, max 150107
+[chunk] v2c fastcdc-256K: 99 chunks, mean 298597 B, min 104669, max 501694
+[chunk] v2c fixed-64K: 452 chunks, mean 65401 B, min 4361, max 65536
+[chunk] v2s fastcdc-4K: 6248 chunks, mean 4731 B, min 1033, max 16384
+[chunk] v2s fastcdc-16K: 1556 chunks, mean 18998 B, min 4121, max 65536
+[chunk] v2s fastcdc-64K: 391 chunks, mean 75604 B, min 17181, max 157174
+[chunk] v2s fastcdc-256K: 99 chunks, mean 298597 B, min 96379, max 559523
+[chunk] v2s fixed-64K: 452 chunks, mean 65401 B, min 4361, max 65536
+[chunk] v1 fastcdc-4K: 6248 chunks, mean 4731 B, min 1033, max 16384
+[chunk] v1 fastcdc-16K: 1556 chunks, mean 18998 B, min 4121, max 65536
+[chunk] v1 fastcdc-64K: 391 chunks, mean 75604 B, min 17181, max 157174
+[chunk] v1 fastcdc-256K: 99 chunks, mean 298597 B, min 96379, max 559523
+[chunk] v1 fixed-64K: 452 chunks, mean 65401 B, min 4361, max 65536
+[chunk] v2l fastcdc-4K: 6236 chunks, mean 4740 B, min 1033, max 16384
+[chunk] v2l fastcdc-16K: 1551 chunks, mean 19059 B, min 4121, max 65536
+[chunk] v2l fastcdc-64K: 389 chunks, mean 75993 B, min 17181, max 157174
+[chunk] v2l fastcdc-256K: 100 chunks, mean 295611 B, min 104669, max 559523
+[chunk] v2l fixed-64K: 452 chunks, mean 65401 B, min 4361, max 65536
+[chunk] v3 fastcdc-4K: 6254 chunks, mean 4727 B, min 1030, max 16384
+[chunk] v3 fastcdc-16K: 1538 chunks, mean 19220 B, min 4121, max 65536
+[chunk] v3 fastcdc-64K: 390 chunks, mean 75798 B, min 17181, max 150107
+[chunk] v3 fastcdc-256K: 99 chunks, mean 298597 B, min 104669, max 501694
+[chunk] v3 fixed-64K: 452 chunks, mean 65401 B, min 4361, max 65536
+[pair] fastcdc-4K v1->v2s: 6248 chunks, 2 new (0.0%), raw 12,375, zstd each 5,350, concat 5,534, each+dict 4984
+[pair] fastcdc-4K v1->v2l: 6236 chunks, 2327 new (37.3%), raw 11,180,048, zstd each 4,900,702, concat 2,873,743, each+dict 3728036
+[pair] fastcdc-4K v1->v2c: 6253 chunks, 3862 new (61.8%), raw 18,365,507, zstd each 7,299,920, concat 4,694,318, each+dict 5905647
+[pair] fastcdc-4K v1->v2p: 6244 chunks, 824 new (13.2%), raw 4,036,792, zstd each 1,587,391, concat 1,170,698, each+dict 1351968
+[pair] fastcdc-4K v1->v3: 6254 chunks, 3876 new (62.0%), raw 18,435,117, zstd each 7,316,050, concat 4,709,152, each+dict 5921943
+[pair] fastcdc-4K v3->v4: 6256 chunks, 2632 new (42.1%), raw 12,584,239, zstd each 5,329,726, concat 3,172,406, each+dict 4515339
+[pair] fastcdc-4K v1->v4: 6256 chunks, 3878 new (62.0%), raw 18,449,653, zstd each 7,320,052, concat 4,710,989, each+dict 5924817
+[pair] fastcdc-16K v1->v2s: 1556 chunks, 2 new (0.1%), raw 42,826, zstd each 17,770, concat 18,459, each+dict 15918
+[pair] fastcdc-16K v1->v2l: 1551 chunks, 686 new (44.2%), raw 13,132,372, zstd each 4,605,432, concat 3,404,887, each+dict 3666874
+[pair] fastcdc-16K v1->v2c: 1544 chunks, 1064 new (68.9%), raw 20,452,760, zstd each 6,854,735, concat 5,333,783, each+dict 5709525
+[pair] fastcdc-16K v1->v2p: 1547 chunks, 382 new (24.7%), raw 7,471,973, zstd each 2,692,011, concat 2,182,863, each+dict 2276929
+[pair] fastcdc-16K v1->v3: 1538 chunks, 1062 new (69.1%), raw 20,522,464, zstd each 6,867,038, concat 5,348,463, each+dict 5722757
+[pair] fastcdc-16K v3->v4: 1547 chunks, 763 new (49.3%), raw 14,546,784, zstd each 4,952,471, concat 3,703,973, each+dict 4202751
+[pair] fastcdc-16K v1->v4: 1547 chunks, 1071 new (69.2%), raw 20,517,202, zstd each 6,868,813, concat 5,348,040, each+dict 5723978
+[pair] fastcdc-64K v1->v2s: 391 chunks, 2 new (0.5%), raw 144,051, zstd each 64,491, concat 64,693, each+dict 59941
+[pair] fastcdc-64K v1->v2l: 389 chunks, 182 new (46.8%), raw 13,857,948, zstd each 4,346,160, concat 3,631,901, each+dict 3853791
+[pair] fastcdc-64K v1->v2c: 390 chunks, 288 new (73.8%), raw 21,650,096, zstd each 6,661,214, concat 5,736,676, each+dict 6025490
+[pair] fastcdc-64K v1->v2p: 391 chunks, 168 new (43.0%), raw 12,690,198, zstd each 4,255,104, concat 3,679,974, each+dict 3839112
+[pair] fastcdc-64K v1->v3: 390 chunks, 292 new (74.9%), raw 22,065,395, zstd each 6,755,099, concat 5,823,958, each+dict 6115602
+[pair] fastcdc-64K v3->v4: 390 chunks, 207 new (53.1%), raw 15,689,977, zstd each 4,804,668, concat 4,046,043, each+dict 4682336
+[pair] fastcdc-64K v1->v4: 390 chunks, 291 new (74.6%), raw 21,963,416, zstd each 6,721,874, concat 5,793,962, each+dict 6083050
+[pair] fastcdc-256K v1->v2s: 99 chunks, 2 new (2.0%), raw 648,284, zstd each 251,310, concat 251,522, each+dict 249345
+[pair] fastcdc-256K v1->v2l: 100 chunks, 51 new (51.0%), raw 15,564,081, zstd each 4,577,848, concat 4,139,479, each+dict 4454774
+[pair] fastcdc-256K v1->v2c: 99 chunks, 77 new (77.8%), raw 23,092,819, zstd each 6,811,629, concat 6,258,265, each+dict 6662248
+[pair] fastcdc-256K v1->v2p: 100 chunks, 54 new (54.0%), raw 16,518,944, zstd each 5,213,113, concat 4,761,116, each+dict 5083341
+[pair] fastcdc-256K v1->v3: 99 chunks, 79 new (79.8%), raw 23,703,496, zstd each 6,951,576, concat 6,391,364, each+dict 6800436
+[pair] fastcdc-256K v3->v4: 99 chunks, 60 new (60.6%), raw 18,020,463, zstd each 5,164,110, concat 4,678,419, each+dict 5023341
+[pair] fastcdc-256K v1->v4: 99 chunks, 80 new (80.8%), raw 24,092,399, zstd each 7,020,509, concat 6,440,137, each+dict 6869172
+[pair] fixed-64K v1->v2s: 452 chunks, 2 new (0.4%), raw 131,072, zstd each 59,634, concat 58,279, each+dict 56897
+[pair] fixed-64K v1->v2l: 452 chunks, 214 new (47.3%), raw 14,024,704, zstd each 4,443,542, concat 3,654,078, each+dict 4120769
+[pair] fixed-64K v1->v2c: 452 chunks, 356 new (78.8%), raw 23,330,816, zstd each 7,121,563, concat 6,082,801, each+dict 6705104
+[pair] fixed-64K v1->v2p: 452 chunks, 297 new (65.7%), raw 19,464,192, zstd each 7,089,523, concat 6,348,635, each+dict 6777611
+[pair] fixed-64K v1->v3: 452 chunks, 409 new (90.5%), raw 26,804,224, zstd each 9,092,427, concat 7,972,801, each+dict 8633349
+[pair] fixed-64K v3->v4: 452 chunks, 240 new (53.1%), raw 15,728,640, zstd each 4,838,330, concat 4,005,273, each+dict 4435271
+[pair] fixed-64K v1->v4: 452 chunks, 409 new (90.5%), raw 26,804,224, zstd each 9,092,571, concat 7,972,789, each+dict 8633218
+exit=0

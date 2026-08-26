@@ -1,0 +1,11 @@
+== whole ../out/corpus/kube-apiserver/1.36.3/kube-apiserver -> ../out/corpus/kube-apiserver/1.36.4/kube-apiserver (layout go1.26)
+match: exact=105482 normalised=0 content=24 unmatched-new=49 unmatched-old=1; layout table zstd=1106 B
+shift table .bss: 0 breakpoints from 67340 samples, 0 B raw:
+shift table .noptrbss: 0 breakpoints from 120094 samples, 0 B raw:
+bss shift tables zstd=0 B (added to the layout cost)
+text relocation: insns=10585312 decode-failures=1788
+BASELINE whole file:        bsdiff=2060250 hdiffz=2366695 zstd=0 rawdiff=71509396 runs=5740523
+stage 1 (pclntab blobs 22152664 B): bsdiff=66126 hdiffz=68633 zstd=0 rawdiff=17842951 runs=1643148
+stage 2 (predicted file):   bsdiff=291375 hdiffz=340850 zstd=0 rawdiff=7709875 runs=2594655
+TOTAL Go-aware = layout 1106 + stage1 + stage2: bsdiff 358607 (5.7x smaller) hdiffz 410589 (5.8x) zstd 1106 (0.0x)
+stage-2 differing bytes by section: .note.go.buildid=78(6 runs) .note.gnu.build-id=20(1 runs) .text=54851(9731 runs) .rodata=873817(464969 runs) .gopclntab=6675145(2085322 runs) .typelink=66546(26836 runs) .itablink=6687(3120 runs) .go.buildinfo=58(15 runs) .go.fipsinfo=54(10 runs) .go.module=105(50 runs) .noptrdata=28721(2768 runs) .data=1442(1175 runs)

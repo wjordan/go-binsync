@@ -1,0 +1,11 @@
+== whole ../out/corpus/prometheus/3.13.1/prometheus.stripped -> ../out/corpus/prometheus/3.13.2/prometheus.stripped (layout go1.26)
+match: exact=113762 normalised=0 content=5 unmatched-new=50 unmatched-old=13; layout table zstd=1097 B
+shift table .bss: 3 breakpoints from 55715 samples, 11 B raw: @18040:+8 @18944:+16 @47328:+0
+shift table .noptrbss: 6 breakpoints from 109125 samples, 16 B raw: @116:+2 @180:+4 @760:+0 @1640:+8 @1776:+16 @5824:+0
+bss shift tables zstd=40 B (added to the layout cost)
+text relocation: insns=10824477 decode-failures=1796
+BASELINE whole file:        bsdiff=2714204 hdiffz=2732978 zstd=0 rawdiff=83238684 runs=6148822
+stage 1 (pclntab blobs 23552368 B): bsdiff=89649 hdiffz=97402 zstd=0 rawdiff=19611611 runs=1602692
+stage 2 (predicted file):   bsdiff=303178 hdiffz=388314 zstd=0 rawdiff=9023835 runs=2486648
+TOTAL Go-aware = layout 1137 + stage1 + stage2: bsdiff 393964 (6.9x smaller) hdiffz 486853 (5.6x) zstd 1137 (0.0x)
+stage-2 differing bytes by section: .note.go.buildid=79(5 runs) .note.gnu.build-id=20(1 runs) .text=74305(7508 runs) .rodata=945175(438366 runs) .gopclntab=7914534(2001968 runs) .typelink=77076(32378 runs) .itablink=8505(4865 runs) .go.buildinfo=330(39 runs) .go.fipsinfo=48(10 runs) .go.module=96(48 runs) .noptrdata=662(323 runs) .data=1032(842 runs)

@@ -1,0 +1,16 @@
+== whole ../out/corpus/vault/2.0.3/vault.stripped -> ../out/corpus/vault/2.0.4/vault.stripped (layout go1.26)
+match: exact=500852 normalised=1 content=23 unmatched-new=619 unmatched-old=41; layout table zstd=9028 B
+shift table .bss: 26 breakpoints from 97877 samples, 87 B raw: @1600:+16 @5896:+24 @15288:+32 @15472:+40 @20192:+56 @31104:+72
+shift table .noptrbss: 14 breakpoints from 507654 samples, 43 B raw: @160:-1 @161:+0 @169:+2 @238:+4 @1696:+0 @2840:+8
+bss shift tables zstd=136 B (added to the layout cost)
+panic: write /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/gt/wh-vault.stripped-vault.stripped-stage2.new: no space left on device
+
+goroutine 82 [running]:
+main.must(...)
+	/home/will/Code/binsync/bench/gotransform/measure.go:165
+main.measure({0x309d7ed78000, 0x27}, {0x309e9dfa6000, 0x17787268, 0x17787268}, {0x309d64780000, 0x17787268, 0x17787269}, {0x7fff0e7cc7ae, 0x1})
+	/home/will/Code/binsync/bench/gotransform/measure.go:85 +0x625
+main.cmdWhole.func2()
+	/home/will/Code/binsync/bench/gotransform/whole.go:166 +0x114
+created by main.cmdWhole in goroutine 1
+	/home/will/Code/binsync/bench/gotransform/whole.go:166 +0x1d7b

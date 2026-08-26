@@ -1,0 +1,8 @@
+Cloning into 'zlib'...
+cc -O3 -DNDEBUG -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -D_IS_NEED_ALL_CompressPlugin=0 -D_IS_NEED_DEFAULT_CompressPlugin=0 -D_IS_NEED_ALL_ChecksumPlugin=0 -D_IS_NEED_DEFAULT_ChecksumPlugin=0  -D_IS_NEED_BSDIFF=1 -D_IS_NEED_VCDIFF=1 -D_CompressPlugin_bz2 -I../bzip2 -D_CompressPlugin_zlib -I../zlib -D_CompressPlugin_ldef -I../libdeflate -D_CompressPlugin_ldef_is_use_zlib=1 -D_IS_NEED_DIR_DIFF_PATCH=1 -D_ChecksumPlugin_fadler64 -D_ChecksumPlugin_crc32 -D_ChecksumPlugin_md5 -I../libmd5 -D_ChecksumPlugin_xxh3 -D_ChecksumPlugin_xxh128 -I../xxHash -D_CompressPlugin_lzma -D_CompressPlugin_lzma2 -D_CompressPlugin_7zXZ -I../lzma/C -D_CompressPlugin_zstd -DZSTD_HAVE_WEAK_SYMBOLS=0 -DZSTD_TRACE=0 -DZSTD_DISABLE_ASM=1 -DZSTDLIB_HIDDEN= -DZSTDLIB_VISIBLE= -DZDICTLIB_VISIBLE= -DZSTDERRORLIB_VISIBLE= -DZSTD_LIB_DEPRECATED=0 -DZSTD_STRIP_ERROR_STRINGS=1 -I../zstd/lib -I../zstd/lib/common -I../zstd/lib/compress -I../zstd/lib/decompress -DZSTD_MULTITHREAD=1 -D_IS_USED_MULTITHREAD=1    -c -o ../zlib/deflate.o ../zlib/deflate.c
+make: *** No rule to make target '../libdeflate/lib/deflate_compress.o', needed by 'libhdiffpatch.a'.  Stop.
+make: *** Waiting for unfinished jobs....
+ls: cannot access 'hdiffz': No such file or directory
+ls: cannot access 'hpatchz': No such file or directory
+bash: line 1: ./hdiffz: No such file or directory
+exit=127

@@ -1,0 +1,24 @@
+== pclnpredict ../out/bin/v1-F2 -> ../out/bin/v2c-F2
+findfunctab regeneration for v1-F2: 72178 bytes, identical=true
+findfunctab regeneration for v2c-F2: 72179 bytes, identical=true
+self-prediction self: len 10541954 vs 10541954, differing bytes=0 runs=0
+self-prediction self-rebuild: len 10541954 vs 10541954, differing bytes=1950837 runs=103517
+self-prediction self-oracle: len 10541954 vs 10541954, differing bytes=1950837 runs=103517
+region              newsize    rawdiff       runs     bsdiff     hdiffz       zstd
+funcnametab         2084432          0          0          0          0          0
+cutab                 76096          0          0          0          0          0
+filetab               84536          0          0          0          0          0
+pctab               3396088      96739      13160        336          0          0
+functab+_func       3111800      70121      63517      12014          0          0
+go:func.*           1716832      48778      17232       1437          0          0
+findfunctab           72179        744        298        982          0          0
+BASELINE old.gopclntab -> new.gopclntab: bsdiff=14259 hdiffz=0 zstd=0 rawdiff=3068037 runs=858149
+V1 functab/entryOff relayout only (names appended, old pctab/funcdata offsets):
+    bsdiff=13271 hdiffz=0 zstd=0 rawdiff=3068100 runs=858153 (pred len 10541955 vs new 10542035)
+V2 V1 + funcnametab rebuilt in layout order:
+    bsdiff=30600 hdiffz=0 zstd=0 rawdiff=4958232 runs=931302 (pred len 10541955 vs new 10542035)
+V3 V2 + NEW pctab/go:func.* given, old offsets re-based via content map:
+    bsdiff=19090 hdiffz=0 zstd=0 rawdiff=4820437 runs=930998 (pred len 10542067 vs new 10542035)
+V3 total = V3 residual + pctab delta + go:func.* delta: bsdiff 19090+336+1437=20863 hdiffz 0+0+0=0 zstd 0+0+0=0
+V3 residual by region (differing bytes at same offset, new layout): funcnametab=1890144 cutab=0 filetab=0 pctab=0 functab+_func=2276514 go:func.*=589394 findfunctab=64352
+pctab map: blocks=212253 matched=212088 ambiguous=156 unmatched=9 shift-changes=1; go:func.* map: blocks=107299 matched=95429 ambiguous=6730 unmatched=5140 shift-changes=20

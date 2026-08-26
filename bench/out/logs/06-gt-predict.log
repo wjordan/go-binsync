@@ -1,0 +1,171 @@
+== predict .text ../out/bin/v1-F2 -> ../out/bin/v2c-F2
+match: exact=32838 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+layout table: raw 65677 B, zstd 30 B
+x86asm decode of old .text: 3664769 insns, 1869 failures, 0.537s => 27.5 MB/s single-thread
+datamap .rodata (block 16, masked pointers=110307): blocks=220466 matched=220173 ambiguous=0 unmatched=293 shift-changes=3
+datamap .noptrdata (block 16, masked pointers=658): blocks=28393 matched=28392 ambiguous=0 unmatched=1 shift-changes=0
+datamap .data (block 16, masked pointers=8526): blocks=11142 matched=11141 ambiguous=0 unmatched=1 shift-changes=0
+datamap build time: 0.300s
+shift table .bss: 0 breakpoints from 8988 samples, 0 B raw:
+shift table .noptrbss: 0 breakpoints from 39004 samples, 0 B raw:
+shift tables raw total: 0 B
+BASELINE old.text -> new.text: bsdiff=39961 hdiffz=50999 zstd=90285 rawdiff=460280 runs=46603 (bsdiff 2.8s hdiffz 0.5s zstd 8.4s)
+P0 layout-copy (no relocation)     bsdiff=39963 hdiffz=50906 zstd=90285 rawdiff=43150 runs=37229  predict-time=0.06s
+P1 reloc, M=section-identity       bsdiff=33633 hdiffz=44323 zstd=75320 rawdiff=33372 runs=31851  predict-time=0.17s
+    insns=3664769 decode-failures=1869 refs: text-self=320896 text-matched=204608 rodata=110611 noptrdata=3956 data=12303 bss/noptrbss=47994 plt=70 other-section=40 outside-image=275
+P2 reloc, M=content-map+bss-shift  bsdiff=659 hdiffz=481 zstd=1999 rawdiff=639 runs=29  predict-time=0.17s
+    insns=3664769 decode-failures=1869 refs: text-self=320896 text-matched=204608 rodata=110611 noptrdata=3956 data=12303 bss/noptrbss=47994 plt=70 other-section=40 outside-image=275
+residual breakdown (P2): total differing bytes in functions=639: changed-function content=639, new functions=0, mispredicted refs:, non-reference bytes in unchanged functions=0, outside functions=0
+functions with residual differences: 4; top: main.helloHandler=630 crypto/internal/fips140/sha256.blockAVX2=5 math.archExp=2 crypto/internal/fips140/sha512.blockAVX2=2
+  mispred histogram (actual-predicted): map[]
+changed functions (content differs after masking PC-rel fields, or new): 4, old 9024 B -> new 9216 B; delta of just those: bsdiff=652 hdiffz=541 zstd=439 rawdiff=8390 runs=168; new bytes alone zstd=3507
+  changed: math.archExp, main.helloHandler, crypto/internal/fips140/sha256.blockAVX2, crypto/internal/fips140/sha512.blockAVX2
+invertibility: relocating NEW->OLD layout: 9 matched functions differ from OLD, of which 4 have changed content; unchanged-content mismatches: [main.jsonHandler main.zipHandler main.regexHandler main.hashHandler main.main]; residual bsdiff=547 hdiffz=432 zstd=1894 rawdiff=481 runs=36
+
+== predict .text ../out/bin/v1-F2 -> ../out/bin/v2l-F2
+match: exact=32838 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+layout table: raw 65676 B, zstd 23 B
+x86asm decode of old .text: 3664769 insns, 1869 failures, 0.861s => 17.2 MB/s single-thread
+datamap .rodata (block 16, masked pointers=110307): blocks=220466 matched=219083 ambiguous=1369 unmatched=14 shift-changes=3
+datamap .noptrdata (block 16, masked pointers=658): blocks=28393 matched=28392 ambiguous=0 unmatched=1 shift-changes=0
+datamap .data (block 16, masked pointers=8526): blocks=11142 matched=11141 ambiguous=0 unmatched=1 shift-changes=0
+datamap build time: 0.520s
+shift table .bss: 0 breakpoints from 8988 samples, 0 B raw:
+shift table .noptrbss: 0 breakpoints from 39005 samples, 0 B raw:
+shift tables raw total: 0 B
+BASELINE old.text -> new.text: bsdiff=22152 hdiffz=30880 zstd=49003 rawdiff=20315 runs=20002 (bsdiff 2.9s hdiffz 0.4s zstd 7.6s)
+P0 layout-copy (no relocation)     bsdiff=22152 hdiffz=30880 zstd=49003 rawdiff=20315 runs=20002  predict-time=0.04s
+P1 reloc, M=section-identity       bsdiff=22152 hdiffz=30880 zstd=49003 rawdiff=20315 runs=20002  predict-time=0.16s
+    insns=3664769 decode-failures=1869 refs: text-self=320896 text-matched=204608 rodata=110611 noptrdata=3956 data=12303 bss/noptrbss=47994 plt=70 other-section=40 outside-image=275
+P2 reloc, M=content-map+bss-shift  bsdiff=179 hdiffz=65 zstd=1636 rawdiff=6 runs=5  predict-time=0.16s
+    insns=3664769 decode-failures=1869 refs: text-self=320896 text-matched=204608 rodata=110611 noptrdata=3956 data=12303 bss/noptrbss=47994 plt=70 other-section=40 outside-image=275
+residual breakdown (P2): total differing bytes in functions=6: changed-function content=3, new functions=0, mispredicted refs: rodata=3, non-reference bytes in unchanged functions=0, outside functions=0
+functions with residual differences: 4; top: main.helloHandler=3 main.fakeDriver.Open=1 main.boltHandler=1 main.(*fakeDriver).Open=1
+  mispred main.fakeDriver.Open+0x22 LEA: old .rodata+2768837 -> pred +0 actual .rodata+2768826 (act-pred=-11) block=173052 delta=0 matched=false
+  mispred main.boltHandler+0x97 LEA: old .rodata+2780771 -> pred -11 actual .rodata+2780774 (act-pred=+14) block=173798 delta=-11 matched=false
+  mispred main.(*fakeDriver).Open+0x2d LEA: old .rodata+2768837 -> pred +0 actual .rodata+2768826 (act-pred=-11) block=173052 delta=0 matched=false
+  mispred histogram (actual-predicted): map[-11:2 14:1]
+changed functions (content differs after masking PC-rel fields, or new): 1, old 512 B -> new 512 B; delta of just those: bsdiff=152 hdiffz=44 zstd=34 rawdiff=4 runs=3; new bytes alone zstd=435
+  changed: main.helloHandler
+invertibility: relocating NEW->OLD layout: 4 matched functions differ from OLD, of which 1 have changed content; unchanged-content mismatches: [main.fakeDriver.Open main.boltHandler main.(*fakeDriver).Open]; residual bsdiff=182 hdiffz=65 zstd=1636 rawdiff=6 runs=5
+
+== predict .text ../out/bin/v1-F2 -> ../out/bin/v2p-F2
+match: exact=32838 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+layout table: raw 65677 B, zstd 30 B
+x86asm decode of old .text: 3664769 insns, 1869 failures, 0.606s => 24.4 MB/s single-thread
+datamap .rodata (block 16, masked pointers=110307): blocks=220466 matched=220171 ambiguous=0 unmatched=295 shift-changes=6
+datamap .noptrdata (block 16, masked pointers=658): blocks=28393 matched=28392 ambiguous=0 unmatched=1 shift-changes=0
+datamap .data (block 16, masked pointers=8526): blocks=11142 matched=11141 ambiguous=0 unmatched=1 shift-changes=0
+datamap build time: 0.317s
+shift table .bss: 0 breakpoints from 8988 samples, 0 B raw:
+shift table .noptrbss: 0 breakpoints from 39005 samples, 0 B raw:
+shift tables raw total: 0 B
+BASELINE old.text -> new.text: bsdiff=9327 hdiffz=11183 zstd=19173 rawdiff=427932 runs=16365 (bsdiff 2.6s hdiffz 0.1s zstd 6.4s)
+P0 layout-copy (no relocation)     bsdiff=9332 hdiffz=11178 zstd=19173 rawdiff=10137 runs=6701  predict-time=0.04s
+P1 reloc, M=section-identity       bsdiff=2653 hdiffz=3184 zstd=4227 rawdiff=1296 runs=795  predict-time=0.19s
+    insns=3664769 decode-failures=1869 refs: text-self=320896 text-matched=204608 rodata=110611 noptrdata=3956 data=12303 bss/noptrbss=47994 plt=70 other-section=40 outside-image=275
+P2 reloc, M=content-map+bss-shift  bsdiff=1103 hdiffz=1057 zstd=2433 rawdiff=670 runs=191  predict-time=0.19s
+    insns=3664769 decode-failures=1869 refs: text-self=320896 text-matched=204608 rodata=110611 noptrdata=3956 data=12303 bss/noptrbss=47994 plt=70 other-section=40 outside-image=275
+residual breakdown (P2): total differing bytes in functions=670: changed-function content=461, new functions=0, mispredicted refs: rodata=209, non-reference bytes in unchanged functions=0, outside functions=0
+functions with residual differences: 128; top: main.helloHandler=456 runtime.printanycustomtype=14 runtime.(*pageAlloc).find=6 google.golang.org/protobuf/internal/filedesc.(*stringName).lazyInit.func1=4 net/url.parseHost=4 time.Time.appendFormat=4 runtime.goroutineheader=4 runtime.printArgs=4 crypto/internal/fips140/sha256.blockAVX2=3 reflect.funcLayout=3 runtime.newstack=3 google.golang.org/grpc/grpclog.(*componentData).Infoln=2 google.golang.org/protobuf/internal/impl.(*placeholderExtension).TextName=2 google.golang.org/grpc/grpclog.(*componentData).Errorln=2 google.golang.org/grpc/grpclog.(*componentData).Fatalf=2
+  mispred runtime.printanycustomtype+0x9a LEA: old .rodata+3186552 -> pred +0 actual .rodata+3186560 (act-pred=+8) block=199159 delta=0 matched=false
+  mispred runtime.printanycustomtype+0xf4 LEA: old .rodata+3186552 -> pred +0 actual .rodata+3186560 (act-pred=+8) block=199159 delta=0 matched=false
+  mispred runtime.printanycustomtype+0x14f LEA: old .rodata+3186552 -> pred +0 actual .rodata+3186560 (act-pred=+8) block=199159 delta=0 matched=false
+  mispred runtime.printanycustomtype+0x1af LEA: old .rodata+3186552 -> pred +0 actual .rodata+3186560 (act-pred=+8) block=199159 delta=0 matched=false
+  mispred runtime.printanycustomtype+0x20f LEA: old .rodata+3186552 -> pred +0 actual .rodata+3186560 (act-pred=+8) block=199159 delta=0 matched=false
+  mispred runtime.printanycustomtype+0x26f LEA: old .rodata+3186552 -> pred +0 actual .rodata+3186560 (act-pred=+8) block=199159 delta=0 matched=false
+  mispred histogram (actual-predicted): map[-696:36 -72:7 -2:11 2:52 8:63]
+changed functions (content differs after masking PC-rel fields, or new): 3, old 8416 B -> new 8544 B; delta of just those: bsdiff=480 hdiffz=352 zstd=260 rawdiff=8150 runs=202; new bytes alone zstd=3173
+  changed: main.helloHandler, crypto/internal/fips140/sha256.blockAVX2, crypto/internal/fips140/sha512.blockAVX2
+invertibility: relocating NEW->OLD layout: 86 matched functions differ from OLD, of which 3 have changed content; unchanged-content mismatches: [runtime.(*mheap).sysAlloc runtime.sysMapOS runtime.markroot runtime.dumpScanStats runtime.(*pageAlloc).find runtime.(*addrRanges).add runtime.recovery runtime.printslice runtime.reentersyscall.func2 runtime.reentersyscall.func1]; residual bsdiff=772 hdiffz=758 zstd=2151 rawdiff=502 runs=127
+
+== predict .text ../out/bin/v1-F2 -> ../out/bin/v3-F2
+match: exact=32838 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+layout table: raw 65677 B, zstd 30 B
+x86asm decode of old .text: 3664769 insns, 1869 failures, 0.541s => 27.3 MB/s single-thread
+datamap .rodata (block 16, masked pointers=110307): blocks=220466 matched=220169 ambiguous=0 unmatched=297 shift-changes=7
+datamap .noptrdata (block 16, masked pointers=658): blocks=28393 matched=28392 ambiguous=0 unmatched=1 shift-changes=0
+datamap .data (block 16, masked pointers=8526): blocks=11142 matched=11141 ambiguous=0 unmatched=1 shift-changes=0
+datamap build time: 0.462s
+shift table .bss: 0 breakpoints from 8988 samples, 0 B raw:
+shift table .noptrbss: 0 breakpoints from 39004 samples, 0 B raw:
+shift tables raw total: 0 B
+BASELINE old.text -> new.text: bsdiff=41221 hdiffz=51761 zstd=91765 rawdiff=462455 runs=46402 (bsdiff 3.2s hdiffz 0.6s zstd 9.3s)
+P0 layout-copy (no relocation)     bsdiff=41218 hdiffz=51740 zstd=91765 rawdiff=45108 runs=37471  predict-time=0.06s
+P1 reloc, M=section-identity       bsdiff=34882 hdiffz=45508 zstd=76014 rawdiff=33808 runs=32095  predict-time=0.20s
+    insns=3664769 decode-failures=1869 refs: text-self=320896 text-matched=204608 rodata=110611 noptrdata=3956 data=12303 bss/noptrbss=47994 plt=70 other-section=40 outside-image=275
+P2 reloc, M=content-map+bss-shift  bsdiff=1374 hdiffz=1330 zstd=2670 rawdiff=988 runs=195  predict-time=0.18s
+    insns=3664769 decode-failures=1869 refs: text-self=320896 text-matched=204608 rodata=110611 noptrdata=3956 data=12303 bss/noptrbss=47994 plt=70 other-section=40 outside-image=275
+residual breakdown (P2): total differing bytes in functions=988: changed-function content=780, new functions=0, mispredicted refs: rodata=208, non-reference bytes in unchanged functions=0, outside functions=0
+functions with residual differences: 129; top: main.helloHandler=770 runtime.printanycustomtype=14 crypto/internal/fips140/sha256.blockAVX2=6 runtime.(*pageAlloc).find=6 net/url.parseHost=4 google.golang.org/protobuf/internal/filedesc.(*stringName).lazyInit.func1=4 time.Time.appendFormat=4 runtime.goroutineheader=4 runtime.printArgs=4 runtime.newstack=3 reflect.funcLayout=3 context.(*timerCtx).String=2 google.golang.org/protobuf/internal/impl.(*placeholderExtension).TextName=2 google.golang.org/grpc/grpclog.(*componentData).Fatalf=2 google.golang.org/grpc/grpclog.(*componentData).Errorf=2
+  mispred runtime.printanycustomtype+0x9a LEA: old .rodata+3186552 -> pred +8 actual .rodata+3186568 (act-pred=+8) block=199159 delta=8 matched=false
+  mispred runtime.printanycustomtype+0xf4 LEA: old .rodata+3186552 -> pred +8 actual .rodata+3186568 (act-pred=+8) block=199159 delta=8 matched=false
+  mispred runtime.printanycustomtype+0x14f LEA: old .rodata+3186552 -> pred +8 actual .rodata+3186568 (act-pred=+8) block=199159 delta=8 matched=false
+  mispred runtime.printanycustomtype+0x1af LEA: old .rodata+3186552 -> pred +8 actual .rodata+3186568 (act-pred=+8) block=199159 delta=8 matched=false
+  mispred runtime.printanycustomtype+0x20f LEA: old .rodata+3186552 -> pred +8 actual .rodata+3186568 (act-pred=+8) block=199159 delta=8 matched=false
+  mispred runtime.printanycustomtype+0x26f LEA: old .rodata+3186552 -> pred +8 actual .rodata+3186568 (act-pred=+8) block=199159 delta=8 matched=false
+  mispred histogram (actual-predicted): map[-696:36 -72:7 -2:11 2:52 8:63]
+changed functions (content differs after masking PC-rel fields, or new): 4, old 9024 B -> new 9344 B; delta of just those: bsdiff=773 hdiffz=624 zstd=535 rawdiff=8532 runs=149; new bytes alone zstd=3579
+  changed: math.archExp, main.helloHandler, crypto/internal/fips140/sha256.blockAVX2, crypto/internal/fips140/sha512.blockAVX2
+invertibility: relocating NEW->OLD layout: 152 matched functions differ from OLD, of which 4 have changed content; unchanged-content mismatches: [runtime.printanycustomtype runtime.(*mheap).sysAlloc runtime.sysMapOS runtime.markroot runtime.gcDumpObject runtime.dumpScanStats runtime.(*gcControllerState).endCycle runtime.(*pageAlloc).find runtime.(*addrRanges).add runtime.recovery]; residual bsdiff=1306 hdiffz=1338 zstd=2594 rawdiff=720 runs=227
+
+== predict .text ../out/bin/v1-F2 -> ../out/bin/v4-F2
+match: exact=32838 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+layout table: raw 65677 B, zstd 30 B
+x86asm decode of old .text: 3664769 insns, 1869 failures, 0.861s => 17.2 MB/s single-thread
+datamap .rodata (block 16, masked pointers=110307): blocks=220466 matched=218789 ambiguous=1369 unmatched=308 shift-changes=8
+datamap .noptrdata (block 16, masked pointers=658): blocks=28393 matched=28392 ambiguous=0 unmatched=1 shift-changes=0
+datamap .data (block 16, masked pointers=8526): blocks=11142 matched=11141 ambiguous=0 unmatched=1 shift-changes=0
+datamap build time: 0.647s
+shift table .bss: 0 breakpoints from 8988 samples, 0 B raw:
+shift table .noptrbss: 0 breakpoints from 39004 samples, 0 B raw:
+shift tables raw total: 0 B
+BASELINE old.text -> new.text: bsdiff=43203 hdiffz=53799 zstd=94709 rawdiff=463023 runs=46402 (bsdiff 5.6s hdiffz 1.3s zstd 16.1s)
+P0 layout-copy (no relocation)     bsdiff=43200 hdiffz=53798 zstd=94709 rawdiff=45676 runs=37471  predict-time=0.19s
+P1 reloc, M=section-identity       bsdiff=36907 hdiffz=47594 zstd=78990 rawdiff=34385 runs=32095  predict-time=0.41s
+    insns=3664769 decode-failures=1869 refs: text-self=320896 text-matched=204608 rodata=110611 noptrdata=3956 data=12303 bss/noptrbss=47994 plt=70 other-section=40 outside-image=275
+P2 reloc, M=content-map+bss-shift  bsdiff=1500 hdiffz=1422 zstd=2774 rawdiff=1047 runs=206  predict-time=0.47s
+    insns=3664769 decode-failures=1869 refs: text-self=320896 text-matched=204608 rodata=110611 noptrdata=3956 data=12303 bss/noptrbss=47994 plt=70 other-section=40 outside-image=275
+residual breakdown (P2): total differing bytes in functions=1047: changed-function content=780, new functions=0, mispredicted refs: rodata=267, non-reference bytes in unchanged functions=0, outside functions=0
+functions with residual differences: 138; top: main.helloHandler=770 runtime.printanycustomtype=24 time.Time.appendFormat=8 runtime.(*pageAlloc).find=6 crypto/internal/fips140/sha256.blockAVX2=6 reflect.funcLayout=5 google.golang.org/protobuf/internal/filedesc.(*stringName).lazyInit.func1=4 net/url.parseHost=4 encoding/json.(*InvalidUnmarshalError).Error=4 runtime.goroutineheader=4 runtime.printArgs=4 runtime.newstack=3 net/http.removeZone=3 go/types.(*Checker).typesSummary=3 go/types.(*Checker).missingMethod=3
+  mispred runtime.printanycustomtype+0x9a LEA: old .rodata+3186552 -> pred +8 actual .rodata+3186752 (act-pred=+192) block=199159 delta=8 matched=false
+  mispred runtime.printanycustomtype+0xf4 LEA: old .rodata+3186552 -> pred +8 actual .rodata+3186752 (act-pred=+192) block=199159 delta=8 matched=false
+  mispred runtime.printanycustomtype+0x14f LEA: old .rodata+3186552 -> pred +8 actual .rodata+3186752 (act-pred=+192) block=199159 delta=8 matched=false
+  mispred runtime.printanycustomtype+0x1af LEA: old .rodata+3186552 -> pred +8 actual .rodata+3186752 (act-pred=+192) block=199159 delta=8 matched=false
+  mispred runtime.printanycustomtype+0x20f LEA: old .rodata+3186552 -> pred +8 actual .rodata+3186752 (act-pred=+192) block=199159 delta=8 matched=false
+  mispred runtime.printanycustomtype+0x26f LEA: old .rodata+3186552 -> pred +8 actual .rodata+3186752 (act-pred=+192) block=199159 delta=8 matched=false
+  mispred histogram (actual-predicted): map[-696:36 -72:7 -2:11 2:52 8:11 192:63]
+changed functions (content differs after masking PC-rel fields, or new): 4, old 9024 B -> new 9344 B; delta of just those: bsdiff=793 hdiffz=626 zstd=538 rawdiff=8532 runs=149; new bytes alone zstd=3584
+  changed: math.archExp, main.helloHandler, crypto/internal/fips140/sha256.blockAVX2, crypto/internal/fips140/sha512.blockAVX2
+invertibility: relocating NEW->OLD layout: 160 matched functions differ from OLD, of which 4 have changed content; unchanged-content mismatches: [runtime.printanycustomtype runtime.(*mheap).sysAlloc runtime.sysMapOS runtime.gcMarkTermination runtime.markroot runtime.gcDumpObject runtime.dumpScanStats runtime.(*gcControllerState).endCycle runtime.(*pageAlloc).find runtime.(*addrRanges).add]; residual bsdiff=1364 hdiffz=1440 zstd=2687 rawdiff=778 runs=237
+
+== predict .text ../out/bin/v3-F2 -> ../out/bin/v4-F2
+match: exact=32838 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+layout table: raw 65676 B, zstd 23 B
+x86asm decode of old .text: 3664840 insns, 1866 failures, 0.688s => 21.5 MB/s single-thread
+datamap .rodata (block 16, masked pointers=110307): blocks=220466 matched=219084 ambiguous=1368 unmatched=14 shift-changes=4
+datamap .noptrdata (block 16, masked pointers=658): blocks=28393 matched=28392 ambiguous=0 unmatched=1 shift-changes=0
+datamap .data (block 16, masked pointers=8526): blocks=11142 matched=11141 ambiguous=0 unmatched=1 shift-changes=0
+datamap build time: 0.583s
+shift table .bss: 0 breakpoints from 8988 samples, 0 B raw:
+shift table .noptrbss: 0 breakpoints from 39005 samples, 0 B raw:
+shift tables raw total: 0 B
+BASELINE old.text -> new.text: bsdiff=25788 hdiffz=35205 zstd=61048 rawdiff=25288 runs=24686 (bsdiff 3.9s hdiffz 0.5s zstd 11.4s)
+P0 layout-copy (no relocation)     bsdiff=25788 hdiffz=35205 zstd=61048 rawdiff=25288 runs=24686  predict-time=0.10s
+P1 reloc, M=section-identity       bsdiff=25788 hdiffz=35205 zstd=61048 rawdiff=25288 runs=24686  predict-time=0.18s
+    insns=3664840 decode-failures=1866 refs: text-self=320900 text-matched=204615 rodata=110617 noptrdata=3956 data=12303 bss/noptrbss=47995 plt=70 other-section=40 outside-image=275
+P2 reloc, M=content-map+bss-shift  bsdiff=475 hdiffz=487 zstd=1957 rawdiff=128 runs=79  predict-time=0.21s
+    insns=3664840 decode-failures=1866 refs: text-self=320900 text-matched=204615 rodata=110617 noptrdata=3956 data=12303 bss/noptrbss=47995 plt=70 other-section=40 outside-image=275
+residual breakdown (P2): total differing bytes in functions=128: changed-function content=3, new functions=0, mispredicted refs: rodata=125, non-reference bytes in unchanged functions=0, outside functions=0
+functions with residual differences: 58; top: runtime.printanycustomtype=24 time.Time.appendFormat=8 reflect.funcLayout=4 encoding/json.(*InvalidUnmarshalError).Error=4 main.helloHandler=3 go/types.(*Checker).missingMethod=3 database/sql.IsolationLevel.String=2 html/template.state.String=2 time.(*Weekday).String=2 google.golang.org/grpc/codes.Code.String=2 fmt.(*ss).complexTokens=2 github.com/prometheus/procfs.Proc.Stat=2 github.com/aws/smithy-go/middleware.(*stackValues).String=2 math/big.Accuracy.String=2 math/big.RoundingMode.String=2
+  mispred runtime.printanycustomtype+0x9a LEA: old .rodata+3186568 -> pred +0 actual .rodata+3186752 (act-pred=+184) block=199160 delta=0 matched=false
+  mispred runtime.printanycustomtype+0xf4 LEA: old .rodata+3186568 -> pred +0 actual .rodata+3186752 (act-pred=+184) block=199160 delta=0 matched=false
+  mispred runtime.printanycustomtype+0x14f LEA: old .rodata+3186568 -> pred +0 actual .rodata+3186752 (act-pred=+184) block=199160 delta=0 matched=false
+  mispred runtime.printanycustomtype+0x1af LEA: old .rodata+3186568 -> pred +0 actual .rodata+3186752 (act-pred=+184) block=199160 delta=0 matched=false
+  mispred runtime.printanycustomtype+0x20f LEA: old .rodata+3186568 -> pred +0 actual .rodata+3186752 (act-pred=+184) block=199160 delta=0 matched=false
+  mispred runtime.printanycustomtype+0x26f LEA: old .rodata+3186568 -> pred +0 actual .rodata+3186752 (act-pred=+184) block=199160 delta=0 matched=false
+  mispred histogram (actual-predicted): map[5:3 8:11 184:63]
+changed functions (content differs after masking PC-rel fields, or new): 1, old 832 B -> new 832 B; delta of just those: bsdiff=155 hdiffz=53 zstd=41 rawdiff=6 runs=5; new bytes alone zstd=635
+  changed: main.helloHandler
+invertibility: relocating NEW->OLD layout: 76 matched functions differ from OLD, of which 1 have changed content; unchanged-content mismatches: [internal/strconv.ParseUint runtime.printanycustomtype runtime.gcMarkTermination runtime.(*gcControllerState).endCycle strconv.toError reflect.funcLayout time.Time.appendFormat time.Month.String time.Weekday.String time.(*Month).String]; residual bsdiff=549 hdiffz=594 zstd=2032 rawdiff=151 runs=100
+

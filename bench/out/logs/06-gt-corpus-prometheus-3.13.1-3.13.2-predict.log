@@ -1,0 +1,30 @@
+== predict .text ../out/corpus/prometheus/3.13.1/prometheus.stripped -> ../out/corpus/prometheus/3.13.2/prometheus.stripped
+match: exact=113762 normalised=0 content=5 unmatched-new=50 unmatched-old=13
+layout table: raw 230951 B, zstd 1097 B
+x86asm decode of old .text: 10825482 insns, 1796 failures, 1.526s => 27.8 MB/s single-thread
+datamap .rodata (block 16, masked pointers=425849): blocks=1209544 matched=1013660 ambiguous=520 unmatched=195364 shift-changes=979
+datamap .noptrdata (block 16, masked pointers=1756): blocks=36871 matched=36868 ambiguous=2 unmatched=1 shift-changes=3
+datamap .data (block 16, masked pointers=17026): blocks=21604 matched=21603 ambiguous=0 unmatched=1 shift-changes=1
+datamap build time: 2.598s
+BASELINE old.text -> new.text: bsdiff=1098950 hdiffz=1129463 zstd=0 rawdiff=39993386 runs=1179851 (bsdiff 23.6s hdiffz 7.4s zstd 0.0s)
+P0 layout-copy (no relocation)     bsdiff=1098053 hdiffz=1129719 zstd=0 rawdiff=2796908 runs=1088595  predict-time=0.14s
+P1 reloc, M=section-identity       bsdiff=548180 hdiffz=572486 zstd=0 rawdiff=978274 runs=533103  predict-time=0.42s
+    insns=10824477 decode-failures=1796 refs: text-self=919407 text-matched=621816 text-unmatched=1 rodata=379434 noptrdata=1537 data=51776 bss/noptrbss=165656 other-section=35 outside-image=276
+P2 reloc, M=content-map            bsdiff=149309 hdiffz=177788 zstd=0 rawdiff=225534 runs=150097  predict-time=0.41s
+    insns=10824477 decode-failures=1796 refs: text-self=919407 text-matched=621816 text-unmatched=1 rodata=379434 noptrdata=1537 data=51776 bss/noptrbss=165656 other-section=35 outside-image=276
+residual breakdown (P2): total differing bytes in functions=225534: changed-function content=55865, new functions=12194, mispredicted refs: text-matched=2 rodata=6683 data=30 bss/noptrbss=150760, non-reference bytes in unchanged functions=0, outside functions=0
+functions with residual differences: 33492; top: main.main=13762 google.golang.org/grpc/internal/transport.(*http2Client).operateHeaders=7553 google.golang.org/grpc/internal/transport.NewHTTP2Client=6223 github.com/aws/aws-sdk-go/aws/endpoints.init=5005 google.golang.org/grpc/internal/transport.NewServerTransport=4105 google.golang.org/grpc.(*Server).handleStream=3174 google.golang.org/grpc.decompress=3122 google.golang.org/grpc/internal/transport.(*http2Client).NewStream=2589 google.golang.org/grpc/internal/transport.(*loopyWriter).processData=1650 golang.org/x/text/unicode/norm.decomposeSegment=1182 github.com/prometheus/prometheus/promql.getMMappedFile=1169 golang.org/x/text/unicode/norm.nextComposed=1126 github.com/prometheus/prometheus/promql.NewActiveQueryTracker=1063 google.golang.org/grpc/internal/transport.(*http2Client).handleData=980 golang.org/x/text/unicode/norm.(*formInfo).quickSpan=935
+  mispred internal/cpu.processOptions+0x19e MOV: old .bss+33560 -> pred +0 actual .bss+33576 (act-pred=+16)
+  mispred internal/cpu.processOptions+0x1b1 MOV: old .bss+33560 -> pred +0 actual .bss+33576 (act-pred=+16)
+  mispred internal/cpu.processOptions+0x28a MOV: old .bss+33552 -> pred +0 actual .bss+33568 (act-pred=+16)
+  mispred internal/cpu.processOptions+0x291 MOV: old .bss+33560 -> pred +0 actual .bss+33576 (act-pred=+16)
+  mispred internal/cpu.processOptions+0x34e MOV: old .bss+33560 -> pred +0 actual .bss+33576 (act-pred=+16)
+  mispred internal/cpu.processOptions+0x365 MOV: old .bss+33552 -> pred +0 actual .bss+33568 (act-pred=+16)
+  mispred internal/cpu.processOptions+0x3b9 MOV: old .bss+33560 -> pred +0 actual .bss+33576 (act-pred=+16)
+  mispred internal/cpu.processOptions+0x3ce MOV: old .bss+33552 -> pred +0 actual .bss+33568 (act-pred=+16)
+  mispred internal/cpu.processOptions+0x3df MOV: old .bss+33560 -> pred +0 actual .bss+33576 (act-pred=+16)
+  mispred internal/cpu.processOptions+0x3eb MOV: old .bss+33552 -> pred +0 actual .bss+33568 (act-pred=+16)
+  mispred histogram (actual-predicted): map[-4213056:1 -3858112:3 -2050016:1 -1958656:9 -1324672:1 -1067392:1 -906432:2 -857728:6 -562272:1 -351520:3 -201399:1 -194144:5 -111104:1 -49787:3 -49033:1 -15664:1 -10368:1 -4096:2 -1728:2 -512:165 -26:1 -8:16 2:156 4:364 8:881 11:3 16:141557 24:4 31:1 32:64 35:2 37:1 40:7 42:1 56:6 64:2 128:5 192:3 195:2 197:4 216:1 256:3 784:1 896:1 928:4 1024:3 1056:3 1216:1 1408:2 1728:1 2000:2545 2048:1 2080:1 2560:1 2624:1 6016:3 10752:3 13568:3 18574:2 119076:1 162112:4 206611:1 244768:1 418176:2 576576:2 769184:1 827136:1 1079200:8 1098112:2 1369216:1 1455072:11 2623176:1 3516128:10 3536992:2 3835520:2 5239328:1 5348032:2 6207584:6 7127872:1 7629216:1 8446112:10 9761312:2]
+changed functions (content differs after masking PC-rel fields, or new): 130, old 176960 B -> new 191808 B; delta of just those: bsdiff=26417 hdiffz=24399 zstd=0 rawdiff=180559 runs=5806; new bytes alone zstd=65404
+  changed: expandAVX512_2, expandAVX512_3, expandAVX512_4, expandAVX512_6, expandAVX512_8, expandAVX512_10, expandAVX512_12, expandAVX512_14, expandAVX512_16, expandAVX512_18, expandAVX512_20, expandAVX512_22, expandAVX512_24, expandAVX512_26, expandAVX512_28, expandAVX512_30, expandAVX512_32, expandAVX512_36, expandAVX512_40, expandAVX512_44
+invertibility: relocating NEW->OLD layout: 33505 matched functions differ from OLD, of which 80 have changed content; unchanged-content mismatches: [internal/cpu.processOptions internal/cpu.doinit internal/cpu.Name internal/strconv.dboxDigits internal/runtime/maps.cloneGroup internal/runtime/maps.NewMap internal/runtime/maps.(*Map).installTableSplit internal/runtime/maps.(*Map).putSlotSmall internal/runtime/maps.(*Map).growToSmall internal/runtime/maps.(*Map).growToTable]; residual bsdiff=144166 hdiffz=173941 zstd=0 rawdiff=212833 runs=150052

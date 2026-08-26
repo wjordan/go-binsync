@@ -1,0 +1,47 @@
+== build prometheus v3.13.2 with go1.27.0 Wed Aug 26 13:04:17 PDT 2026
+go: downloading golang.org/x/text v0.39.0
+go: downloading github.com/prometheus/alertmanager v0.33.0
+go: downloading go.opentelemetry.io/collector/pdata v1.60.0
+go: downloading golang.org/x/crypto v0.53.0
+go: downloading google.golang.org/genproto/googleapis/rpc v0.0.0-20260610212136-7ab31c22f7ad
+go: downloading github.com/google/pprof v0.0.0-20260604005048-7023385849c0
+go: downloading github.com/open-telemetry/opentelemetry-collector-contrib/internal/exp/metrics v0.154.0
+go: downloading go.opentelemetry.io/collector/confmap/xconfmap v0.154.0
+go: downloading go.opentelemetry.io/collector/internal/componentalias v0.154.0
+go: downloading go.opentelemetry.io/collector/pipeline v1.60.0
+go: downloading go.opentelemetry.io/collector/confmap v1.60.0
+go: downloading github.com/aws/aws-sdk-go-v2/service/ec2 v1.307.0
+go: downloading github.com/aws/aws-sdk-go-v2/service/ecs v1.83.0
+go: downloading google.golang.org/genproto/googleapis/api v0.0.0-20260615183401-62b3387ff324
+go: downloading go.yaml.in/yaml/v4 v4.0.0-rc.5
+go: downloading github.com/aws/aws-sdk-go-v2/service/signin v1.2.0
+go: downloading github.com/aws/aws-sdk-go-v2/service/sso v1.31.3
+go: downloading github.com/aws/aws-sdk-go-v2/service/ssooidc v1.36.6
+go: downloading github.com/open-telemetry/opentelemetry-collector-contrib/pkg/pdatautil v0.154.0
+go: downloading golang.org/x/term v0.44.0
+go: downloading go.opentelemetry.io/collector/featuregate v1.60.0
+go: downloading github.com/knadh/koanf/v2 v2.3.5
+	Command being timed: "env GOTOOLCHAIN=go1.27.0 GOFLAGS= go build -trimpath -ldflags=-s -w -buildid= -buildvcs=false -o /home/will/Code/binsync/bench/out/corpus127/prometheus/3.13.2/prometheus ./cmd/prometheus"
+	User time (seconds): 362.16
+	System time (seconds): 40.39
+	Percent of CPU this job got: 894%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:44.99
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 2990752
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 29
+	Minor (reclaiming a frame) page faults: 13021995
+	Voluntary context switches: 363063
+	Involuntary context switches: 318436
+	Swaps: 0
+	File system inputs: 181496
+	File system outputs: 2591864
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+exit=0 Wed Aug 26 13:05:02 PDT 2026

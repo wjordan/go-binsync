@@ -1,0 +1,6 @@
+Cloning into 'HDiffPatch'...
+3b9dca715ca492873bf2c49e22e5d5b7d2a78620 Fri Jul 31 13:53:30 2026 +0800
+make: *** No rule to make target '../lzma/C/LzFind.o', needed by 'libhdiffpatch.a'.  Stop.
+ls: cannot access 'hdiffz': No such file or directory
+ls: cannot access 'hpatchz': No such file or directory
+exit=2

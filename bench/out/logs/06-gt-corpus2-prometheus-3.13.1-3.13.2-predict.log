@@ -1,0 +1,22 @@
+== predict .text ../out/corpus/prometheus/3.13.1/prometheus.stripped -> ../out/corpus/prometheus/3.13.2/prometheus.stripped
+match: exact=113762 normalised=0 content=5 unmatched-new=50 unmatched-old=13
+layout table: raw 230951 B, zstd 1097 B
+x86asm decode of old .text: 10825482 insns, 1796 failures, 1.546s => 27.4 MB/s single-thread
+datamap .rodata (block 16, masked pointers=425849): blocks=1209544 matched=1013660 ambiguous=520 unmatched=195364 shift-changes=979
+datamap .noptrdata (block 16, masked pointers=1756): blocks=36871 matched=36868 ambiguous=2 unmatched=1 shift-changes=3
+datamap .data (block 16, masked pointers=17026): blocks=21604 matched=21603 ambiguous=0 unmatched=1 shift-changes=1
+datamap build time: 2.008s
+shift table .bss: 3 breakpoints from 55715 samples, 11 B raw: @18040:+8 @18944:+16 @47328:+0
+shift table .noptrbss: 6 breakpoints from 109125 samples, 16 B raw: @116:+2 @180:+4 @760:+0 @1640:+8 @1776:+16 @5824:+0
+shift tables raw total: 27 B
+BASELINE old.text -> new.text: bsdiff=1098950 hdiffz=1129463 zstd=0 rawdiff=39993386 runs=1179851 (bsdiff 21.7s hdiffz 6.7s zstd 0.0s)
+P0 layout-copy (no relocation)     bsdiff=1098053 hdiffz=1129719 zstd=0 rawdiff=2796908 runs=1088595  predict-time=0.11s
+P1 reloc, M=section-identity       bsdiff=548180 hdiffz=572486 zstd=0 rawdiff=978274 runs=533103  predict-time=0.45s
+    insns=10824477 decode-failures=1796 refs: text-self=919407 text-matched=621816 text-unmatched=1 rodata=379434 noptrdata=1537 data=51776 bss/noptrbss=165656 other-section=35 outside-image=276
+P2 reloc, M=content-map+bss-shift  bsdiff=27506 hdiffz=29908 zstd=0 rawdiff=74305 runs=7508  predict-time=0.46s
+    insns=10824477 decode-failures=1796 refs: text-self=919407 text-matched=621816 text-unmatched=1 rodata=379434 noptrdata=1537 data=51776 bss/noptrbss=165656 other-section=35 outside-image=276
+residual breakdown (P2): total differing bytes in functions=74305: changed-function content=55396, new functions=12194, mispredicted refs: text-matched=2 rodata=6683 data=30, non-reference bytes in unchanged functions=0, outside functions=0
+functions with residual differences: 2093; top: main.main=13395 google.golang.org/grpc/internal/transport.(*http2Client).operateHeaders=7552 google.golang.org/grpc/internal/transport.NewHTTP2Client=6219 google.golang.org/grpc/internal/transport.NewServerTransport=4099 google.golang.org/grpc.(*Server).handleStream=3174 google.golang.org/grpc.decompress=3122 google.golang.org/grpc/internal/transport.(*http2Client).NewStream=2582 google.golang.org/grpc/internal/transport.(*loopyWriter).processData=1650 golang.org/x/text/unicode/norm.decomposeSegment=1182 github.com/prometheus/prometheus/promql.getMMappedFile=1169 golang.org/x/text/unicode/norm.nextComposed=1125 github.com/prometheus/prometheus/promql.NewActiveQueryTracker=1063 google.golang.org/grpc/internal/transport.(*http2Client).handleData=980 golang.org/x/text/unicode/norm.(*formInfo).quickSpan=935 google.golang.org/grpc/internal/transport.(*loopyWriter).handle=875
+changed functions (content differs after masking PC-rel fields, or new): 130, old 176960 B -> new 191808 B; delta of just those: bsdiff=26417 hdiffz=24399 zstd=0 rawdiff=180559 runs=5806; new bytes alone zstd=65404
+  changed: expandAVX512_2, expandAVX512_3, expandAVX512_4, expandAVX512_6, expandAVX512_8, expandAVX512_10, expandAVX512_12, expandAVX512_14, expandAVX512_16, expandAVX512_18, expandAVX512_20, expandAVX512_22, expandAVX512_24, expandAVX512_26, expandAVX512_28, expandAVX512_30, expandAVX512_32, expandAVX512_36, expandAVX512_40, expandAVX512_44
+invertibility: relocating NEW->OLD layout: 2078 matched functions differ from OLD, of which 80 have changed content; unchanged-content mismatches: [internal/runtime/gc/scan.scanSpanPackedAVX512 reflect.Value.Seq crypto/internal/sysrand.Read crypto/internal/sysrand.urandomRead crypto/sha3.init.0 crypto/sha1.blockAVX2 vendor/golang.org/x/sys/cpu.init.1 crypto/hpke.init.func2 crypto/hpke.init.func4 crypto/hpke.init.func8]; residual bsdiff=22503 hdiffz=23659 zstd=0 rawdiff=61554 runs=7463

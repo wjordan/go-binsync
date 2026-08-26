@@ -1,0 +1,16 @@
+== sectdiff ../out/corpus/prometheus/3.13.1/prometheus.stripped -> ../out/corpus/prometheus/3.13.2/prometheus.stripped
+section                  size    rawdiff       runs     bsdiff     hdiffz       zstd
+.note.go.buildid          100         79          5        241        114        105
+.note.gnu.build-id         36         20          1        191         50         40
+.text                42429777   39993386    1179851    1098950    1129463    3576415
+.rodata              19354777   14201961    1434721     443232     553655    1497405
+.gopclntab           34621634   27925818    3549704    1036118     938925    2642787
+.typelink              161428      95429      40422      76841      86671      86739
+.itablink               42512      12853       5314       9523       9912       7045
+.go.buildinfo           23280        330         39        579        426        346
+.go.fipsinfo              120         48         10        213         95         90
+.go.module                592         96         48        253        172        166
+.noptrdata             589921       7048       2654       1421       1847       3956
+.data                  345682      61058      25277       7357      10056      26701
+SUM(sections)                   82298126    6238046    2674919    2731386    7841795
+WHOLE FILE           97577304   83238684    6148822    2714204    2732978    8279163  (bsdiff 66.4s hdiffz 20.4s zstd 37.1s)

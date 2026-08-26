@@ -1,660 +1,634 @@
-# binsync — system design
+# binsync — design
 
-Status: authoritative design, v1 (2026-08-26). `README.md` specifies *behaviour*;
-this document records *why* and *how*: requirements, evidence, decisions,
-wire formats, algorithms, and the performance model. Research and benchmarks
-that the decisions rest on are in `docs/research/` (index in
-`docs/research/README.md`); numbers quoted here cite those documents.
+Architecture and reasoning behind the behaviour specified in `README.md`.
+Measurements are in `docs/research/` (index: `docs/research/README.md`).
+This is the second-round design: the first round (`docs/archive/DESIGN-round1.md`)
+was over-scoped, and this document records what was cut and why (§10) as
+well as what stays.
 
-Contents
-
-1. Requirements and latency budget
-2. Evidence summary
-3. Architecture
-4. Decisions (D1–D18)
-5. Formats
-6. Algorithms
-7. Upgrade lifecycle details
-8. Security model
-9. Performance model and targets
-10. Testing and benchmarking strategy
-11. Roadmap and open questions
+Status: design phase, nothing implemented. Numbers quoted below were measured
+on 2026-08-26 (linux/amd64; Go 1.26.4 for the first two research rounds,
+Go 1.27.0 for the codec prototype's final pass, §3.2) unless marked *estimate*.
 
 ---
 
-## 1. Requirements and latency budget
+## 1. Workload and assumptions
 
-**Workload.** One statically linked Go web-server binary, 30–100 MB, rebuilt many
-times a day. Consecutive releases usually differ by one line of code or one text
-constant. Targets are a fleet of Linux hosts reached over a high-latency link:
-either an object store (S3/GCS/R2, ~30 ms in-region first-byte, 100–200 ms
-envelope, one byte-range per request) or SSH from a workstation (100+ ms RTT).
-
-**Objective.** Minimise end-to-end latency from "release binary exists on the
-build box" to "every target is executing it, healthy, with no dropped
-connections", subject to: byte-exact result, authenticated release, automatic
-rollback, and support for targets that skipped releases or drifted.
-
-**Latency budget (50 MB binary, 100 ms RTT, 100 Mbit/s).** The components, with
-the design target for each:
-
-| Stage | Naive (scp + restart) | binsync target | Note |
-|---|---|---|---|
-| Hash new release | — | 5 ms | BLAKE3 in Go: 9.6 GB/s single-thread on this box (`benchmark-local.md`) |
-| Encode delta | — | ≤ 1 s warm, ≤ 5 s cold | warm = base index precomputed (D3) |
-| Upload | 50 MB ≈ 4 s + RTTs | 1 PUT ≈ 2 RTT (0.2 s) | patch ≤ 512 KiB rides in the pointer |
-| Notify | — | 1 RTT (poke) or ≤ poll interval | D10 |
-| Detect + fetch | 6–8 RTT SSH + 4 s | 1 conditional GET (1 RTT warm) | patch inline; second GET only if large |
-| Apply + verify | — | ≤ 0.3 s | linear apply, ~150–700 MB/s |
-| Install | rename | 3 syscalls + 2 fsync (≤ 50 ms) | D13 |
-| Exec + ready + probe | restart gap (connections dropped) | app start time; zero-loss overlap | D12 |
-| **Total (binsync-controlled)** | **≈ 8–10 s + dropped connections** | **≈ 1.5–2.5 s** | dominated by encode and 2–3 RTTs |
-
-Bytes barely matter at this bandwidth once the patch is < 1 MB (10 ms per
-100 KB); round trips and encode time dominate. The design therefore spends its
-complexity on (a) a shift-tolerant encoder that is fast when warm and (b) a
-one-request hot path.
-
-## 2. Evidence summary
-
-Measured on this workstation (Go 1.26.4, linux/amd64) unless noted. Full
-tables: `docs/research/benchmark-local.md`, `cdc-cas.md` §8,
-`go-binary-layout.md` §0–2.
-
-| Finding | Number | Source |
+| Assumption | Value used for design | Source |
 |---|---|---|
-| A code edit that grows a function past its 32-byte padding shifts every later function and rewrites rel32/RIP-relative operands in *unmoved* functions | +47 B edit → 7,281 functions shifted, 114,519 one-byte operand edits in 9,410 unmoved functions | go-binary-layout §2.2 |
-| A longer string literal shifts `.rodata` (symbols sorted by size, then index) and rewrites references binary-wide | +15 B string → 1,421 rodata symbols moved; 38 % of `.rodata` bytes differ | go-binary-layout §2.3, cdc-cas §8.3 |
-| Same-length constant edit is nearly free | ~100 bytes differ; bsdiff 310 B | cdc-cas §8.2 |
-| Compressed DWARF avalanches | unstripped one-line patch 4.9–5.6 MB vs 66–119 KB stripped | go-binary-layout §1, cdc-cas §8.2 |
-| CDC chunk reuse on a shifted Go binary | 57 % (rodata shift) / 68 % (code shift) of 64 KiB chunks missing; 49–60 % at 4 KiB; rsync-style 512 B blocks still 26–42 % unmatched | cdc-cas §8.2 |
-| Delta vs chunk transfer | bsdiff 28–66 KB, zstd `--patch-from` 67–223 KB, missing chunks compressed 3.3–9.2 MB, full zstd 6.0 MB (18.6 MB binary) | cdc-cas §8.2 |
-| Tool ranking on the 29.6 MB stripped bench binary, one added statement (v1→v2c) | bsdiff 60.5 KB (6.0 s), hdiffz -m zstd 75.3 KB (1.17 s; 0.47 s with 8 threads, 80 MB), zstd -19 `--patch-from` 213 KB (15.7 s; `--long`/`--ultra` no help), xdelta3 lzma 344 KB / djw 464 KB (0.9 s), zstd -3 1.7 MB (0.08 s); apply 0.01–0.10 s for all | benchmark-local §3 |
-| Where the bytes change (same case) | 13.4 % of bytes in 965 K runs (median 3 B): `.gopclntab` 3.07 MB = 29 % of the section (858 K runs of shifted 32-bit offsets; pclntab is 35 % of the file), `.rodata` 439 KB, `.text` 460 KB (69–100 % of `.text` runs are 1-byte RIP-relative displacement edits); only 21.6 % of the file survives in unchanged runs ≥ 256 KiB | benchmark-local §2 |
-| Real CDC tools on the same pair | desync 16:64:256 KiB: 273 of 386 chunks new = 7.7 MB compressed = 92 % of the full download; 4 KiB chunks no better; casync default 7.6 MB | benchmark-local §4 |
-| Chained vs direct patches | v1→v2c→v3→v4 costs 1.72× (bsdiff, zstd) to 1.81× (xdelta3) the direct v1→v4 patch | benchmark-local §3 |
-| Mismatched build flags for the base | F1 base → F2 target: bsdiff 161 KB (2.7×), zstd 490 KB (2.3×) — degraded but still 17–52× smaller than full | benchmark-local §3 |
-| PIE | +6.3 % size; patches larger (397 vs 332 KB zstd), 66k `R_X86_64_RELATIVE` entries with absolute addresses | go-binary-layout §2.5 |
-| Pure-Go feasibility | `index/suffixarray` over 29.5 MB: 2.33 s, 118 MB; klauspost zstd raw-dict `best`: 261 KB in 0.83 s (levels below `best`: 10 MB, unusable); go-bsdiff: 69.6 KB in 9.0 s, 616 MB | bench/out/logs/05-*.log |
-| x86 BCJ (E8/E9 → absolute) pre-transform | no gain: bsdiff 60.5 → 61.5 KB | bench/out/logs/05-bcj.log |
-| Disassembly-aware patchers on ELF | Zucchini vs mbsdiff: ~10 % on Linux Firefox (33 % on Windows PE); Courgette 30 % from assembly form alone; 15–20 min, 1 GB to generate for Chrome | binary-delta §2.3 |
-| Object-store request economics | S3/GCS: no multi-range GET; ~30 ms median TTFB, 100–200 ms envelope; conditional GET 304 = 1 request, no egress; S3 `If-Match` PUT since 2024-11 | update-systems §3 |
-| Socket handoff | same-socket inheritance is loss-free on every kernel; `SO_REUSEPORT` drops queued connections unless kernel ≥ 5.14 and `tcp_migrate_req=1` | zero-downtime §2 |
-| Replacing a running binary | `open(O_WRONLY)` → ETXTBSY; `rename` works; `/proc/self/exe` then executes the *old* inode; `os.Executable()` returns the path (= new file) | go-binary-layout §5, zero-downtime §5 |
+| Binary | Go, linux/amd64, stripped (`-s -w`), non-PIE; 30 MB typical, 100–250 MB common, up to 1 GB | user; corpus in `benchmark-scale.md` |
+| Change per release | *not* one line: several lines across several packages (a normal patch release); sometimes a minor release with dependency bumps | user |
+| Release cadence | many per day; targets are usually one release behind, occasionally several | user |
+| WAN | 5–100 Mbit/s, 100–300 ms RTT, 0–2 % packet loss | user; netem profiles A–D in `benchmark-scale.md` |
+| Fleet | many targets pulling from one store; no coordination between targets | user |
+| Trust | the store endpoint is authenticated by its transport (TLS, SigV4, SSH, local fs); no separate signing key | user (§8) |
 
-## 3. Architecture
+What the measurements say about that workload:
 
-```
- build box / workstation                 store (S3/GCS/R2/file/https)            target host
- ┌───────────────────────┐   PUT/CAS     ┌──────────────────────────────┐  GET   ┌─────────────────────────────┐
- │ binsync publish        │ ────────────►│ channels/<ch>/latest (BSYP)  │◄──────│ binsync agent  (or agent pkg │
- │  hash · encode · sign  │              │ releases/<hash>.json          │       │  embedded in the service)    │
- │  cache: bins + indexes │              │ patches/<from>-<to>.bsz       │       │  poll · verify · plan ·      │
- └──────────┬────────────┘              │ blobs/<hash>.zst (seekable)   │       │  fetch · apply · install     │
-            │ POST /poke (optional)      └──────────────────────────────┘       └──────────┬──────────────────┘
-            └───────────────────────────────────────────────────────────────────────────────┤ control socket
-                                                                                             ▼
- workstation ── ssh host binsync recv ── stdio framed protocol ──────────────────► ┌─────────────────────────────┐
- (binsync push: same code path, no store)                                          │ service (binsync/upgrade)    │
-                                                                                   │ old proc: exec new, pass fds,│
-                                                                                   │ wait ready, probe, commit /  │
-                                                                                   │ abort; child: Ready(), serve │
-                                                                                   └─────────────────────────────┘
-```
+- **How much of the file changes.** A multi-package edit that grows `.text`
+  by 2.3 KB (`v1→v5`, 29.6 MB) changes **70 %** of the bytes in ~1.95 M
+  runs (median run 3 B); a one-line edit changes 13 %. Both are the same
+  mechanism: every function after the first grown one moves by a multiple of
+  32 B, and every PC-relative reference crossing a moved boundary is
+  rewritten; `.gopclntab` (35 % of the file) is offset-based and is rewritten
+  almost entirely. Chunk-based transfer (CDC/CAS) therefore re-sends ~90 % of
+  a full download (`cdc-cas.md`, `benchmark-local.md`) and is not used.
+- **Generic delta encoders.** bsdiff-class approximate matching gets a real
+  patch release of an 88 MB binary (kube-apiserver 1.36.3→1.36.4) down to
+  **2.06 MB** against a 19.1 MB full download (10.8 %); terraform 5.4 MB /
+  25.5 MB; a minor release (prometheus 3.13→3.14) 8.6 MB / 24.3 MB; the
+  multi-package synthetic `v1→v5` 470 KB / 8.4 MB. But bsdiff needs ~12× the
+  input in RAM and 50–190 s for ~90 MB, and took 267 s and 3.4 GB for a
+  393 MB stripped binary; hdiffz manages 46 s at 1.7 GB RSS for a 537 MB
+  file (`benchmark-scale.md`).
+- **The Go-aware transform (§3).** Aligning old and new by *function name*
+  (from `.gopclntab`) and re-deriving the layout-induced churn removes most of
+  those bytes: on Go 1.27, one-line 150,475 → 2,207 B (68×; the new sorted
+  `.go.type` section makes bsdiff 2.5× worse than on 1.26 while the Go-aware
+  patch is unchanged), multi-package `v1→v4` 145,205 → 2,733 B (53×), and
+  prometheus 3.13.1→3.13.2 built with Go 1.27 2,691,644 → 111,552 B (24×),
+  encoded, decoded and byte-verified end to end, in 2.1 s. The remaining
+  bytes are mostly genuinely changed code, plus new type descriptors and the
+  pc tables of changed functions (`go-aware-transform.md` §11).
+- **The link.** At 20 Mbit/s / 200 ms / 1 % loss one TCP connection carries
+  ~1.2 Mbit/s: an 8.4 MB full download takes 57 s single-stream and 7.4 s
+  8-way; a 60 KB patch takes 1.0 s; a 1.76 MB patch 8 s. At 5 Mbit/s / 300 ms
+  / 2 % loss: full 132 s single (27 s 8-way), 60 KB 1.5 s, 1.76 MB 22 s. A
+  conditional GET that returns 304 costs one RTT (0.2–0.6 s)
+  (`benchmark-scale.md`, netem section).
 
-Packages and their dependencies (arrows = imports):
+Design consequences: patch bytes dominate end-to-end latency on a bad link,
+so the codec is where the effort goes; anything larger than a few hundred KB
+must be fetched with parallel ranges and be resumable; the poll must be one
+conditional GET; and the encoder must scale to 1 GB inputs in seconds, not
+minutes, without a whole-file suffix array.
 
-```
-cmd/binsync ─► agent ─► release, store, delta, install, hooks
-              upgrade (no dependency on the network packages; importable by any service)
-              delta   ─► klauspost/compress/zstd, index/suffixarray, lukechampine.com/blake3
-              release ─► crypto/ed25519, blake3, canonical JSON
-              store   ─► net/http (+ SigV4 signer), GCS JSON API, os
-              install ─► os, syscall (link/rename/fsync), blake3
-```
+## 2. System overview
 
-Data flow of a publish: hash → look up base(s) in local cache → load or build
-base index → encode hot patch (parallel partitions) → sign manifest → upload
-patch (inline or object) → CAS pointer → upload blob + release manifest →
-poke → background: direct patches from older bases → re-CAS pointer.
-
-Data flow of a sync: conditional GET pointer → verify signature/seq/expiry →
-hash base (cached) → plan path in graph → fetch edges (parallel) → apply in
-sequence, hashing each intermediate → `pre-swap` hook → install → lifecycle.
-
-## 4. Decisions
-
-Each decision states the choice, the evidence, and what was rejected.
-
-**D1 — Delta encoding against the deployed release, not chunk sync.**
-CDC/CAS re-sends 40–70 % of a Go binary for any size-changing edit because
-addresses change, not just move (cdc-cas §8; REAPI's 75 % reuse on executables).
-Delta encoders send 30–120 KB. CDC's remaining merits (any-base recovery,
-storage dedup) are not worth its request count on S3/GCS (one range per
-request; hundreds of missing chunks in ~10 runs). Rejected: casync/desync
-model, zsync/rsync block matching (26–42 % unmatched at 512 B blocks).
-
-**D2 — Primary codec `bsz`: bsdiff-class approximate matching with
-zstd-compressed streams, pure Go.**
-bsdiff's "extend matches while ≥ 50 % of bytes agree, emit bytewise
-differences" turns the +32 operand rewrites into a near-zero diff stream that
-compresses ~3–4× better than exact-match LZ (zstd `--patch-from`) and ~8×
-better than xdelta3 on our workload (60 / 213 / 464 KB). HDiffPatch is
-comparable (75 KB) but C-only. Classic bsdiff's container (bzip2, three streams,
-no integrity) is replaced: varint control triples, zstd streams, per-partition
-output hashes, bounds checks (CVE-2014-9862 class bugs in bspatch). Rejected:
-cgo HDiffPatch (cross-compilation, static agents), xdelta3 (size), shelling out
-to external tools.
-
-**D3 — Precomputed base index on the publisher.**
-Encode cost is on the critical path (a 1-line change ships in seconds;
-`index/suffixarray` alone is 2.3 s for 30 MB, ~4–8 s at 50–100 MB). After each
-publish the publisher builds and caches the suffix array of the *just
-published* release (off the critical path); the next publish reuses it, so the
-warm encode is only the parallel match scan (target < 1 s). Cache key: release
-hash; storage 4 bytes per input byte. Rejected: hash-based matcher only
-(bidiff-style, ~2.3× larger patches); always cold SA.
-
-**D4 — Partitioned patch frames aligned to ELF sections.**
-The new file is split into partitions (≈ 4–8 MiB, boundaries snapped to section
-starts) each encoded and decodable independently against the whole old file.
-Gives parallel encode/apply, streaming apply with bounded memory, early failure
-via per-partition hashes, and prevents a change in `.rodata` from perturbing
-the encoder's state in `.gopclntab`. Measured per-section sums equal whole-file
-patches within ±1 % (go-binary-layout §7.3), so partitioning costs nothing in
-size. Section-aware framing is also the hook for future Go-aware transforms
-(D6).
-
-**D5 — Secondary codec `zstd` (raw-dictionary frames, `zstd --patch-from`
-compatible).**
-klauspost/compress at `SpeedBestCompression` with the old file as raw
-dictionary produces 261 KB in 0.83 s for the case where bsz gives 60 KB; lower
-levels do not find long matches (10 MB) and are excluded. It is the fast path
-when the base index is cold and encode latency matters more than 200 KB, and it
-is interoperable with the `zstd` CLI for debugging. Chosen per publish
-(`--codec`); the publisher may also pick it automatically when the SA is cold
-and the file is large (policy, §6.1).
-
-**D6 — Executable-aware transforms are deferred (measured negative for the
-cheap one).**
-The x86 BCJ E8/E9 transform gave no gain (60.5 → 61.5 KB): converting to
-absolute addresses helps references *from* shifted code *to* unshifted targets
-and hurts the reverse, and both populations exist — and on our binary the
-dominant `.text` churn is RIP-relative `lea`/`mov` displacements into a
-shifted `.rodata`, which BCJ does not touch at all. A real Courgette/Zucchini
-label scheme buys ~10–30 % on ELF (Firefox Linux data) at high complexity and
-fragility. The largest structured residual is `.gopclntab` (35 % of the file;
-29–61 % of it rewritten as constant-shifted 32-bit offsets on a code change),
-which bsdiff already reduces to a few tens of KB; a pclntab-aware transform
-could take that to a few KB.
-At 100 Mbit/s a 60 KB patch costs 5 ms; this is not where latency goes. The
-container reserves a `transform` id so a future codec can add it without a
-format break. Rejected for v1: Zucchini port, pclntab-aware encoding, DWARF
-decompress/recompress.
-
-**D7 — BLAKE3-256 content ids everywhere.**
-9.6 GB/s single-thread in Go here (SHA-256 with SHA-NI: 2.6 GB/s); hashing a
-100 MB binary is ~10 ms, so the agent can afford to hash on every check when the
-inode cache misses. Ids are `b3:<64 hex>`. SHA-256 of the head is also recorded
-in the manifest for interop with other tooling but is not used for decisions.
-
-**D8 — Patch graph with chain edges plus bounded direct edges; full blob
-fallback.**
-Every publish creates the edge prev→new (needed anyway for the hot path). Chain
-edges are immutable, so a target K releases behind already has a path (K tiny
-patches, fetched in parallel, applied sequentially with a hash check between
-steps; apply is ~0.1–0.2 s each). A three-hop chain measured 1.7–1.8× the bytes
-of the direct patch — still ~100 KB. After the hot path, the publisher adds direct
-edges from the last N (default 3) releases so common stragglers need one patch.
-The agent plans the fewest-bytes path with a chain cap (default 16), else full.
-Rejected: Firefox-style K-wide matrix on the critical path (K encodes before
-anyone can update); Windows-UUP reverse+forward hub (two applies for everyone,
-periodic rebasing, and retained reverse deltas on targets — solves a problem
-chain edges already solve for a fleet whose old versions are known);
-on-demand server-side generation (requires a live server, not an object store).
-
-**D9 — One signed mutable pointer object per channel; everything else
-content-addressed and immutable; hot patch inline.**
-Targets poll `channels/<ch>/latest` with `If-None-Match`; a 304 is one request
-and no egress. When a release lands, the pointer body carries the manifest, the
-recent graph (so path planning needs no further GET) and the hot patch if
-≤ 512 KiB (adds ~4 ms of transfer instead of a +130–230 ms second request).
-The pointer is replaced with `If-Match` CAS so concurrent publishers cannot
-lose a sequence number. Objects are cacheable forever (CDN-friendly); the
-pointer is `no-store`. Rejected: TUF's 4-GET flow (borrow its rollback/freeze
-checks instead); HEAD-then-GET; per-chunk objects; a live update server.
-
-**D10 — Poll plus optional poke.**
-No object store has a watch primitive and event notifications take seconds to a
-minute (update-systems §4). The agent polls (default 5 s; 1 RTT, one request)
-and exposes `POST /poke` so `publish --poke` or CI can trigger an immediate
-check; the poke carries no data, so it needs no trust. Rejected: long-poll
-server (extra infrastructure), object-store events.
-
-**D11 — SSH push path shares the codec and lifecycle, not the store.**
-For workstation→server the store is overhead: `push` opens SSH (cheap with
-ControlMaster), asks the remote for its base hash, encodes from the local cache,
-streams manifest + patch, and receives lifecycle events. Same `release`,
-`delta`, `install`, `upgrade` code; only transport differs. Signed by default,
-unsigned allowed only if the remote opted in.
-
-**D12 — Zero-downtime handoff by same-socket fd inheritance, run by the old
-process (tableflip model), with health probation before commit.**
-Only sharing one accept queue is loss-free on every kernel. The old process
-holds sockets until COMMITTED, so abort is free. Improvements over tableflip:
-readiness *and* probe-based probation before the old process drains; explicit
-abort reasons; a startup self-check to cover crashes after the old process has
-exited; `O_NONBLOCK` re-armed on inherited fds in the child (Go's `exec.Cmd`
-clears it). systemd fd-store mode is offered for services that cannot link the
-library (accept pause, not loss). `SO_REUSEPORT` handoff refused (D-evidence:
-`tcp_migrate_req` only ≥ 5.14, default off).
-
-**D13 — Install = temp + fsync + `link(path, path.old)` + `rename` + fsync(dir);
-`upgrade.pending` marker; one retained generation.**
-`rename` is atomic and unaffected by ETXTBSY; hardlink-then-rename keeps a valid
-executable at the path at every instant (go-update's rename-rename has a gap and
-never fsyncs). The marker lets the *next* process start detect "new build
-crashed after old exited" and revert before the supervisor's `StartLimitBurst`.
-Re-exec is always by path, never `/proc/self/exe` (old inode).
-
-**D14 — Ed25519-signed manifests with monotonic `seq` and `expires`;
-signature verified before anything else is parsed.**
-Sign the manifest (which names the patch and blob hashes), not the blobs: one
-signature covers the result. `seq` defeats rollback replays, `expires` freeze
-attacks (TUF's threat model, update-systems §6). Keys in minisign format so
-operators can reuse existing key hygiene. Multiple signatures allowed for
-rotation. Rejected: sigstore/Rekor on the hot path; unsigned patches with only a
-result hash (go-update model).
-
-**D15 — Pure Go, no cgo.**
-Agents must cross-compile and run in `FROM scratch` containers; the encoder
-runs on a build box where a few seconds are acceptable and can be hidden
-(D3). Dependencies: `klauspost/compress`, `lukechampine.com/blake3`, an S3
-SigV4 signer, `x/sys/unix`.
-
-**D16 — Publisher enforces delta-friendly builds.**
-Refuse (default) binaries with `.debug_*` or `.symtab` because they inflate a
-one-line patch 20–40× (5 MB vs 0.12 MB) and no encoder fixes compressed DWARF.
-Warn on PIE, `vcs.modified`, and missing `-trimpath`. Reproducible builds make
-"expected hash" derivable from the artifact and let any build box regenerate an
-old base.
-
-**D17 — Full blob as zstd seekable frames; ranged parallel fetch.**
-Independent 8 MiB frames plus a seek table (zstd's seekable format) let a
-straggler or drifted target fetch 4 ranges in parallel (S3 ~85–95 MB/s per
-connection) and decode concurrently, and let a resumed download restart at a
-frame. Also used by `push` when the base is unknown.
-
-**D18 — Probation defaults favour speed but never skip readiness.**
-`ready-timeout` 60 s, `min-healthy` 5 s, `healthy-deadline` 60 s,
-`drain-timeout` 30 s. Probation runs while the old process still serves, so it
-is not downtime; operators optimising pure build→reload latency can set
-`--min-healthy 0` and rely on readiness plus the startup self-check.
-
-## 5. Formats
-
-All integers little-endian. Hashes are 32-byte BLAKE3-256 digests unless in
-JSON, where they are `"b3:" + hex`. Canonical JSON = RFC 8785 (JCS): sorted
-keys, no insignificant whitespace, UTF-8.
-
-### 5.1 Manifest container (`BSYP`)
-
-Used for the channel pointer, release manifests, and the `push` protocol.
+Three roles, one store:
 
 ```
-off  size  field
-0    4     magic "BSYP"
-4    1     container version = 1
-5    3     reserved (0)
-8    4     manifest_len (u32)
-12   n     manifest: canonical JSON (UTF-8), exactly manifest_len bytes
-     2     sig_count (u16), ≥ 1
-     ×     sig_count × { key_id: 8 bytes, signature: 64 bytes }
-     8     inline_len (u64), 0 if no inline patch
-     m     inline patch: a complete patch container (§5.3), exactly inline_len bytes
+publisher (CI or workstation)            store (S3 / HTTPS / file / SSH dir)          targets (fleet)
+  binsync publish bin s3://…   ──put──▶   blobs/<hash>.zst        (immutable)  ◀─get──  poll latest.json (conditional GET)
+                                          patches/<from>-<to>.bsz (immutable)          fetch chain or blob, apply, verify
+                                          latest.json             (CAS-replaced)       install, restart, check, or revert
 ```
 
-- `key_id` = first 8 bytes of BLAKE3(public key bytes).
-- `signature` = Ed25519 over `"binsync/manifest/v1\n" || manifest` (domain
-  separated; no prehash — Ed25519 handles long messages).
-- Verifiers parse nothing in `manifest` until at least one signature verifies
-  against a pinned key. `inline_len` and the inline bytes are covered by the
-  manifest's `inline.size` and `inline.hash`.
+Two target shapes share the same `agent` package:
 
-### 5.2 Manifest JSON
+- **Embedded** (`selfupdate`): the service links the library; the old process
+  polls, installs and execs the new binary with its listening sockets
+  inherited. Zero downtime, no external process, one writable directory.
+- **External** (`binsync agent`): a sidecar polls and installs, then runs a
+  user command (`--restart`) and optionally a health check (`--healthy`). For
+  services that cannot link the library.
+
+Everything below the store is pull-based; there is no push channel, no
+per-target registry and no coordinator. Fleet-wide state is "whatever each
+target's file hashes to".
+
+## 3. Codec: `bsz` (Go-aware predict-then-correct)
+
+### 3.1 Principle
+
+A patch has two parts:
+
+1. **Prediction inputs** — a compact description of the new binary's
+   *layout* (function order and sizes; where data blocks moved), from which
+   the decoder rebuilds, deterministically, a *predicted* new binary out of
+   the old one: every function relocated to its new address with every
+   PC-relative operand re-targeted, every offset-based table regenerated.
+2. **Correction** — the difference between the prediction and the real new
+   binary, encoded positionally and compressed.
+
+The prediction only has to be deterministic, not correct: an imperfect
+prediction costs bytes in the correction, never correctness, because the
+output is verified against the release hash before use. This is the
+Courgette/Zucchini idea, but keyed on Go's own metadata rather than on
+disassembly heuristics: `.gopclntab` survives `-s -w` and names every
+function with its entry offset and size, which gives an exact
+function-by-function correspondence between releases and the exact new
+layout. Nothing in the pipeline needs symbols, DWARF or relocations.
+
+### 3.2 Pipeline
+
+Encoder and decoder run the same prediction; the encoder additionally has the
+real new file and emits the correction.
+
+```
+parse(old)            ELF sections; pclntab (funcs: name, entry, size, pc tables); moduledata
+                      ─ unsupported (non-Go, non-amd64, PIE, not the supported Go release — D14): plain codec §3.7
+match(old, new)       new function j ↔ old function i by name (exact; then normalised for
+                      closure/deferwrap/generic-instantiation numbering; then by content hash)
+layout table          for each new function in order: {same-as-next-old | old index | new name}, Δsize
+data maps             per data section (.rodata .noptrdata .data): piecewise-constant shift of old
+                      16-byte blocks to their new offsets (run-length: (block, Δ) pairs);
+                      blocks containing pointers may only shift by multiples of 8
+shift tables          .bss/.noptrbss: (old offset, Δ) runs derived from symbol-order deltas
+predict .text         for each new function: copy the matched old body to its new entry;
+                      decode x86 (x/arch/x86asm); rewrite every rip-relative / rel32 operand
+                      through {function map, data maps, shift tables}; unmatched → zero-filled slot
+predict .gopclntab    regenerate functab (entryOff), findfunctab, _func.entryOff, and re-base
+                      nameOff/pcdata/funcdata offsets after applying stage-1 deltas to the
+                      variable-length blobs (funcnametab, cutab, filetab, pctab, gofunc)
+predict data          re-lay blocks through the data maps; rewrite absolute pointers into
+                      .text/.rodata/.data/.bss through the same maps
+predict type descs    walk the descriptors and itabs from moduledata (Go 1.27: `.go.type`,
+                      `typedesclen`/`itaboffset`); rewrite nameOff/typeOff/textOff/ptrToThis and
+                      method tables through the same maps — nothing extra is transmitted
+correction            new ⊖ predicted, positionally; inside each changed function pair a local
+                      (window-bounded) approximate match; zstd; split into 8 MiB frames
+```
+
+Measured on the prototype (`bench/gotransform/`, `go-aware-transform.md`
+§10–11). Every Go-aware row was encoded to a patch file, decoded from the old
+binary and byte-verified; layout tables, data maps and stage-1 blobs are
+transmitted and counted (nothing is an oracle input any more):
+
+| Pair (toolchain) | bsdiff | hdiffz -p-8 | Go-aware, positional | Factor | Go-aware, hdiffz correction |
+|---|---:|---:|---:|---:|---:|
+| one-line (`v1→v2c`, 29.6 MB, Go 1.27) | 150,475 | 176,929 | 2,207 | 68× | 1,930 |
+| +3-byte string (`v1→v2l`, 1.27) | 24,874 | 33,713 | 566 | 44× | – |
+| multi-package (`v1→v4`, 1.27) | 145,205 | 171,760 | 2,733 | 53× | – |
+| `v3→v4` (1.27) | 30,196 | 40,523 | 578 | 52× | – |
+| prometheus 3.13.1→3.13.2, built with Go 1.27 (94 MB) | 2,691,644 | 2,719,152 | **111,552** | **24×** | 94,470 |
+
+The official Go 1.26 builds (prometheus 3.13.1→3.13.2: 291,214 B, 9.3×;
+kube-apiserver 1.36.3→1.36.4: 292,972 B, 7.0×) were measured with the
+previous codec revision — before pc-table regeneration and pointer consensus —
+and were not re-run; the codec targets Go 1.27 only (D14).
+
+Earlier oracle-map pass (§7.5; maps not transmitted, no decoder, now
+superseded): terraform 1.15.8→1.15.9 (Go 1.25) 5,427,575 → 1,990,549 (2.7×);
+cockroach 26.2.4→26.2.5 (Go 1.25, cgo) 8,588,309 → 4,190,756 (2.0×);
+prometheus 3.13.2→3.14.0 minor release (hdiffz) 8,599,007 → 5,416,050 (1.6×
+— 6,326 new functions; content-dominated, as it should be).
+
+Go 1.27 moved type descriptors and itabs out of `.rodata` into a sorted
+`.go.type` section full of `textOff` fields, which makes generic deltas 2.5×
+*worse* on 1.27 for the same change (bsdiff 60,478 → 150,475 B for the
+one-liner) and leaves the Go-aware patch unchanged. Three regenerations took
+the real pair from ~7× to 24×: the type-descriptor offsets
+(nameOff/typeOff/textOff, walking the descriptors from `moduledata`; without
+it prometheus/1.27 is 960,168 B), the pc tables (`pctab`, `cutab`,
+`go:func.*` are emulated from the new function layout instead of being sent
+as a generic delta — they were 100,949 B, 42 % of the patch), and pointer
+shifts chosen by majority vote among all pointers into the same symbol
+(which fixed a 5-byte-off shift into the short, repetitive `runtime.gcbits`
+data that had held `v3→v4` at 4.7×).
+
+What is left on prometheus/1.27 (111,552 B = header 116 + layout 11,271 +
+stage 1 20,469 + stage 2 79,696): 62,555 B of genuinely changed `.text`
+(56 % of stage 2), 45,170 B of `.go.type` (two-thirds genuinely new
+descriptors, ~8 KB wrong rewrites, ~4.5 KB names), and 14 KB of pc tables
+belonging to changed functions. A hdiffz stage 2 still beats positional
+runs (94,470 vs 111,552 B) because the changed-code residual is not purely
+positional; the codec's correction is therefore positional runs plus a
+window-bounded local match inside changed regions (§3.3), expected to land
+between the two.
+
+Encoder and decoder cost (`/usr/bin/time`, one run each; prometheus/1.27,
+94 MB): Go-aware encode 2.1 s / 654 MB (x86 decoding runs on all cores; the
+profile is 38 % `x86asm`, 30 % content-index build); bsdiff 39–43 s /
+805 MB; hdiffz -p-8 7.4 s / 388 MB (8 threads); full `zstd -19 -T0` 9.4 s /
+364 MB. Go-aware decode 1.0 s / 636 MB — it holds old + predicted + new,
+≈ 7× the file; applying section by section (open question 3) brings that to
+≈ 2× — against bspatch 0.47 s / 192 MB and hpatchz 0.08 s / 25 MB. Wall-clock
+is no longer the encoder's problem; memory is.
+
+Two lessons the prototype carries into the design:
+
+- Per-Go-release layout handling is real work, not a table of constants:
+  1.25 → 1.26 changed `entryOff` handling; 1.26 → 1.27 changed `moduledata`,
+  removed `.typelink`/`.itablink`, added `.go.type`/`.go.func`, grew
+  `MapType` by 24 B and made `go:func.*` alignment data-dependent. Hence D14:
+  one supported Go release, gated by a byte-exact self-prediction check
+  (old → old through the whole pipeline), plain codec for everything else.
+- Prediction is a compression context, not a correctness mechanism: the
+  decoder hashes the predicted base before applying the correction, so
+  encoder/decoder divergence is detected, and a wrong prediction costs
+  bytes, never a wrong output.
+
+### 3.3 Why no suffix array
+
+Once the layout table is applied the prediction has **exactly** the new
+file's length and structure (every function is at its final entry, unmatched
+functions as zero-filled slots of the right size, tables regenerated at the
+right sizes). The prototype achieves this by construction for `.text` and
+the whole file, and for pclntab on the synthetic pairs only; the design makes
+it unconditional by carrying the sizes of every variable-length pclntab blob
+(and of any new function's pc tables) in the layout table, so that the
+prediction is length-exact even where its *content* is wrong. The correction can therefore be positional: walk predicted and
+new in lockstep, emit `(offset, len, bytes)` runs where they differ. Where a
+run falls inside a changed function whose old body was matched, a local
+matcher over just that function pair (old body relocated vs new body,
+window-bounded, hash-chain) turns an edited function into
+"copy/insert/copy", recovering bsdiff-quality inside the function at
+O(function size) memory. Unmatched (new) functions are sent literally, zstd
+handles the rest.
+
+Cost model for a 1 GB binary (600 MB `.text`, ~400 K functions): x86 decode
+ran at 17–29 MB/s per core in the prototype (6 s for vault's 159 MB `.text`)
+and is embarrassingly parallel per function (relocation with 24 goroutines:
+1.6 s on vault); the `.rodata` content-map build is O(n) hashing (13 s for
+95 MB single-threaded, parallelisable). Memory was not measured on the
+prototype; by construction it is old + new + predicted + maps ≈ 3× input
+(*estimate*), versus bsdiff's 8.6–12× measured and a suffix array's 5–8×.
+The encoder is expected to finish a 1 GB pair in well under a minute on a CI
+box (*estimate*; the prototype's own residual step still used bsdiff, which
+dominated its wall time). The decoder does the same prediction work plus
+a sequential pass, so a target applies a patch in seconds; it never needs
+more than ~3× the binary in RAM (v1 keeps whole sections in memory;
+streaming is §11).
+
+### 3.4 Patch container (`.bsz`)
+
+```
+magic "BSZ1"  u8 transform (0 = plain, 1 = go-amd64-v1)  u8 flags
+u32 header_len; header (CBOR): { from: b3 hash, to: b3 hash, old_size, new_size,
+                                 frames: [ {off, len, zlen, b3} … ] }
+frames: independent zstd frames, each ≤ 8 MiB decompressed, in order:
+  frame 0     layout table, data maps, shift tables, stage-1 pclntab-blob deltas
+  frames 1..n correction runs: varint(gap) varint(len) bytes, in file order
+```
+
+Each frame's BLAKE3 is in the header and the whole patch's hash is in the
+pointer, so a partially fetched patch is verified frame by frame and resumed
+at a frame boundary with a `Range` request. All offsets read from the patch
+are bounds-checked against `old_size`/`new_size`; a malformed patch fails
+verification, it cannot crash the decoder or write outside the output.
+
+### 3.5 Transform versioning and the decoder that is already deployed
+
+The decoder that applies a patch is **the old binary's** embedded library (or
+the deployed agent). The publisher therefore chooses the transform per patch:
+
+- Embedded: the publisher reads the old binary's `debug/buildinfo` for the
+  `binsync` module version, and uses the newest transform that version
+  supports. (The old binary is in the publisher's cache; it produced the
+  chain's `from` hash.)
+- External: the agent version is not visible to the publisher; the current
+  transform is used.
+- A decoder that meets a transform it does not support **falls back to the
+  blob** — a full download, never a failure. Same for a Go version whose
+  pclntab format the decoder does not know.
+
+Format stability: the codec depends on `.gopclntab` (`runtime/symtab.go`,
+magic `0xfffffff1` since Go 1.20), `moduledata` field order, and the 32-byte
+function alignment. The magic is stable across 1.20–1.27 but the surrounding
+layout is not: the prototype needed separate code paths for 1.25
+(`entryOff`), 1.26 and 1.27 (`.go.type`, `moduledata`, `go:func.*`
+alignment).
+The codec therefore keys its
+pclntab/moduledata/type-descriptor handling on the Go version from
+`debug/buildinfo`, and **supports exactly one Go release at a time: the
+current stable one (1.27 today; D14)**. A binary built by any other
+toolchain gets the plain codec (§3.7). Each new Go release is enabled only
+after a byte-exact self-prediction check (old → old through the full
+pipeline) on a small corpus built with that release; the previous release is
+kept only for as long as it costs nothing. This trades a wider compatibility
+matrix — one that the prototype showed is real work per Go minor — for a
+codec that is small enough to be reviewed and tested exhaustively; a fleet
+that pins an older Go still updates correctly, just with larger patches.
+
+### 3.6 Determinism and safety
+
+- The prediction uses only the old file plus bytes from the patch; no
+  environment, no clock, no randomness. Encoder and decoder share the code.
+- Any decode failure of an instruction (the prototype hit 9 bytes of AVX2 in
+  30 MB) leaves those bytes unrelocated; the correction fixes them.
+- The result is written to a temp file and BLAKE3-hashed before it is
+  renamed into place; the hash is compared with `to` from the pointer.
+
+### 3.7 Plain codec (transform 0)
+
+For non-Go, non-amd64, PIE, or otherwise unparseable inputs: a bsdiff-class
+encoder over the whole file using the standard library's `index/suffixarray`
+(SA-IS), zstd-compressed, same container and frames. It is capped at 256 MB
+old-file size (memory ≈ 6× input); above that `publish` publishes the blob
+only and says so. This keeps one simple, pure-Go fallback with predictable
+cost rather than a second tuned encoder. Measured plain-codec sizes: one-line
+60 KB, kube-apiserver 2.1 MB (bsdiff); ours will be within ~20 % of bsdiff
+(*estimate*: same algorithm, different compressor).
+
+Not doing: zstd `--patch-from` as a codec (3.5× worse than bsdiff on
+one-line and on kube-apiserver), HDiffPatch (C, cgo), xdelta3 (worst sizes,
+8.9× RAM).
+
+## 4. Releases, pointer and store
+
+### 4.1 Identity
+
+A release is its BLAKE3-256 hash (`b3:<64 hex>`), nothing else. The version
+string shown in logs comes from the binary's `debug/buildinfo` (`main` module
+version or `vcs.revision`), with the hash as the identity. Reproducible builds
+(`-trimpath`, `-buildid=`, `CGO_ENABLED=0`) make the hash derivable from
+source, which is what makes "is the fleet on commit X" answerable.
+
+### 4.2 Pointer: `latest.json`
+
+The only mutable object. Small enough to fetch on every poll (≈ 1 KB + 80 B
+per frame; a 1 GB blob has 128 frames):
 
 ```json
 {
-  "v": 1,
-  "kind": "pointer",                       // "pointer" | "release" | "push"
-  "channel": "prod",
-  "seq": 1234,                             // strictly increasing per channel
-  "created": "2026-08-26T10:00:00Z",
-  "expires": "2026-09-25T10:00:00Z",       // default created + 30 d
-  "head": {
-    "hash": "b3:…", "sha256": "…", "size": 29561097,
-    "version": "v1.2.3-4-g1234abc",
-    "blob": { "key": "blobs/b3:….zst", "size": 9497944, "hash": "b3:…" },
-    "buildinfo": { "go": "go1.26.4", "path": "example.com/srv", "vcs.revision": "…", "vcs.modified": false },
-    "elf": { "pie": false, "dwarf": false, "symtab": false, "sections": [["text", 4096, 14781841], …] }
-  },
-  "graph": {
-    "nodes": [ { "hash": "b3:…", "seq": 1233, "version": "…", "size": … }, … ],   // last 16 releases incl. head
-    "edges": [ { "from": "b3:…", "to": "b3:…", "codec": "bsz", "size": 61234, "hash": "b3:…", "key": "patches/b3:…-b3:….bsz" }, … ]
-  },
-  "inline": { "from": "b3:…", "to": "b3:…", "codec": "bsz", "size": 61234, "hash": "b3:…" },   // or null
-  "publisher": { "key_id": "0123456789abcdef", "tool": "binsync/0.1.0", "host": "ci-42" }
+  "format": 1,
+  "seq": 1724700000123,
+  "head": { "hash": "b3:…", "version": "v1.42.0-3-gabc123", "size": 88011776,
+            "blob": { "key": "blobs/b3-….zst", "size": 19072059,
+                      "frames": [ { "off": 0, "len": 8388608, "zlen": 1802331, "b3": "…" }, … ] } },
+  "chain": [
+    { "from": "b3:…prev",  "to": "b3:…head", "key": "patches/…prev-…head.bsz", "size": 358607, "b3": "…" },
+    { "from": "b3:…prev2", "to": "b3:…prev", "key": "patches/…prev2-…prev.bsz", "size": 402113, "b3": "…" }
+  ]
 }
 ```
 
-Validation order on the target: signature → `v`/`kind` → `channel` equals the
-configured one → `expires` > now → `seq` > last accepted (persisted) → `head`
-fields well-formed → graph edges reference known nodes and the inline entry (if
-any) matches `inline_len`/hash. `kind: "release"` objects omit `graph` and
-`inline`; `kind: "push"` omits `channel`/`seq` (the push transport provides
-freshness) unless the sender sets them.
+- `seq` is the publisher's wall clock in ms; a target ignores a pointer whose
+  `seq` is ≤ the last one it accepted (replay protection against a stale
+  cache or a rolled-back bucket; it does not need to be exactly monotonic
+  across publishers, only larger).
+- `chain` lists the last `max_chain` (8) edges, newest first. It is rebuilt
+  from the previous pointer on every publish; older patches remain in the
+  bucket but are unreachable (a lifecycle rule can delete them after 30 d).
+- A target on hash `h` finds the suffix of `chain` that ends at `h`. If it
+  exists and its total `size` is below the blob's, it fetches those patches
+  (oldest first, applying each with verification); otherwise the blob.
+- The pointer is written with `Cache-Control: no-store` and replaced with a
+  compare-and-swap (`If-Match` on S3/GCS, `rename(2)` on file/ssh); a lost
+  race is retried after re-reading the pointer, so two publishers cannot fork
+  the chain.
+- Store `format` bumps are forward-only: a target that sees an unknown
+  `format` logs and keeps its current binary.
 
-### 5.3 Patch container
-
-```
-off  size  field
-0    4     magic "BSZ1"
-4    1     container version = 1
-5    1     codec: 1 = bsz, 2 = zstd-prefix
-6    1     transform: 0 = none (reserved for D6)
-7    1     flags (bit0: partitions carry old-range hints)
-8    32    from_hash
-40   32    to_hash
-72   8     old_size
-80   8     new_size
-88   4     partition_count N (≥ 1)
-92   4     header_crc32c over bytes 0..91
-96   N×64  partition table entries:
-             new_off u64, new_len u64, old_hint_off u64, old_hint_len u64,
-             frame_len u64, out_hash 32 bytes (BLAKE3 of new[new_off, new_off+new_len))
-     ...   frames, in partition order, each exactly frame_len bytes
-```
-
-Partitions tile `[0, new_size)` exactly, in increasing order. The trailing
-32 bytes after the last frame are a BLAKE3 of everything before them (whole-file
-patch integrity for offline use; the manifest's edge hash is the authoritative
-one). Apply refuses any partition whose decoded output length ≠ `new_len` or
-whose hash ≠ `out_hash`, and any control instruction that would read outside
-`[0, old_size)` or write outside the partition.
-
-**bsz frame:**
+### 4.3 Objects
 
 ```
-ctrl_len u32, diff_len u32, extra_len u32, then ctrl, diff, extra — each an
-independent zstd frame (klauspost, level "best" for diff/ctrl, "better" for extra).
-ctrl (decompressed) = sequence of { diff_n uvarint, extra_n uvarint, seek svarint }
+<store>/latest.json
+<store>/patches/<from8>-<to8>.bsz      first 8 hex of each hash; immutable; Cache-Control: immutable
+<store>/blobs/<hash>.zst               immutable; independent zstd frames of 8 MiB input each
 ```
 
-Semantics per triple, with `oldpos` starting at 0 for each partition:
-copy `diff_n` bytes as `old[oldpos+i] + diff[i]` (mod 256), then `extra_n`
-literal bytes from `extra`, then `oldpos += diff_n + seek`. Sum of `diff_n +
-extra_n` over the partition = `new_len`. Empty diff and extra streams are
-encoded as zero-length zstd frames.
+Blobs are frame-split so that a target can fetch them with N parallel `Range`
+requests (S3/GCS accept exactly one range per request) and resume at a frame
+boundary; each frame is hashed in the pointer. Patches use the same frame
+scheme inside the container (§3.4).
 
-**zstd-prefix frame:** one partition; the frame is a standard zstd frame (or
-frame sequence) encoded with `old` as the raw content dictionary and window log
-= ⌈log₂(old_size + new_size)⌉ (≤ 31). `zstd -d --patch-from=old --long=<wlog>
---memory=<size>` decodes the frame bytes after the header.
-
-### 5.4 Full blob
-
-`blobs/<hash>.zst` is a zstd *seekable* stream: independent frames of 8 MiB
-uncompressed, followed by a skippable frame (magic `0x184D2A5E`) holding the
-seek table `[compressed_size u32, decompressed_size u32]×n`, `n` (u32),
-descriptor, and the seekable magic `0x8F92EAB1`. Targets fetch the last 4 KiB
-first (one ranged GET), then frames in parallel ranges.
-
-### 5.5 Object keys and headers
-
-| Key | Mutability | Headers |
-|---|---|---|
-| `channels/<ch>/latest` | mutable, CAS (`If-Match` ETag; `If-None-Match: *` on first create) | `Cache-Control: no-store`, `Content-Type: application/vnd.binsync.pointer` |
-| `releases/<hash>.json` (BSYP) | immutable | `public, max-age=31536000, immutable` |
-| `patches/<from>-<to>.<codec>` | immutable | same |
-| `blobs/<hash>.zst` | immutable | same |
-
-Hashes in keys use the `b3:` prefix form. The publisher writes all immutable
-objects with `If-None-Match: *` and treats "already exists" as success.
-
-### 5.6 Target state directory
+### 4.4 Publisher flow
 
 ```
-<state>/state.json        { "channel", "last_seq", "last_head", "base_cache": { "path","dev","ino","size","mtime_ns","ctime_ns","hash" }, "last_result": {…} }
-<state>/upgrade.pending   { "old_hash","new_hash","started","attempt","crashes" }  — exists from INSTALLED until COMMITTED/ABORTED
-<state>/lock              flock(2) held by the running agent/sync
-<path>.old                previous binary (hard link), one generation
-<path>.binsync-tmp.<rand> staging file (same directory; removed on failure)
+binsync publish <bin> <store>:
+  hash bin; warn (or refuse without --force) on DWARF/symtab/PIE/modified VCS tree
+  read store pointer (or none) → prev = head
+  if prev == hash: exit 0 ("already published")
+  old = cache[prev] (fetched from the store's blob if the cache lacks it; skip patch if absent)
+  patch = Encode(old, bin) unless len(patch) ≥ len(blob)   ← never publish a patch larger than the blob
+  put patch, put pointer (CAS; retry on conflict), then put blob frames (parallel)
+  cache[hash] = bin
 ```
 
-### 5.7 Control socket protocol (agent ↔ service)
+Cache: `$XDG_CACHE_HOME/binsync/<hash>` with an LRU cap of 10 releases; a
+cold cache means the first publish from a new machine fetches the previous
+blob (or publishes blob-only).
 
-Unix stream socket, newline-delimited JSON, one request per connection.
+Upload order is **patch → pointer → blob** (D13). Every target that is on the
+chain — which is every target in the steady state — needs only the patch, and
+the pointer becomes visible as soon as the patch (hundreds of KB) is up,
+rather than after the blob (tens of MB). On a fast CI → bucket link the
+difference is a second or two; from a workstation over the same medium link
+the targets are on, it is the difference between ~5 s and ~2 min (a 19 MB
+blob over one SSH stream at 1 % loss is ≈ 130 s; the SSH store cannot
+parallelise it). The cost is a weaker invariant: a pointer always names an
+existing *patch*, but may name a blob that is still uploading. A target that
+needs the blob (drifted, or more than `max_chain` behind) and gets a 404
+retries with backoff (1 s doubling to 1 min, for up to 30 min) and, if the
+publisher died before the blob landed, is healed by the next publish, whose
+blob it fetches instead. Patch-only publishes are never left permanently
+blob-less: `publish` treats a missing blob for the current head as work to
+finish first on its next run.
+
+## 5. Transport
+
+- **Poll**: `GET latest.json` with `If-None-Match`; 304 costs one RTT and no
+  bytes. Default interval 5 s remote, 1 s `file://`; the interval doubles up to
+  5 min on consecutive errors and resets on success. On S3 the poll is a
+  `GetObject` with `IfNoneMatch`; on `file://` it is `stat` + read.
+- **Patch fetch**: one `GET` per patch, streamed, frame-verified; on a
+  transport error the fetch resumes at the last verified frame with a `Range`
+  request (up to 5 retries with backoff).
+- **Blob fetch**: 8 parallel `Range` requests over the frame table; each frame
+  verified on arrival, written at its offset into the temp file; failed
+  frames retried individually. A 404 on a blob the pointer names means the
+  publisher has not finished uploading it (§4.4): retry with backoff rather
+  than fail. On profile C (20 Mbit/s, 1 % loss) this is
+  57 s → 7.4 s for an 8 MB blob and 180 s → 26 s for 25 MB.
+- **Stores**: `s3://` (AWS SDK v2, SigV4; also GCS/R2/MinIO via endpoint
+  config in the usual env vars), `https://` (read-only, plain `GET`/`HEAD`,
+  meant for a CDN or static server in front of a bucket), `file://`,
+  `ssh://` (publish-only: `sftp` puts + `rename` for the CAS; the remote
+  target polls the same directory as `file://`).
+
+## 6. Target lifecycle
+
+### 6.1 The rule
+
+One update runs at a time; it either ends with the new release running and
+`Ready()`/`--healthy` observed, or with the previous file back in place and
+the previous process (or a restart of it) serving. There is no intermediate
+state a user has to reason about beyond "which binary is at `<path>` and
+does `<path>.old` exist".
+
+### 6.2 Install (both shapes)
 
 ```
-→ {"op":"status"}
-← {"state":"idle","pid":123,"hash":"b3:…","version":"…","started":"…"}
-
-→ {"op":"upgrade","path":"/srv/app/server","expect":"b3:…","ready_timeout":"60s",
-   "probe":{"url":"http://127.0.0.1:8080/healthz","min_healthy":"5s","deadline":"60s"},
-   "drain_timeout":"30s"}
-← {"event":"starting","child_pid":456}
-← {"event":"ready"}                      // child wrote the ready byte
-← {"event":"healthy"}                    // probation passed (or omitted when no probe)
-← {"event":"committed"}                  // old process now draining; connection closes when it exits
-   -- or --
-← {"event":"aborted","reason":"ready-timeout","exit_status":null}
-
-→ {"op":"abort"}                         // operator/agent-initiated during STARTING/PROBING
-← {"event":"aborted","reason":"operator"}
+write <path>.tmp.<rand> (same directory) ← decoded bytes; fsync; verify BLAKE3 == head
+link(<path>, <path>.old)             (replace any stale .old first)
+create <path>.pending                 (contains head hash)
+rename(<path>.tmp.<rand>, <path>)     (atomic; running process keeps its old inode)
+fsync(dir)
 ```
 
-The service refuses `upgrade` while one is in flight (`{"error":"upgrade in
-progress"}`) and refuses a `path` whose hash ≠ `expect` (it hashes the file
-before exec — cheap, and prevents racing an unrelated write).
+Revert is `rename(<path>.old, <path>); unlink(<path>.pending); fsync(dir)`.
+Every step is idempotent so a crash at any point leaves either the old or the
+new file at `<path>`, and the next start can finish or undo the job from the
+marker (§6.5). Requirements: the directory is writable and `<path>` is not a
+symlink; no other file is touched.
 
-### 5.8 Child environment and fds (embedded mode)
-
-```
-fd 3           ready pipe (write end); child writes one byte 0x2A after Ready()
-fd 4           parent-alive pipe (read end); EOF ⇒ parent exited
-fd 5..         inherited listeners, in the order given by BINSYNC_FDS
-env BINSYNC_UPGRADE_CHILD=1
-env BINSYNC_FDS=[{"name":"http","network":"tcp","addr":"[::]:8080","fd":5}, {"name":"control","network":"unix","addr":"/run/app/binsync.sock","fd":6}]
-```
-
-The child sets `O_NONBLOCK` on every inherited fd before `os.NewFile`. Unix
-socket paths are unlinked only by the process that finally stops with no
-successor. `os.Args[0]` for the child is the installed path; `argv` otherwise
-copied from the parent.
-
-### 5.9 `push`/`recv` protocol (stdio)
-
-Frames: `len u32 | json header | payload(len - header_len)`.
+### 6.3 Embedded (`selfupdate`)
 
 ```
-recv → {"hello":1,"base":"b3:…","size":…,"version":"…","mode":"embedded","allow_unsigned":false}
-push → {"manifest":true}  payload = BSYP container (kind "push", inline patch or none)
-push → {"blob":true, "frames":n}  payload = seekable zstd blob     (only when no patch)
-recv → {"event":"…"} …                                             (lifecycle events, as §5.7)
-recv → {"result":"ok"|"failed","code":0..75,"hash":"b3:…"}
+old process (agent loop)                          new process
+  install (§6.2)
+  cmd = exec.Command(<path>, os.Args[1:]...)      ← by path, never /proc/self/exe
+  cmd.ExtraFiles = listeners; env BINSYNC_FDS=…,
+      BINSYNC_READY=<pipe fd>
+  start; wait for: ready-pipe byte | exit | 60 s   selfupdate.Start(): sees BINSYNC_FDS → Listen()
+                                                    returns inherited fds; serves; user calls Ready()
+  ready   → stop accepting (close listener fds       Ready(): unlink <path>.pending; write byte to pipe
+            in this process), run OnShutdown
+            callbacks (drain, ≤ 30 s), exit 0
+  exit / timeout → SIGTERM, 5 s, SIGKILL;
+            revert (§6.2); record head in
+            <path>.binsync/failed; keep serving
 ```
 
-## 6. Algorithms
+- `Listen(network, addr)` returns an inherited listener when one with the
+  same `(network, addr)` was passed in `BINSYNC_FDS`, otherwise a fresh one.
+  Both processes accept from the same socket between `start` and `ready`,
+  so nothing queued in the accept backlog is lost.
+- `Ready()` is the health decision; the library does not probe anything. Do
+  your checks (DB connectivity, warm caches) *before* calling it.
+- `Done()` closes when this process has been superseded, after `OnShutdown`
+  callbacks return; the usual `main` ends with `<-up.Done()`.
+- Signals: the old process forwards nothing. If the supervisor (systemd)
+  sends SIGTERM to the old process mid-upgrade, the child is killed and the
+  file reverted first, so the supervisor restarts the old release.
+- `failed` (a file with the head hash): the loop skips that head until the
+  pointer changes, so a broken release cannot crash-loop the fleet; the
+  publisher's next release clears it.
 
-### 6.1 Encoder (`bsz`)
+### 6.4 External (`binsync agent`)
 
-1. **Base index.** `sa = suffixarray.New(old)` (SA-IS, 32-bit ints below 2 GiB).
-   Serialized to `<cache>/index/<hash>.sa` after publish; loaded with `mmap` on
-   the next publish. Cold build: ~80 ms/MB on this box.
-2. **Partitioning.** Read the new file's ELF section headers (`debug/elf`);
-   candidate cut points are section starts. Choose partitions of ~6 MiB (tunable)
-   whose starts are the nearest section start ≤ the ideal cut; partitions never
-   span a section start unless the section is larger than the partition size
-   (then cut inside it). Non-ELF inputs use fixed cuts.
-3. **Match scan** (per partition, one goroutine each, bounded by `GOMAXPROCS`):
-   bsdiff's scan — at each `scan` position search the SA for the longest match
-   (`binary search + LCP`), keep it if it explains ≥ 8 bytes beyond the current
-   approximate extension, extend forward/backward while ≥ 50 % of bytes match,
-   emit `(diff_n, extra_n, seek)`. The old-range hint recorded in the partition
-   table is the min/max `oldpos` used (informational; lets a future apply
-   prefetch).
-4. **Streams.** Encode ctrl varints; diff bytes; extra bytes. Compress each with
-   klauspost zstd (`SpeedBestCompression`, window 4 MiB for diff/ctrl — the
-   diff stream is near-zero and compresses to a few KB regardless).
-5. **Selection.** If the resulting patch ≥ 90 % of the blob size, the publisher
-   omits the edge (targets will use the blob). If the SA is cold and
-   `old_size > 64 MiB` and `--codec auto`, use `zstd-prefix` for the hot patch
-   and let the background job replace it with a `bsz` edge.
+```
+install (§6.2) → run --restart CMD (sh -c; must exit 0 within 60 s)
+   → if --healthy: poll URL (2xx) or run CMD every 1 s until 60 s
+   → ok: unlink <path>.pending
+   → not ok / restart failed: revert (§6.2); run --restart again; record failed
+```
 
-Complexity: scan is O(m log n) string comparisons; memory = old + new + SA
-(≈ 6× old). Target: warm encode of a 50 MB binary in < 1 s on 8 cores.
+The agent never signals or supervises the service; the user's command does
+whatever "restart" means for them (`systemctl restart`, `kill -HUP`, …).
+Without `--healthy` the update is considered successful once `--restart`
+exits 0 — that is the deliberate minimal contract.
 
-### 6.2 Apply
+### 6.5 Crash after the old process is gone
 
-Sequential over partitions (or parallel with `--parallel`, each into its own
-output range via `WriteAt`); per partition, stream-decode the three zstd frames,
-execute triples with strict bounds checks, write into the staging file, feed a
-per-partition BLAKE3 and the whole-file BLAKE3. Old file accessed via `mmap`
-(read-only) or `ReadAt`. Peak memory ≈ zstd windows + I/O buffers (tens of MB),
-never old + new.
+If the new binary crashes after `Ready()` was never called but the old
+process already exited (possible in external mode, or if the embedded old
+process was killed by the supervisor after `ready`), the supervisor restarts
+`<path>`, which is still the new file. `selfupdate.Start()` (and
+`binsync agent` on start-up) checks: `<path>.pending` exists **and**
+`BINSYNC_FDS` is unset (so this is not an upgrade launch) **and**
+`<path>.old` exists → revert, record `failed`, and `exec` `<path>` (now the
+old release). That is the whole recovery protocol; no state machine, no
+probation window, no health history. A service without a supervisor is not
+protected against this case (documented).
 
-### 6.3 Path planning
+### 6.6 What the user sees
 
-Graph from the pointer (nodes ≤ 16, edges ≤ ~50). Dijkstra by edge `size` from
-`base` to `head`, with hop count ≤ `--max-chain`; if no path, use the blob.
-Ties prefer fewer hops. All edges of the chosen path are fetched concurrently
-(inline edge from memory), applied in order, verifying each intermediate hash
-before it becomes the base for the next step. The intermediate outputs live in
-the staging directory and are removed after the final verify.
+Structured log lines (`slog`) per cycle: `poll` (304/changed), `plan` (chain
+vs blob, bytes), `fetch`, `apply`, `install`, `restart`, `ready`/`healthy`,
+`reverted`, `failed`. Exit codes for `agent --once`: 0 ok/at head, 3
+verification failed, 4 no path to head, 5 rolled back.
 
-### 6.4 Base hash cache
+## 7. Library layout
 
-`state.json.base_cache` is valid iff `(dev, ino, size, mtime_ns, ctime_ns)` of
-`<path>` are unchanged; otherwise rehash (≈ 10 ms/100 MB). The hash is also
-recomputed after every install.
+```
+binsync/delta        Encode(old, new []byte, opts) ([]byte, error); Apply(old, patch, w) error  (§3)
+binsync/delta/gopcln pclntab/moduledata parsing and regeneration (Go ≥ 1.20 format)
+binsync/delta/x86    operand relocation over x/arch/x86asm
+binsync/release      Pointer, Edge, Frame types; Plan(pointer, current) (chain | blob | none);
+                     Install/Revert (§6.2); hash cache keyed by (dev, inode, size, mtime)
+binsync/store        Store interface { Get(key, opts{range, ifNoneMatch}) ; Put(key, r, opts{ifMatch}) }
+                     implementations: s3, https, file, ssh
+binsync/agent        Loop(ctx, Config, Hooks): poll → plan → fetch → apply → install → hooks.Restart → hooks.Check
+binsync/selfupdate   Start/Listen/OnShutdown/Ready/Done built on agent with the exec handoff as Restart
+cmd/binsync          publish, agent, diff, patch
+```
 
-## 7. Upgrade lifecycle details
-
-The state machine and hook contract are in `README.md` §7. Additional
-mechanics:
-
-- **Who runs what.** `binsync/upgrade` (in the service) owns processes: exec,
-  fd passing, readiness, probation, drain, abort/kill. `binsync/install` owns
-  files: stage, link, rename, marker, revert. `binsync/agent` sequences them and
-  runs hooks. In self-updating services all three run in-process.
-- **Exec.** `syscall.ForkExec` via `os.StartProcess` with `Files = [stdin,
-  stdout, stderr, readyW, aliveR, listeners…]`, `Env` extended as §5.8, `Dir`
-  inherited. On `ETXTBSY` (Go fork/exec race, golang/go#22315) retry with
-  backoff up to 1 s.
-- **Readiness.** Parent selects on the ready pipe and the child's exit; whichever
-  first. `Ready()` in the child also updates a PID file if configured
-  (`sd_notify MAINPID=` when under systemd `Type=notify`).
-- **Probation.** Parent probes `probe.url` every 500 ms (or runs `probe.cmd`);
-  requires continuous success for `min_healthy` before `deadline`; the probe is
-  expected to target the new process (e.g. a port only the child announces, or
-  a `/healthz?pid=` echo) — in same-socket mode both processes accept, so the
-  probe should carry a `X-Binsync-Expect: <new_hash>` header that the service
-  echoes with its own hash; mismatch ⇒ retry, not failure.
-- **Commit.** Parent closes its copies of the listeners *after* the child is
-  healthy, calls registered shutdown callbacks, `http.Server.Shutdown(drain)`,
-  then `Close()`, then exits 0. The child sees EOF on the alive pipe and
-  finalises (removes the marker via the agent, or itself when self-updating).
-- **Abort.** `SIGTERM` child, 5 s, `SIGKILL`; the parent keeps its listeners
-  throughout so nothing queued is lost except connections the child already
-  accepted (it is asked to drain those during the 5 s).
-- **Startup self-check** ordering: first statement in `main` (`upgrade.Init()`),
-  before any listener is created, so a broken build fails before it can take
-  traffic.
-- **systemd unit sketch** (embedded mode): `Type=notify`, `NotifyAccess=all`,
-  `KillMode=mixed`, `Restart=on-failure`, `StartLimitBurst=5`, and the agent as
-  a separate unit with `After=`.
+Dependencies: `golang.org/x/arch` (x86 decoder), `github.com/klauspost/compress/zstd`,
+`github.com/zeebo/blake3`, AWS SDK v2 (s3 only; behind a build tag so a
+`file://`-only build stays small), `golang.org/x/crypto/ssh`.
 
 ## 8. Security model
 
-Threats and mitigations (TUF-derived):
+- **Authenticity comes from the endpoint.** A target trusts whatever
+  `latest.json` the configured store returns; the store URL is the security
+  configuration. `https://` requires a valid certificate chain (no
+  `InsecureSkipVerify` knob); `s3://` uses SigV4 over TLS with the ambient
+  credentials; `ssh://` uses the host key; `file://` trusts the filesystem.
+  This is the same trust model as `go install`, `apt` over TLS mirrors, and
+  most container registries; it means a compromise of the bucket or of the
+  publisher's credentials is a compromise of the fleet. Signed manifests
+  would narrow that to "compromise of the signing key" and can be added
+  later as an extra field in the pointer without changing the layout.
+- **Integrity comes from hashes.** Every byte the target uses is checked
+  against a hash that is reachable from the pointer: frame hashes, patch
+  hash, and the final file hash. A CDN or proxy that corrupts or substitutes
+  content causes a verification failure, not a bad install.
+- **Replay/rollback.** `seq` must increase; an attacker who can serve an old
+  pointer can hold a target back, not move it to arbitrary content.
+- **Decoder hardening.** The patch is untrusted input to the decoder: all
+  offsets and lengths are bounds-checked; allocation is bounded by
+  `new_size` from the pointer (which is itself bounded by a configured
+  `max_size`, default 2 GB).
+- **Local.** `<path>` and its directory must be writable only by the service
+  user; the agent refuses a `<path>` that is a symlink or world-writable.
 
-| Threat | Mitigation |
-|---|---|
-| Store compromise / MITM serves a malicious binary | Ed25519 signature over the manifest; hashes of patch and blob in the manifest; result hash verified before install |
-| Rollback to an older signed release | `seq` strictly increasing per channel, persisted on the target |
-| Freeze (serve a stale but valid pointer forever) | `expires`; the agent logs and refuses expired pointers; a "stale head" metric |
-| Mix-and-match (valid patch, wrong base) | edges carry from/to hashes; base hash checked before apply; output hash after |
-| Malicious patch exploiting the decoder | strict bounds checks; decoder fuzzed; the patch bytes are hashed against the signed manifest before decoding begins |
-| Key compromise | multiple pinned keys, rotation by publishing with old+new signatures for a grace period; revocation by removing the key from targets |
-| Local attacker with write access to `<path>` | out of scope (equivalent to root on the target); state dir and binary directory should be root-owned |
-| Poke endpoint abuse | pokes carry no data; rate-limited; optional bearer token |
+## 9. Testing strategy
 
-## 9. Performance model and targets
+- Unit: codec round-trips on small hand-built ELF fixtures (a few KB) with
+  synthetic pclntabs; pointer planning; install/revert on a temp dir with
+  fault injection between each syscall step; frame verification with
+  corrupted frames. All < 100 ms.
+- Integration (`go test -run Integration`, ≤ 1 s each): `file://` store
+  end-to-end with a tiny Go test server that does a real exec handoff and
+  checks no accept is lost under load (`tableflip`-style test); external
+  agent with a fake `--restart`.
+- Corpus/benchmark (manual, `bench/`): patch sizes and encoder time on the
+  release corpus; must not regress against `go-aware-transform.md` numbers.
 
-Model (100 Mbit/s, 100 ms RTT, S3-like 30 ms TTFB, 4-way parallel):
+## 10. Decisions
 
-| Scenario | Requests | Bytes | Network time | Encode | Apply | Total |
-|---|---|---|---|---|---|---|
-| Hot path, inline patch (60 KB) | 1 | 60 KB | 0.13 s | 0.8 s warm | 0.2 s | **≈ 1.2 s** + exec/ready |
-| Hot path, patch object (300 KB) | 2 | 300 KB | 0.28 s | 0.8 s | 0.2 s | ≈ 1.3 s |
-| 5 releases behind (chain, 5 × 80 KB) | 1 + 5 ∥ | 400 KB | 0.3 s | — | 1.0 s | ≈ 1.4 s |
-| Drifted / cold (full blob 15 MB, 4 ranges) | 1 + 5 | 15 MB | 1.5 s | — | 0.1 s | ≈ 1.7 s |
-| CDC/CAS (rejected, for reference) | 1 + ~10 coalesced ranges | 3–9 MB | 0.6–1.2 s | — | 0.2 s | ≈ 1–1.5 s but 50–100× the bytes |
-| Full copy over cold SSH + restart | 6–8 RTT + 50 MB | 50 MB | 4.8 s | — | — | ≈ 5 s + dropped connections |
+| # | Decision | Reason (short) |
+|---|---|---|
+| D1 | Delta patches, not CDC/CAS | 100× smaller for shifted executables (`cdc-cas.md`) |
+| D2 | Go-aware predict-then-correct as the primary codec; plain bsdiff-class fallback | 5.7–38× over bsdiff on the corpus; scales to 1 GB without a suffix array (§3) |
+| D3 | Correction is positional after a layout-exact prediction | removes the encoder's memory/time cliff; the layout table makes prediction length-exact |
+| D4 | One mutable pointer, immutable content-addressed objects, chain of prev→head patches | one conditional GET to poll; CAS prevents forks; skipped releases follow the chain or take the blob |
+| D5 | Blob and patches split into 8 MiB frames with per-frame hashes | parallel ranged fetch (5–8× under loss) and resume; S3/GCS have no multi-range |
+| D6 | No signing key; endpoint trust + hashes | setup friction; same model as `go install`; can be layered later (§8) |
+| D7 | Two hooks (`--restart`, `--healthy`) / two calls (`Ready`, `OnShutdown`) | covers the initial use-cases; everything else is the user's code |
+| D8 | Three outcomes per update (ready, reverted, failed-and-skipped); `.pending` marker for post-exit crashes | simplest thing a user can reason about; no probation state machine |
+| D9 | Same-socket fd inheritance for handoff; `SO_REUSEPORT` refused | only loss-free mechanism on all kernels (`zero-downtime-upgrade.md`) |
+| D10 | Hardlink + rename install; exec by path | atomic, revertible, and never runs a deleted inode via `/proc/self/exe` |
+| D11 | `-s -w` required (warning, `--force` to override) | unstripped DWARF makes every patch ≈ full size |
+| D12 | Poll only (no push, no poke) | 304 poll is one RTT; workstation case is served by `file://` at 1 s |
+| D13 | Publish order patch → pointer → blob; blob 404s are retried | the pointer goes live after hundreds of KB, not tens of MB — from a workstation over a lossy link that is ~5 s vs ~2 min (§4.4); steady-state targets never touch the blob |
+| D14 | Go-aware codec supports one Go release at a time (the current stable, 1.27); everything else takes the plain codec | pclntab/type layouts change per minor; one version + a self-prediction gate keeps the codec small and testable (§3.5) |
 
-At 20 Mbit/s / 200 ms RTT the bytes start to matter: hot path ≈ 1.3 s, chain
-≈ 1.6 s, full blob ≈ 8 s — which is why a small patch and single request are
-both required.
+Cut from the first-round design (and why): private signing keys and key
+rotation (D6); the `poke` push endpoint and control socket (D12); inline
+patches in the pointer (saves one RTT only for tiny patches; complicates the
+pointer); direct non-chain edges and a K-matrix of patches (chain + blob
+covers skipped releases; publisher cost stays O(1)); multiple channels per
+store (use prefixes); a probation state machine with health windows and
+canary hooks (D8); systemd-notify integration; zstd `--patch-from` as a
+secondary codec (§3.7); most CLI flags (`README.md` §5 lists all that
+remain).
 
-Targets for the implementation (to be enforced by `bench/`):
+## 11. Open questions (to settle during implementation)
 
-- Encode: warm < 1 s, cold < 6 s for a 50 MB binary on 8 cores; patch size
-  within 1.3× of C bsdiff on the bench corpus.
-- Apply: > 200 MB/s of output, < 64 MB RSS.
-- Agent: hot path ≤ 2 requests; idle poll = 1 request; CPU idle otherwise.
-- Handoff: zero failed connections in a `wrk`/`hey` soak across 100 upgrades
-  (integration test with `tc netem` for latency).
-
-## 10. Testing and benchmarking strategy
-
-- **Codec**: property tests (random edits, shifts, insertions; apply(encode) is
-  identity), fuzzing of the decoder against malformed containers (must never
-  read/write out of bounds; must fail closed), cross-check `zstd-prefix` frames
-  with the `zstd` CLI, golden patches for the bench corpus, size/time
-  regressions gated in CI (`bench/run.sh --check`).
-- **Release/manifest**: signature and canonicalisation vectors; seq/expiry
-  rejection cases; CAS conflict simulation.
-- **Store**: contract tests against a local S3 emulator (MinIO) and `file://`;
-  conditional GET/PUT semantics; range requests.
-- **Install**: crash injection between each syscall (path always executable,
-  `.old` always valid); ETXTBSY behaviour with a running child.
-- **Upgrade**: end-to-end tests with a real HTTP server under load, asserting
-  zero connection errors across upgrades, abort on non-ready child, abort on
-  failed probe, self-revert after crash loop; run in a network namespace with
-  `tc qdisc netem delay 100ms` to check the request budget.
-- **Bench corpus**: `bench/testsrv` variants (v1…v4, F1–F3, PIE) kept
-  reproducible; report regenerated by `bench/run.sh`.
-- All unit tests < 100 ms each; integration tests tagged and < 1 s except the
-  soak test.
-
-## 11. Roadmap and open questions
-
-Phases: (1) `delta` codecs + CLI `diff/patch` + bench gate; (2) `release`,
-`store`, `install`, `sync/publish` against `file://` and S3; (3) `upgrade` +
-`agent` embedded mode with the soak test; (4) `push/recv`, systemd mode, hooks,
-`gc`; (5) hardening: fuzzing, key rotation, metrics.
-
-Open questions to settle during implementation (each with the intended
-default):
-
-1. Warm encode speed of the pure-Go match scan on 50–100 MB inputs — the
-   suffix-array search in Go may need an LCP array or a sampled index to hit
-   < 1 s; fallback is `zstd-prefix` for the hot patch (D5).
-2. Whether the per-partition zstd window should be shared across partitions
-   (single frame, larger window) for the `extra` stream; measure on the corpus.
-3. Probe targeting in same-socket mode (§7): the `X-Binsync-Expect` echo
-   requires a one-line handler in the service; alternative is a child-only
-   ephemeral port.
-4. Whether to ship a CDC "heal" for drifted targets later (v1: full blob).
-5. Go 1.27's closure-naming change and PGO as sources of layout drift — track
-   patch sizes across toolchain upgrades in the bench.
+1. **`.go.type` residual.** 45,170 B of the prometheus/1.27 patch is type
+   descriptors: ~31.6 KB are genuinely new descriptors (inherent), ~7.9 KB
+   are wrong rewrites and ~4.5 KB names. Only the consensus pass has been
+   applied; an anchor pass (descriptor start → symbol) may recover the
+   wrong rewrites. The changed `.text` itself (62,555 B, 56 % of the
+   correction) is the other large item and is real change; the open
+   question there is whether the window-bounded local match (§3.3) gets
+   closer to the 94,470 B a hdiffz stage 2 reaches than to the 111,552 B of
+   positional runs.
+2. **arm64** in the Go-aware codec: fixed-width instructions make operand
+   relocation *simpler* (ADRP/ADD page+offset pairs, B/BL imm26); needs a Go
+   arm64 corpus to validate. Until then arm64 targets get the plain codec.
+3. **Memory.** Encoder (654 MB) and decoder (636 MB) hold old + predicted +
+   new for a 94 MB file, ≈ 7×; apply and encode section by section to reach
+   ≈ 2×. The earlier 5 s kube-apiserver decode (Go 1.26 build) was never
+   profiled.
+4. **Encoder details.** `.text` is x86-decoded twice (relocation and
+   shift-table derivation; caching saves ~0.3 of 2.1 s). The pointer-override
+   table costs 5.5 KB of layout for a 26.5 KB net gain and its second
+   consensus round gained nothing on prometheus; the 39 B floor of the
+   second stage-1 blob makes tiny patches slightly larger than before
+   (v1→v2s 425 → 466 B). All cosmetic, all to settle when the codec is
+   written for real.

@@ -1,0 +1,22 @@
+== predict .text ../out/corpus/prometheus/3.13.2/prometheus.stripped -> ../out/corpus/prometheus/3.14.0/prometheus.stripped
+match: exact=113154 normalised=1 content=56 unmatched-new=6326 unmatched-old=606
+layout table: raw 598889 B, zstd 29538 B
+x86asm decode of old .text: 10828910 insns, 1795 failures, 1.535s => 27.6 MB/s single-thread
+datamap .rodata (block 16, masked pointers=425917): blocks=1209674 matched=797309 ambiguous=8862 unmatched=403503 shift-changes=5970
+datamap .noptrdata (block 16, masked pointers=1757): blocks=36871 matched=36762 ambiguous=10 unmatched=99 shift-changes=32
+datamap .data (block 16, masked pointers=17028): blocks=21606 matched=21125 ambiguous=477 unmatched=4 shift-changes=48
+datamap build time: 2.039s
+shift table .bss: 31 breakpoints from 54769 samples, 99 B raw: @1176:+8 @1192:+1424 @1192:+8 @1192:+1424 @1192:+8 @1192:+1424
+shift table .noptrbss: 8 breakpoints from 91527 samples, 22 B raw: @93:+2 @184:+0 @1576:+8 @1592:+24 @2480:+56 @4288:+64
+shift tables raw total: 121 B
+BASELINE old.text -> new.text: bsdiff=2539721 hdiffz=2229326 zstd=0 rawdiff=41580817 runs=1144209 (bsdiff 27.8s hdiffz 7.7s zstd 0.0s)
+P0 layout-copy (no relocation)     bsdiff=2545719 hdiffz=2228199 zstd=0 rawdiff=5872317 runs=1240479  predict-time=0.13s
+P1 reloc, M=section-identity       bsdiff=1673565 hdiffz=1485627 zstd=0 rawdiff=4144693 runs=706645  predict-time=0.36s
+    insns=10743320 decode-failures=1809 refs: text-self=912626 text-matched=617003 text-unmatched=70 rodata=375861 noptrdata=1536 data=51748 bss/noptrbss=164155 other-section=35 outside-image=276
+P2 reloc, M=content-map+bss-shift  bsdiff=900850 hdiffz=701784 zstd=0 rawdiff=2792483 runs=162871  predict-time=0.37s
+    insns=10743320 decode-failures=1809 refs: text-self=912626 text-matched=617003 text-unmatched=70 rodata=375861 noptrdata=1536 data=51748 bss/noptrbss=164155 other-section=35 outside-image=276
+residual breakdown (P2): total differing bytes in functions=2792483: changed-function content=1622711, new functions=1143691, mispredicted refs: text-matched=32 rodata=20947 noptrdata=4 data=5070 bss/noptrbss=28, non-reference bytes in unchanged functions=0, outside functions=0
+functions with residual differences: 11256; top: github.com/aws/aws-sdk-go/aws/endpoints.init=128072 github.com/aws/aws-sdk-go-v2/service/signin.resolveResult=19642 github.com/prometheus/prometheus/promql.(*evaluator).eval=19640 github.com/prometheus/prometheus/storage/remote/otlptranslator/prometheusremotewrite.(*PrometheusConverter).FromMetrics=14516 github.com/pb33f/libopenapi/datamodel/high/base.NewSchema=13073 github.com/prometheus/prometheus/tsdb.newHeadMetrics=12646 github.com/aws/aws-sdk-go-v2/service/rds/internal/endpoints.init=12574 github.com/prometheus/prometheus/tsdb/wlog.Checkpoint=12066 github.com/felixge/httpsnoop.Wrap=11952 github.com/pb33f/libopenapi/datamodel/low/base.(*Schema).Build=11486 github.com/prometheus/prometheus/scrape.newScrapeMetrics=10207 google.golang.org/protobuf/internal/descfmt.formatDescOpt=10163 github.com/aws/aws-sdk-go-v2/service/ecs/internal/endpoints.init=9755 github.com/pb33f/libopenapi/datamodel/high.(*NodeBuilder).AddYAMLNode=9724 github.com/aws/aws-sdk-go-v2/service/sts/internal/endpoints.init=9669
+changed functions (content differs after masking PC-rel fields, or new): 8726, old 4553120 B -> new 5693408 B; delta of just those: bsdiff=1033993 hdiffz=829412 zstd=0 rawdiff=5525762 runs=114329; new bytes alone zstd=1251442
+  changed: expandAVX512_2, expandAVX512_3, expandAVX512_4, expandAVX512_6, expandAVX512_8, expandAVX512_10, expandAVX512_12, expandAVX512_14, expandAVX512_16, expandAVX512_18, expandAVX512_20, expandAVX512_22, expandAVX512_24, expandAVX512_26, expandAVX512_28, expandAVX512_30, expandAVX512_32, expandAVX512_36, expandAVX512_40, expandAVX512_44
+invertibility: relocating NEW->OLD layout: 11559 matched functions differ from OLD, of which 2400 have changed content; unchanged-content mismatches: [internal/cpu.doinit internal/runtime/cgroup.FindCPUCgroup internal/runtime/cgroup.FindCPUMountPoint internal/stringslite.Index internal/runtime/exithook.Run runtime.chansend runtime.chanrecv runtime.debugCallWrap runtime.debugCallWrap.func1 runtime.debugCallWrap1]; residual bsdiff=573649 hdiffz=484348 zstd=0 rawdiff=1910091 runs=158404

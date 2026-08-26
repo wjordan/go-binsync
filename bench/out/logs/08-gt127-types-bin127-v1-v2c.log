@@ -1,0 +1,23 @@
+  [  0.04s] loaded v1-F2 (go1.27, 29995271 B) -> v2c-F2 (go1.27, 29995271 B)
+  [  0.04s] match: exact=32652 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+  datamap .rodata: blocks=49196 matched=49193 ambiguous=0 unmatched=3 shift-changes=4; rle 21 B
+  datamap .go.type: blocks=169423 matched=169123 ambiguous=13 unmatched=287 shift-changes=0; rle 10 B
+  datamap .go.func: blocks=1365 matched=1365 ambiguous=0 unmatched=0 shift-changes=0; rle 8 B
+  datamap .noptrdata: blocks=28681 matched=28680 ambiguous=0 unmatched=1 shift-changes=0; rle 9 B
+  datamap .data: blocks=11138 matched=11137 ambiguous=0 unmatched=1 shift-changes=0; rle 8 B
+  shift table .bss: 0 breakpoints from 9285 samples, 0 B raw:
+  shift table .noptrbss: 0 breakpoints from 39226 samples, 0 B raw:
+  [  1.37s] content maps + shift tables
+  [  1.37s] layout: 32652 funcs, 0 rec shapes, raw 65619 B, zstd 207 B
+  [  1.42s] stage 1 (h): pclntab blobs 7532184 -> 7532264 B, delta 1283 B
+  [  1.62s] prediction: 29995271 B (new 29995271 B), insns=3735024 decode-failures=1866, differing bytes=1249 in 391 runs
+  type descriptors: descriptors=15840 itabs=2103 rewritten nameOff=46477 typeOff=24429 textOff=32370 name.pkgPath=1352 unmapped=3059 bad=0
+  stage-2 differing bytes by section: .note.go.buildid=80(4 runs) .note.gnu.build-id=20(1 runs) .text=966(298 runs) .rodata=31(14 runs) .gopclntab=7(7 runs) .go.type=5(4 runs) .go.fipsinfo=32(1 runs) .go.module=12(9 runs) .noptrdata=2(2 runs)
+  [  1.65s] stage 2 (positional): raw 2108 B, zstd 1542 B
+PATCH /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/t.gtp: 3144 B = header 112 + layout 207 + stage1(h) 1283 + stage2(p) 1542  [encode 1.68s]
+  [  0.04s] loaded old (go1.27) and patch: 3144 B, layout 65619 B
+  [  0.06s] stage 1 applied: 7532264 B of pclntab blobs; skeleton 32652 funcs
+  [  0.26s] prediction: 29995271 B, hash verified
+  [  0.29s] stage 2 (p) applied: 29995271 B written to /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/t.out, hash verified
+DECODE OK /tmp/claude-1000/-home-will-Code-binsync/49262ac6-3517-4d5a-b8ec-a8634d869b18/scratchpad/t.out: 29995271 B [decode 0.29s]
+DECODE-IDENTICAL

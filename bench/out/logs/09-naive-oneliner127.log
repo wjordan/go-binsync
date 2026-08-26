@@ -1,0 +1,46 @@
+== one-line change v1-F2 -> v2c-F2 (Go 1.27, 30 MB)
+== xz -9 -T1
+TIME 6.53 s RSS 331172 KB
+SIZE xz=7917680
+== zstd -19
+TIME 6.04 s RSS 124468 KB
+SIZE zstd19=8663959
+== zstd -19 --long=27 --patch-from
+TIME 12.17 s RSS 162876 KB
+SIZE zstd-patch-from=538493
+== xdelta3 -9
+TIME 1.49 s RSS 239936 KB
+SIZE xdelta3=1925369
+== desync CDC default 16:64:256
+STORE_NEW_BYTES=19307541 CDC_RESEND_BYTES=8023962
+== desync CDC small 4:16:64
+STORE_NEW_BYTES=20322301 CDC_RESEND_BYTES_SMALL=8204624
+== bsdiff
+TIME 5.35 s RSS 264888 KB
+SIZE bsdiff=150475
+== hdiffz -m-6 -SD -d -p-8 -c-zstd-21-24
+old : "/home/will/Code/binsync/bench/out/bin127/v1-F2"
+new : "/home/will/Code/binsync/bench/out/bin127/v2c-F2"
+out : "h.hdiff"
+create single compressed diffData!
+  compress plugin: "zstd"
+oldDataSize : 29995271
+newDataSize : 29995271
+  match covers by block ...
+    create blocks's match table ...
+    search covers by match table ...
+  load new data into memory from new stream ...
+    build cache for search invalid oldData ranges ...
+    search invalid oldData ranges for skip ...
+  load old data into memory from old stream ...
+  match covers by suffix string ...
+    create suffix string ...
+    search covers by suffix string ...
+  serialize single compressed diffData ...
+    (used one zstd dictSize: 1048576  (input data: 986547))
+diffDataSize: 176929
+diff    time: 0.731 s
+  out diff file ok!
+TIME 0.73 s RSS 105940 KB
+SIZE hdiffz=176929
+DONE

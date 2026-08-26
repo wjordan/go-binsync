@@ -1,0 +1,11 @@
+== whole ../out/corpus/cockroach/26.2.4/cockroach.stripped -> ../out/corpus/cockroach/26.2.5/cockroach.stripped (layout go1.25)
+match: exact=254603 normalised=125 content=23 unmatched-new=66 unmatched-old=5; layout table zstd=2702 B
+shift table .bss: 3 breakpoints from 107119 samples, 10 B raw: @8672:+8 @10848:+16 @78720:+0
+shift table .noptrbss: 0 breakpoints from 197462 samples, 0 B raw:
+bss shift tables zstd=23 B (added to the layout cost)
+text relocation: insns=25856452 decode-failures=2350
+BASELINE whole file:        bsdiff=8588309 hdiffz=9455199 zstd=0 rawdiff=187016997 runs=13870375
+stage 1 (pclntab blobs 47540416 B): bsdiff=65371 hdiffz=62685 zstd=0 rawdiff=42695910 runs=1943843
+stage 2 (predicted file):   bsdiff=4122660 hdiffz=4478862 zstd=0 rawdiff=10886079 runs=2351546
+TOTAL Go-aware = layout 2725 + stage1 + stage2: bsdiff 4190756 (2.0x smaller) hdiffz 4544272 (2.1x) zstd 2725 (0.0x)
+stage-2 differing bytes by section: .dynsym=13005(4985 runs) .rela.dyn=22(10 runs) .rela.plt=498(249 runs) .init=5(2 runs) .plt=502(251 runs) .plt.got=10(5 runs) .text=726256(64320 runs) .fini=3(1 runs) .rodata=2824008(1250336 runs) .typelink=132309(47563 runs) .itablink=1(1 runs) .gopclntab=4181274(952483 runs) .eh_frame_hdr=15872(6156 runs) .eh_frame=15824(6162 runs) .gcc_except_table=4(2 runs) .data.rel.ro=1436(532 runs) .dynamic=7(3 runs) .got.plt=2(1 runs) .data=2458(1371 runs) .go.fipsinfo=58(9 runs) .noptrdata=2971274(16651 runs)

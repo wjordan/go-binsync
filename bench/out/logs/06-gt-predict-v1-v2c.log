@@ -1,0 +1,19 @@
+== predict .text ../out/bin/v1-F2 -> ../out/bin/v2c-F2
+match: exact=32838 normalised=0 content=0 unmatched-new=0 unmatched-old=0
+layout table: raw 65677 B, zstd 30 B
+x86asm decode of old .text: 3664769 insns, 1869 failures, 0.539s => 27.4 MB/s single-thread
+datamap .rodata (block 32): blocks=110233 matched=81657 ambiguous=1470 unmatched=27106 shift-changes=28
+datamap .noptrdata (block 32): blocks=14197 matched=13140 ambiguous=1037 unmatched=20 shift-changes=0
+datamap .data (block 32): blocks=5571 matched=3116 ambiguous=876 unmatched=1579 shift-changes=177
+datamap build time: 0.493s
+BASELINE old.text -> new.text: bsdiff=39961 hdiffz=50999 zstd=90285 rawdiff=460280 runs=46603 (bsdiff 2.8s hdiffz 0.5s zstd 8.9s)
+P0 layout-copy (no relocation)     bsdiff=39963 hdiffz=50906 zstd=90285 rawdiff=43150 runs=37229  predict-time=0.05s
+P1 reloc, M=section-identity       bsdiff=33633 hdiffz=44323 zstd=75320 rawdiff=33372 runs=31851  predict-time=0.14s
+    insns=3664769 decode-failures=1869 refs: text-self=320896 text-matched=204608 rodata=110611 noptrdata=3956 data=12303 bss/noptrbss=47994 plt=70 other-section=40 outside-image=275
+P2 reloc, M=content-map            bsdiff=1354 hdiffz=1263 zstd=2686 rawdiff=992 runs=263  predict-time=0.16s
+    insns=3664769 decode-failures=1869 refs: text-self=320896 text-matched=204608 rodata=110611 noptrdata=3956 data=12303 bss/noptrbss=47994 plt=70 other-section=40 outside-image=275
+residual breakdown (P2): total differing bytes in functions=992: changed-function content=639, new functions=0, mispredicted refs: rodata=2 data=351, non-reference bytes in unchanged functions=0, outside functions=0
+functions with residual differences: 63; top: main.helloHandler=630 google.golang.org/protobuf/internal/impl.fieldCoder=131 google.golang.org/protobuf/internal/impl.encoderFuncsForValue=87 google.golang.org/protobuf/internal/impl.init=20 net/http.http2putDataBufferChunk=7 net/http.http2getDataBufferChunk=7 encoding/gob.init.0=6 crypto/rsa.SignPSS=6 crypto/rsa.VerifyPSS=6 crypto/internal/fips140/sha256.blockAVX2=5 crypto/rsa.decryptOAEP=4 crypto/rsa.EncryptPKCS1v15=4 net/http.(*http2serverConn).writeDataFromHandler=3 net/http.(*http2bufferedWriter).Flush=3 net/http.(*http2bufferedWriter).Write=3
+changed functions (content differs after masking PC-rel fields, or new): 4, old 9024 B -> new 9216 B; delta of just those: bsdiff=652 hdiffz=541 zstd=439 rawdiff=8390 runs=168; new bytes alone zstd=3507
+  changed: math.archExp, main.helloHandler, crypto/internal/fips140/sha256.blockAVX2, crypto/internal/fips140/sha512.blockAVX2
+invertibility: relocating NEW->OLD layout: 122 matched functions differ from OLD, of which 4 have changed content; unchanged-content mismatches: [runtime.printpanicval runtime.schedtrace runtime.goroutineheader runtime.traceStack runtime.schedtrace.func1 os.(*File).readdir os.(*file).close os.(*File).seek fmt.newScanState fmt.(*ss).free]; residual bsdiff=1552 hdiffz=1537 zstd=2906 rawdiff=937 runs=354
