@@ -36,8 +36,10 @@ holds the measurements the design rests on; `docs/DEMO.md` specifies the
 public demo.
 
 **Status: the library, the CLI and the public demo are implemented, and the
-numbers below are measured on them** (`bench/demo` builds and serves the
-demo; `docs/DEMO.md` specifies it). What is not done: the decoder's memory
+numbers below are measured on them.** The demo is live at
+<https://binsync-demo.fly.dev> — pick a region, watch a real 94 MB release
+arrive as a 95 KB patch and verify (`bench/demo` builds and serves it;
+`docs/DEMO.md` specifies it). What is not done: the decoder's memory
 footprint, `docs/DESIGN.md` §11.3.
 
 ---
@@ -69,8 +71,8 @@ be: the decoder peaks at 7.6× the binary, most of it the prediction's working
 set rather than the file buffers, and getting that to ≈ 2× is the open item
 (`docs/DESIGN.md` §11.3).
 
-The same codec turns a one-line change of a 30 MB binary into a 2.4 KB patch
-(bsdiff: 150 KB — 63× smaller), and a multi-package edit into 2.9 KB (bsdiff:
+The same codec turns a one-line change of a 30 MB binary into a 2.3 KB patch
+(bsdiff: 150 KB — 67× smaller), and a multi-package edit into 2.7 KB (bsdiff:
 145 KB). On a minor release with thousands of new functions the patch is
 content-dominated and the gain is modest (1.6×) — the right outcome: binsync
 removes *layout* churn, not code.
@@ -89,7 +91,7 @@ of that because almost no chunk survives; exact-match delta coders (`zstd
 --patch-from`, xdelta3) get to 0.5–1.9 MB but pay for every shifted
 operand; approximate matchers (bsdiff, hdiffz) absorb the shifts and reach
 150–177 KB, at the price of a suffix array over the whole file. binsync sends
-2.4 KB. For the prometheus release the same ladder reads 18.4–20.6 MB (whole file),
+2.3 KB. For the prometheus release the same ladder reads 18.4–20.6 MB (whole file),
 25.7 MB (chunk store — worse than a fresh archive, because chunks compress
 alone), 8.5–15.2 MB (exact-match), 2.7 MB (bsdiff/hdiffz) and 0.095 MB.
 

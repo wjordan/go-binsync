@@ -149,19 +149,20 @@ repository's `delta` package, including its patch header and frame table:
 
 | Pair (toolchain) | bsdiff | hdiffz -p-8 | prototype | **v1** | vs bsdiff |
 |---|---:|---:|---:|---:|---:|
-| one-line (`v1→v2c`, 29.6 MB, Go 1.27) | 150,475 | 176,929 | 2,207 | **2,373** | 63× |
-| +3-byte string (`v1→v2l`, 1.27) | 24,874 | 33,713 | 566 | **531** | 47× |
-| multi-package (`v1→v4`, 1.27) | 145,205 | 171,760 | 2,733 | **2,860** | 51× |
-| `v3→v4` (1.27) | 30,196 | 40,523 | 578 | **563** | 54× |
+| one-line (`v1→v2c`, 29.6 MB, Go 1.27) | 150,475 | 176,929 | 2,207 | **2,262** | 67× |
+| +3-byte string (`v1→v2l`, 1.27) | 24,874 | 33,713 | 566 | **438** | 57× |
+| multi-package (`v1→v4`, 1.27) | 145,205 | 171,760 | 2,733 | **2,745** | 53× |
+| `v3→v4` (1.27) | 30,196 | 40,523 | 578 | **440** | 69× |
 | prometheus 3.13.1→3.13.2, built with Go 1.27 (94 MB) | 2,691,644 | 2,719,152 | 111,552 | **95,366** | **28×** |
 
 The real pair is 14 % below the prototype and within 1 % of the 94,470 B that
 an hdiffz stage 2 reached (the range §3.4 was aiming for), from an encoder
 with no suffix array and a decoder that applies in place. The synthetic pairs
-move both ways by a hundred bytes or so: the two that grew pay for the
-container (a 120-byte header where the prototype wrote none) and for the
-second stage-1 blob's floor; the two that shrank keep it back on the
-correction.
+move both ways: the two large ones are tens of bytes above the prototype,
+paying for the container (a 120-byte header where the prototype wrote none)
+and for the second stage-1 blob's floor, and the two small ones are ~23 %
+below it, where a patch that is mostly floor gains most from the brotli tier
+(§3.5) and from predicting the unallocated bytes (§7).
 
 The official Go 1.26 builds (prometheus 3.13.1→3.13.2: 291,214 B, 9.3×;
 kube-apiserver 1.36.3→1.36.4: 292,972 B, 7.0×) were measured with the

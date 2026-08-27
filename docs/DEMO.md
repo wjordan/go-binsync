@@ -1,5 +1,8 @@
 # Public demo: the patch explorer (phase 1)
 
+Live at <https://binsync-demo.fly.dev> (five Fly regions: ord, jnb, nrt, gru,
+syd; Machines suspend when idle).
+
 A deployed, browser-usable proof of concept for the one idea binsync exists
 for: **an incremental release of a Go binary is a tiny patch that really does
 reconstruct the new binary, and it crosses the world in about a second**.

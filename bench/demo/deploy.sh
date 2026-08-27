@@ -15,8 +15,15 @@ cd "$ROOT"
 [ -d bench/out/demo-assets/prometheus ] || { echo "run bench/demo/build-assets.sh first" >&2; exit 1; }
 command -v flyctl >/dev/null || { echo "flyctl not on PATH" >&2; exit 1; }
 
-flyctl apps list | grep -q "^$APP " || flyctl apps create "$APP"
-flyctl deploy --config bench/demo/fly.toml --app "$APP" --ha=false --region "${REGIONS%% *}"
+# Not a pipe into grep -q: it exits at the first match, flyctl takes SIGPIPE,
+# and pipefail turns that into "the app does not exist".
+case "$(flyctl apps list --json)" in
+  *"\"Name\": \"$APP\""*) ;;
+  *) flyctl apps create "$APP" ;;
+esac
+# The first deploy lands in fly.toml's primary_region; the scale calls below
+# fill in the rest. (flyctl deploy has no --region flag.)
+flyctl deploy --config bench/demo/fly.toml --app "$APP" --ha=false
 
 # One Machine per region. The page's region buttons are this list.
 for r in $REGIONS; do

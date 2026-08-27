@@ -8,7 +8,9 @@ app = "binsync-demo"
 primary_region = "ord"
 
 [build]
-  dockerfile = "bench/demo/Dockerfile"
+  # Relative to this config file, not to the build context (which is the
+  # repository root, where deploy.sh runs flyctl from).
+  dockerfile = "Dockerfile"
 
 [env]
   ADDR = ":8080"
