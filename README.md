@@ -2,6 +2,24 @@
 
 Small, fast, verified, zero-downtime updates of a deployed Go binary.
 
+One string literal changed, in one handler of a 30 MB Go service. Nothing else
+in the source moved — but the linker moved 13 % of the bytes in the file,
+because every function after the edit shifted and every reference that crossed
+the shift was rewritten. That is what a byte-level differ has to encode, and
+what a Go-aware one can predict:
+
+```
+one-line change to a 30 MB Go binary — patch bytes on the wire, linear scale
+
+  hdiffz -p-8  ████████████████████████████████████████████████  176,929
+  bsdiff       ████████████████████████████████████████▊         150,475
+  go-binsync   ▌                                                   2,262   ← 67× smaller than bsdiff
+```
+
+bsdiff and hdiffz are the strongest general-purpose binary differs there are.
+The gap is not compression; it is knowing that the two files are the same
+program.
+
 Software often needs to fly across the world. Say you run a large fleet of
 servers that all run the same binary — a web application, a telemetry
 pipeline, it doesn't matter; call it one big monolithic Go binary. You want to
@@ -33,7 +51,7 @@ the new one does not come up.
 It is a Go library and a CLI. This README is the behavioural specification;
 `docs/DESIGN.md` records the architecture and the reasoning; `docs/research/`
 holds the measurements the design rests on; `docs/DEMO.md` specifies the
-public demo.
+public demo; `docs/design-brief.html` condenses all four onto one page.
 
 **Status: the library, the CLI and the public demo are implemented, and the
 numbers below are measured on them.** The demo is live at
@@ -46,13 +64,15 @@ footprint, `docs/DESIGN.md` §11.3.
 
 ## 1. What it costs
 
-Three things decide how fast an incremental release lands: how long the
-publisher takes to encode it, how many bytes cross the link, and how long those
-bytes take on a realistic link. Measured on a real incremental release —
-prometheus 3.13.1 → 3.13.2, a 94 MB stripped binary built with Go 1.27 —
+The one-line pair at the top of this page isolates the effect. A real
+incremental release carries genuinely new code as well, and is the honest
+case. Three things decide how fast one lands: how long the publisher takes to
+encode it, how many bytes cross the link, and how long those bytes take on a
+realistic link. Measured on
+prometheus 3.13.1 → 3.13.2, a 94 MB stripped binary built with Go 1.27,
 fetched over a medium-quality link: 20 Mbit/s, 200 ms RTT, 1 % packet loss.
 
-| | Full download | Generic delta (hdiffz) | go-binsync (Go-aware delta) |
+| | Full download (`zstd -19`) | Generic delta (hdiffz) | go-binsync (Go-aware delta) |
 |---|---:|---:|---:|
 | Bytes sent | 20.6 MB | 2.7 MB | **0.095 MB** |
 | Encode time · peak memory | 9 s · 0.36 GB | 7 s · 0.39 GB | **2.4 s** · 0.90 GB |
@@ -63,17 +83,27 @@ Bytes are the thing that cannot be optimised away, and they dominate as the
 link degrades: with 1 % loss a single TCP stream carries about 1.2 Mbit/s
 whatever the link rate, so the full download takes minutes and the generic
 patch a quarter of a minute, while go-binsync's patch fits in a couple of round
-trips. (go-binsync fetches full blobs with parallel ranged requests, which
-recovers most of the loss penalty; a small patch simply never pays it.) The
-encoder is faster than the generic tools because it never builds a suffix
-array over the file. Memory is the one number that is not yet where it should
-be: the decoder peaks at 7.6× the binary, most of it the prediction's working
-set rather than the file buffers, and getting that to ≈ 2× is the open item
-(`docs/DESIGN.md` §11.3).
+trips — 213× less than the 20.3 MB blob a cold target would take, and 28×
+less than the best generic delta. (go-binsync fetches that blob with parallel
+ranged requests, which recovers most of the loss penalty; a small patch simply
+never pays it.) The encoder is faster than the generic tools because it never
+builds a suffix array over the file. Memory is the one number that is not yet
+where it should be: the decoder peaks at 7.6× the binary, most of it the
+prediction's working set rather than the file buffers, and getting that to
+≈ 2× is the open item (`docs/DESIGN.md` §11.3).
 
-The same codec turns a one-line change of a 30 MB binary into a 2.3 KB patch
-(bsdiff: 150 KB — 67× smaller), and a multi-package edit into 2.7 KB (bsdiff:
-145 KB). On a minor release with thousands of new functions the patch is
+Every pair the codec is measured on, in bytes. Each row is encode → patch →
+decode → byte-exact compare, with every table counted inside the patch:
+
+| Pair (all built with Go 1.27) | bsdiff | hdiffz | go-binsync | vs bsdiff |
+|---|---:|---:|---:|---:|
+| one-line change, 30 MB | 150,475 | 176,929 | **2,262** | **67×** |
+| +3-byte string literal, 30 MB | 24,874 | 33,713 | **438** | 57× |
+| multi-package edit (+2.3 KB code), 30 MB | 145,205 | 171,760 | **2,745** | 53× |
+| second multi-package step (v3 → v4), 30 MB | 30,196 | 40,523 | **440** | 69× |
+| prometheus 3.13.1 → 3.13.2, 94 MB | 2,691,644 | 2,719,152 | **95,366** | 28× |
+
+On a minor release with thousands of new functions the patch is
 content-dominated and the gain is modest (1.6×) — the right outcome: go-binsync
 removes *layout* churn, not code.
 
@@ -84,16 +114,26 @@ reference that crosses the move is rewritten, and the third of the file that
 is offset tables (`.gopclntab`) changes with it. A one-line edit rewrites 13 %
 of the bytes; a change touching several packages rewrites 70 %; a real release
 79–87 %, in runs a few bytes long. Every technique that looks only at bytes
-pays for that. For the one-line change of the 30 MB binary: compressing the
-whole file (`xz -9`, `zstd -19`) sends 7.9–8.7 MB; a chunk store
-(casync/desync, rsync-style content-defined chunking) re-sends 93 %
-of that because almost no chunk survives; exact-match delta coders (`zstd
---patch-from`, xdelta3) get to 0.5–1.9 MB but pay for every shifted
-operand; approximate matchers (bsdiff, hdiffz) absorb the shifts and reach
-150–177 KB, at the price of a suffix array over the whole file. go-binsync sends
-2.3 KB. For the prometheus release the same ladder reads 18.4–20.6 MB (whole file),
-25.7 MB (chunk store — worse than a fresh archive, because chunks compress
-alone), 8.5–15.2 MB (exact-match), 2.7 MB (bsdiff/hdiffz) and 0.095 MB.
+pays for that. Each rung below understands more of the binary than the one
+above it:
+
+| | one-line change, 30 MB | prometheus 3.13.1 → 3.13.2, 94 MB |
+|---|---:|---:|
+| whole file, `zstd -19` | 8.66 MB | 20.6 MB |
+| chunk store (casync/desync CDC) | 8.02 MB | 25.7 MB |
+| whole file, `xz -9` | 7.92 MB | 18.4 MB |
+| `xdelta3 -9` | 1.93 MB | 15.2 MB |
+| `zstd --patch-from` | 538 KB | 8.5 MB |
+| bsdiff / hdiffz | 150 / 177 KB | 2.69 / 2.72 MB |
+| **go-binsync** | **2,262 B** | **95,366 B** |
+
+A chunk store re-sends 93 % of a fresh archive on the one-liner and *more*
+than one on the real release, because almost no chunk survives the shift and
+the ones that do compress alone. Exact-match delta coders (`zstd
+--patch-from`, xdelta3) find the moved code but pay for every shifted operand.
+Approximate matchers (bsdiff, hdiffz) absorb the shifted operands as cheap
+byte differences and are several times better, at the price of a suffix array
+over the whole file. go-binsync predicts the shift instead of encoding it.
 
 A stripped Go binary still carries the function table, with names and sizes.
 go-binsync uses it to align the old and new releases *by function name*, predict
@@ -104,11 +144,12 @@ encoder never builds a whole-file suffix array — the step that makes bsdiff
 need 9–12× the input in RAM and minutes above 100 MB.
 
 The prediction covers code, data, the pclntab with its pc tables, and the type
-descriptors; what the patch still carries on a real release is mostly the
-changed code itself (63 KB of the 121 KB the prometheus prediction gets
-wrong), plus type descriptors that are genuinely new and the pc tables of the
-functions whose code changed. Design and measurements: `docs/DESIGN.md` §3;
-the research behind it: `docs/research/go-aware-transform.md`.
+descriptors. On the prometheus release it is wrong in 120,852 bytes — 0.13 %
+of the file — and what the patch carries is mostly real change: 63,179 B of
+changed code, 45,170 B of type descriptors (two-thirds of them genuinely new),
+17,441 B of pc tables for the functions that changed, and 10,379 B of layout
+tables. Design and measurements: `docs/DESIGN.md` §3; the research behind it:
+`docs/research/go-aware-transform.md`.
 
 ## 2. Concepts
 
