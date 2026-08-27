@@ -8,7 +8,7 @@ import (
 	"sort"
 	"time"
 
-	"binsync/release"
+	"github.com/wjordan/go-binsync/release"
 )
 
 // The release cache holds the recent binaries this machine published, so that
@@ -21,14 +21,14 @@ const cacheLimit = 10
 type releaseCache struct{ dir string }
 
 // openCache prepares the cache directory. dir empty takes
-// $XDG_CACHE_HOME/binsync.
+// $XDG_CACHE_HOME/go-binsync.
 func openCache(dir string) (*releaseCache, error) {
 	if dir == "" {
 		base, err := os.UserCacheDir()
 		if err != nil {
 			return nil, fmt.Errorf("no cache directory: %w (pass --cache DIR)", err)
 		}
-		dir = filepath.Join(base, "binsync")
+		dir = filepath.Join(base, "go-binsync")
 	}
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return nil, err

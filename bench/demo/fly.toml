@@ -4,7 +4,7 @@
 # would have chosen for them.
 #
 # Deploy with bench/demo/deploy.sh, from the repository root.
-app = "binsync-demo"
+app = "go-binsync-demo"
 primary_region = "ord"
 
 [build]

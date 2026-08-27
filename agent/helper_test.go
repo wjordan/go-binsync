@@ -13,9 +13,9 @@ import (
 	"testing"
 	"time"
 
-	"binsync/delta"
-	"binsync/release"
-	"binsync/store"
+	"github.com/wjordan/go-binsync/delta"
+	"github.com/wjordan/go-binsync/release"
+	"github.com/wjordan/go-binsync/store"
 )
 
 // relSize is large enough that a patch between two releases is far smaller
@@ -89,7 +89,7 @@ func (f *fixture) binary() []byte {
 	return b
 }
 
-// publish is `binsync publish`: the blob, then the patch from the previous
+// publish is `go-binsync publish`: the blob, then the patch from the previous
 // head, then the pointer naming both (docs/DESIGN.md 4.4).
 func (f *fixture) publish(data []byte) release.Hash {
 	f.t.Helper()

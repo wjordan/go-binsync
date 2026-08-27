@@ -12,9 +12,9 @@ import (
 	"strings"
 	"time"
 
-	"binsync/delta"
-	"binsync/release"
-	"binsync/store"
+	"github.com/wjordan/go-binsync/delta"
+	"github.com/wjordan/go-binsync/release"
+	"github.com/wjordan/go-binsync/store"
 )
 
 // casAttempts bounds the compare-and-swap loop on the pointer. Two publishers
@@ -24,7 +24,7 @@ const casAttempts = 3
 func publish(ctx context.Context, log *slog.Logger, args []string) error {
 	fs := newFlags("publish", "[--force] [--cache DIR] <binary> <store>")
 	force := fs.Bool("force", false, "publish a binary that is not delta-friendly anyway")
-	cacheDir := fs.String("cache", "", "release cache directory (default $XDG_CACHE_HOME/binsync)")
+	cacheDir := fs.String("cache", "", "release cache directory (default $XDG_CACHE_HOME/go-binsync)")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -41,7 +41,7 @@ func publish(ctx context.Context, log *slog.Logger, args []string) error {
 	var warnings []string
 	p.version, warnings = inspect(bin)
 	for _, w := range warnings {
-		log.Warn("binsync: " + w)
+		log.Warn("go-binsync: " + w)
 	}
 	if len(warnings) > 0 && !*force {
 		return fmt.Errorf("refusing to publish %s: it is not delta-friendly (see the warnings above); pass --force to publish anyway", binPath)
@@ -55,7 +55,7 @@ func publish(ctx context.Context, log *slog.Logger, args []string) error {
 	}
 	defer p.store.Close()
 
-	log.Info("binsync: publishing", "release", p.hash, "version", p.version,
+	log.Info("go-binsync: publishing", "release", p.hash, "version", p.version,
 		"size", hbytes(int64(len(bin))), "store", p.store.URL())
 	return p.run(ctx)
 }
@@ -83,7 +83,7 @@ func (p *publisher) run(ctx context.Context) error {
 	// compressing it again per attempt would dominate a publish.
 	start := time.Now()
 	p.blobObj, p.blob = release.EncodeBlob(p.hash, p.bin)
-	p.log.Info("binsync: compressed", "blob", hbytes(p.blob.Size),
+	p.log.Info("go-binsync: compressed", "blob", hbytes(p.blob.Size),
 		"of", hbytes(int64(len(p.bin))), "frames", len(p.blob.Frames), "took", hdur(time.Since(start)))
 
 	for attempt := 1; ; attempt++ {
@@ -95,7 +95,7 @@ func (p *publisher) run(ctx context.Context) error {
 			return err
 		}
 		if prev != nil && prev.Head.Hash == p.hash {
-			p.log.Info("binsync: already published", "release", p.hash)
+			p.log.Info("go-binsync: already published", "release", p.hash)
 			return nil
 		}
 		edge, err := p.putPatch(ctx, prev)
@@ -109,16 +109,16 @@ func (p *publisher) run(ctx context.Context) error {
 		if !errors.Is(err, store.ErrPreconditionFailed) || attempt == casAttempts {
 			return err
 		}
-		p.log.Warn("binsync: another publisher replaced the pointer first; re-reading it", "attempt", attempt)
+		p.log.Warn("go-binsync: another publisher replaced the pointer first; re-reading it", "attempt", attempt)
 	}
 
 	start = time.Now()
 	if err := putObject(ctx, p.store, p.blob.Key, p.blobObj, immutable()); err != nil {
 		return err
 	}
-	p.log.Info("binsync: uploaded the blob", "key", p.blob.Key, "size", hbytes(p.blob.Size), "took", hdur(time.Since(start)))
+	p.log.Info("go-binsync: uploaded the blob", "key", p.blob.Key, "size", hbytes(p.blob.Size), "took", hdur(time.Since(start)))
 	if err := p.cache.put(p.hash, p.bin); err != nil {
-		p.log.Warn("binsync: caching this release", "err", err)
+		p.log.Warn("go-binsync: caching this release", "err", err)
 	}
 	return nil
 }
@@ -157,7 +157,7 @@ func (p *publisher) finishBlob(ctx context.Context, prev *release.Pointer) error
 		data = p.cache.get(prev.Head.Hash)
 	}
 	if data == nil {
-		p.log.Warn("binsync: the head's blob is missing from the store and this machine has no copy of that release",
+		p.log.Warn("go-binsync: the head's blob is missing from the store and this machine has no copy of that release",
 			"release", prev.Head.Hash, "key", b.Key)
 		return nil
 	}
@@ -165,10 +165,10 @@ func (p *publisher) finishBlob(ctx context.Context, prev *release.Pointer) error
 	if nb.Size != b.Size || !sameFrames(nb.Frames, b.Frames) {
 		// The pointer's frame hashes are what targets verify against, so
 		// bytes that differ from them would be worse than the missing object.
-		p.log.Warn("binsync: cannot reproduce the head's blob byte for byte; leaving it missing", "key", b.Key)
+		p.log.Warn("go-binsync: cannot reproduce the head's blob byte for byte; leaving it missing", "key", b.Key)
 		return nil
 	}
-	p.log.Info("binsync: finishing the blob a previous publish left unfinished", "key", b.Key, "size", hbytes(int64(len(obj))))
+	p.log.Info("go-binsync: finishing the blob a previous publish left unfinished", "key", b.Key, "size", hbytes(int64(len(obj))))
 	return putObject(ctx, p.store, b.Key, obj, immutable())
 }
 
@@ -192,10 +192,10 @@ func (p *publisher) putPatch(ctx context.Context, prev *release.Pointer) (*relea
 	if err != nil {
 		return nil, fmt.Errorf("encoding the patch from %s: %w", from, err)
 	}
-	p.log.Info("binsync: encoded the patch", "size", hbytes(int64(len(patch))),
+	p.log.Info("go-binsync: encoded the patch", "size", hbytes(int64(len(patch))),
 		"transform", st.Transform, "took", hdur(time.Since(start)))
 	if int64(len(patch)) >= p.blob.Size {
-		p.log.Info("binsync: the patch is not smaller than the blob; publishing blob-only",
+		p.log.Info("go-binsync: the patch is not smaller than the blob; publishing blob-only",
 			"patch", hbytes(int64(len(patch))), "blob", hbytes(p.blob.Size))
 		return nil, nil
 	}
@@ -216,19 +216,19 @@ func (p *publisher) oldBytes(ctx context.Context, prev *release.Pointer) []byte 
 		return b
 	}
 	if prev.Head.Blob == nil {
-		p.log.Warn("binsync: the previous release is neither cached here nor published as a blob; publishing blob-only",
+		p.log.Warn("go-binsync: the previous release is neither cached here nor published as a blob; publishing blob-only",
 			"release", prev.Head.Hash)
 		return nil
 	}
-	p.log.Info("binsync: fetching the previous release to encode against", "release", prev.Head.Hash,
+	p.log.Info("go-binsync: fetching the previous release to encode against", "release", prev.Head.Hash,
 		"size", hbytes(prev.Head.Blob.Size))
 	b, err := fetchBlob(ctx, p.store, prev.Head)
 	if err != nil {
-		p.log.Warn("binsync: could not fetch the previous release; publishing blob-only", "err", err)
+		p.log.Warn("go-binsync: could not fetch the previous release; publishing blob-only", "err", err)
 		return nil
 	}
 	if err := p.cache.put(prev.Head.Hash, b); err != nil {
-		p.log.Warn("binsync: caching the previous release", "err", err)
+		p.log.Warn("go-binsync: caching the previous release", "err", err)
 	}
 	return b
 }
@@ -265,7 +265,7 @@ func (p *publisher) putPointer(ctx context.Context, prev *release.Pointer, edge 
 	}); err != nil {
 		return err
 	}
-	p.log.Info("binsync: published", "release", p.hash, "seq", np.Seq, "chain", len(np.Chain))
+	p.log.Info("go-binsync: published", "release", p.hash, "seq", np.Seq, "chain", len(np.Chain))
 	return nil
 }
 
@@ -283,7 +283,7 @@ func putObject(ctx context.Context, s store.Store, key string, b []byte, o store
 	return nil
 }
 
-// inspect reads the version binsync reports for a release, and the reasons it
+// inspect reads the version go-binsync reports for a release, and the reasons it
 // will produce patches close to a full download (README.md 8).
 func inspect(bin []byte) (version string, warnings []string) {
 	if f, err := elf.NewFile(bytes.NewReader(bin)); err == nil {

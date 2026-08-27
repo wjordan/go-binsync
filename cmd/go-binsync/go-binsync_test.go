@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"binsync/agent"
-	"binsync/release"
-	"binsync/store"
+	"github.com/wjordan/go-binsync/agent"
+	"github.com/wjordan/go-binsync/release"
+	"github.com/wjordan/go-binsync/store"
 )
 
 // fill writes a deterministic pseudo-random stream, so a test binary is
@@ -384,7 +384,7 @@ func listStore(t *testing.T, dir string) []string {
 			return err
 		}
 		rel, _ := filepath.Rel(dir, p)
-		if rel != ".binsync.lock" {
+		if rel != ".go-binsync.lock" {
 			out = append(out, rel)
 		}
 		return nil

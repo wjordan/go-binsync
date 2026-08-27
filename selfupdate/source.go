@@ -3,11 +3,11 @@ package selfupdate
 import (
 	"context"
 
-	"binsync/agent"
-	"binsync/release"
+	"github.com/wjordan/go-binsync/agent"
+	"github.com/wjordan/go-binsync/release"
 )
 
-// agentSource is the embedded shape's update source: binsync/agent, with the
+// agentSource is the embedded shape's update source: go-binsync/agent, with the
 // exec handoff as its restart hook.
 //
 // The agent hands its hook no release hash -- an external agent restarts a

@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"binsync/store"
+	"github.com/wjordan/go-binsync/store"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	awshttp "github.com/aws/aws-sdk-go-v2/aws/transport/http"
@@ -236,7 +236,7 @@ func TestOpen(t *testing.T) {
 // TestLive runs the shared backend suite against a real endpoint. It needs a
 // writable bucket, so it is opt-in:
 //
-//	BINSYNC_S3_TEST_URL=s3://bucket/binsync-test go test ./store/s3/
+//	BINSYNC_S3_TEST_URL=s3://bucket/go-binsync-test go test ./store/s3/
 //
 // against AWS, or against MinIO with AWS_ENDPOINT_URL and
 // AWS_S3_FORCE_PATH_STYLE=1 set.

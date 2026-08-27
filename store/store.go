@@ -1,4 +1,4 @@
-// Package store is the object interface binsync publishes to and polls: a
+// Package store is the object interface go-binsync publishes to and polls: a
 // flat key space under one URL, with conditional reads, ranged reads and a
 // compare-and-swap write for the single mutable object.
 package store
@@ -90,7 +90,7 @@ func Register(scheme string, o Opener) {
 }
 
 // Open resolves a store URL. Recognised schemes are file://, https://,
-// ssh:// and — when binsync/store/s3 is imported — s3://.
+// ssh:// and — when go-binsync/store/s3 is imported — s3://.
 func Open(raw string) (Store, error) {
 	u, err := url.Parse(raw)
 	if err != nil {

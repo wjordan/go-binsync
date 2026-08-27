@@ -1,4 +1,4 @@
-module binsync
+module github.com/wjordan/go-binsync
 
 go 1.27
 

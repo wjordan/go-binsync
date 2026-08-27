@@ -1,4 +1,4 @@
-<title>binsync Design Brief</title>
+<title>go-binsync Design Brief</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
   :root {
@@ -153,7 +153,7 @@
       <span class="pill">implemented · deployed · measured</span>
     </div>
     <h1>A one-line change to a 30 MB Go binary ships as <em>2,262 bytes — 67× smaller than bsdiff</em>. A real 94 MB release ships as 0.095 MB.</h1>
-    <p class="lede">Software often needs to fly across the world: a fleet of servers all running one large, monolithic Go binary, rebuilt many times a day, reached over links where packet loss and congestion turn a big download into a crawl. The way out is to ship only what changed. binsync pushes that further than a compressed archive, a content-defined-chunk store or a general binary diff can go, using the idea behind Google's <a href="https://www.chromium.org/developers/design-documents/software-updates-courgette/">Courgette</a>: read the structure the compiler left behind and predict where everything moved, instead of diffing bytes. A stripped Go binary still carries its function table; binsync aligns old and new release by function name, predicts the new layout, and sends only the correction — then installs the verified result and re-execs the service with its sockets handed over. This page condenses <code>README.md</code>, <code>docs/DESIGN.md</code>, <code>docs/DEMO.md</code> and <code>docs/research/</code>; the library, CLI, agent and public demo are built, and every number on it is measured on them.</p>
+    <p class="lede">Software often needs to fly across the world: a fleet of servers all running one large, monolithic Go binary, rebuilt many times a day, reached over links where packet loss and congestion turn a big download into a crawl. The way out is to ship only what changed. go-binsync pushes that further than a compressed archive, a content-defined-chunk store or a general binary diff can go, using the idea behind Google's <a href="https://www.chromium.org/developers/design-documents/software-updates-courgette/">Courgette</a>: read the structure the compiler left behind and predict where everything moved, instead of diffing bytes. A stripped Go binary still carries its function table; go-binsync aligns old and new release by function name, predicts the new layout, and sends only the correction — then installs the verified result and re-execs the service with its sockets handed over. This page condenses <code>README.md</code>, <code>docs/DESIGN.md</code>, <code>docs/DEMO.md</code> and <code>docs/research/</code>; the library, CLI, agent and public demo are built, and every number on it is measured on them.</p>
   </header>
 
   <section>
@@ -167,7 +167,7 @@
       <div class="hl-rows">
         <div class="hl-row"><span class="who">hdiffz <span class="tag">-p-8</span></span><div class="track"><div class="fill" style="width: 100%"></div></div><span class="val">176,929 B</span></div>
         <div class="hl-row"><span class="who">bsdiff</span><div class="track"><div class="fill" style="width: 85.05%"></div></div><span class="val">150,475 B</span></div>
-        <div class="hl-row pick"><span class="who">binsync</span><div class="track"><div class="fill" style="width: 1.28%"></div></div><span class="val">2,262 B</span></div>
+        <div class="hl-row pick"><span class="who">go-binsync</span><div class="track"><div class="fill" style="width: 1.28%"></div></div><span class="val">2,262 B</span></div>
       </div>
       <p class="hl-foot">Encode → patch → decode → byte-exact compare, with every table counted inside the patch. bsdiff and hdiffz are the strongest general-purpose binary differs there are; the gap is not compression, it is knowing that the two files are the same program.</p>
     </div>
@@ -183,7 +183,7 @@
     </div>
     <div class="tbl profile">
       <table>
-        <thead><tr><th></th><th class="num">Full download<br><span class="tag">zstd -19, 1 stream</span></th><th class="num">Full blob<br><span class="tag">binsync 8-way ranges</span></th><th class="num">bsdiff</th><th class="num">hdiffz -p-8</th><th class="num pick">binsync<br><span class="tag pick">Go-aware</span></th></tr></thead>
+        <thead><tr><th></th><th class="num">Full download<br><span class="tag">zstd -19, 1 stream</span></th><th class="num">Full blob<br><span class="tag">go-binsync 8-way ranges</span></th><th class="num">bsdiff</th><th class="num">hdiffz -p-8</th><th class="num pick">go-binsync<br><span class="tag pick">Go-aware</span></th></tr></thead>
         <tbody>
           <tr><td class="rowlab">bytes sent</td><td class="num">20.6 MB</td><td class="num">20.3 MB</td><td class="num">2.69 MB</td><td class="num">2.72 MB</td><td class="num pick">0.095 MB</td></tr>
           <tr><td class="rowlab">encode wall-clock · peak RSS</td><td class="num">9.4 s · 364 MB</td><td class="num">13 s</td><td class="num">42.7 s · 805 MB</td><td class="num">7.4 s · 388 MB</td><td class="num pick">2.4 s · 899 MB</td></tr>
@@ -192,14 +192,14 @@
         </tbody>
       </table>
     </div>
-    <p class="note">Encoder timings are single runs on a 24-thread workstation: zstd -19 with all threads, hdiffz with 8, bsdiff one; binsync decodes x86 on all cores and does everything else on one. Transfer times are interpolated from netem measurements of the same link (TCP cubic, HTTP/1.1); with 1 % loss a single stream carries ≈ 1.2 Mbit/s whatever the link rate, which is why a full blob is fetched as 8 parallel ranges. Sources: <code>docs/DESIGN.md</code> §3, <code>docs/research/benchmark-scale.md</code> §6 and §10.</p>
-    <p>The encoder is faster than the generic tools because it never builds a suffix array over the file. The number still out of place is memory: the decoder peaks at 714 MB of live heap for a 94 MB binary — 7.6×, and only 2× of that is the file buffers — the rest is the prediction's own working set. A 1 GB binary at that ratio asks a target for 7.6 GB, which is not a thing a fleet can be asked for. Getting it to ≈ 2× is the one open constraint, and none of the three fixes it needs changes the patch format. The other honest limit is the one the codec cannot argue with: on a minor release that adds thousands of new functions the gain falls to 1.6×, which is the correct result — binsync removes layout churn, and cannot remove code.</p>
+    <p class="note">Encoder timings are single runs on a 24-thread workstation: zstd -19 with all threads, hdiffz with 8, bsdiff one; go-binsync decodes x86 on all cores and does everything else on one. Transfer times are interpolated from netem measurements of the same link (TCP cubic, HTTP/1.1); with 1 % loss a single stream carries ≈ 1.2 Mbit/s whatever the link rate, which is why a full blob is fetched as 8 parallel ranges. Sources: <code>docs/DESIGN.md</code> §3, <code>docs/research/benchmark-scale.md</code> §6 and §10.</p>
+    <p>The encoder is faster than the generic tools because it never builds a suffix array over the file. The number still out of place is memory: the decoder peaks at 714 MB of live heap for a 94 MB binary — 7.6×, and only 2× of that is the file buffers — the rest is the prediction's own working set. A 1 GB binary at that ratio asks a target for 7.6 GB, which is not a thing a fleet can be asked for. Getting it to ≈ 2× is the one open constraint, and none of the three fixes it needs changes the patch format. The other honest limit is the one the codec cannot argue with: on a minor release that adds thousands of new functions the gain falls to 1.6×, which is the correct result — go-binsync removes layout churn, and cannot remove code.</p>
   </section>
 
   <section>
     <h2>Try it — the patch explorer</h2>
     <div class="demo">
-      <div class="url"><a href="https://binsync-demo.fly.dev">binsync-demo.fly.dev</a></div>
+      <div class="url"><a href="https://go-binsync-demo.fly.dev">go-binsync-demo.fly.dev</a></div>
       <p class="note">Pick a release pair and a region, press Update, and watch a real binary get rebuilt from a patch on a machine on the other side of the world. Nothing is staged: the page reads the store's pointer, plans the update from the patch chain exactly as a deployed target does, fetches the patch, and the server applies it with the same <code>delta.Apply</code> a target runs — against its own copy of the old release — and hashes what comes out. If the page says the release verifies, a target would have installed it.</p>
       <ul class="steps">
         <li><span class="k">pointer</span><span class="v">one conditional GET, <span class="mono">no-store</span></span></li>
@@ -224,7 +224,7 @@
           <div class="rung"><span class="lab"><code>xdelta3 -9</code></span><div class="bar-wrap"><div class="fill" style="width: 90.6%"></div></div><span class="val">1.93 MB</span></div>
           <div class="rung"><span class="lab"><code>zstd --patch-from</code></span><div class="bar-wrap"><div class="fill" style="width: 82.6%"></div></div><span class="val">538 KB</span></div>
           <div class="rung"><span class="lab">hdiffz / bsdiff</span><div class="bar-wrap"><div class="fill" style="width: 74.6%"></div></div><span class="val">177 / 150 KB</span></div>
-          <div class="rung pick"><span class="lab">binsync</span><div class="bar-wrap"><div class="fill" style="width: 48.4%"></div></div><span class="val">2.26 KB</span></div>
+          <div class="rung pick"><span class="lab">go-binsync</span><div class="bar-wrap"><div class="fill" style="width: 48.4%"></div></div><span class="val">2.26 KB</span></div>
         </div>
       </div>
       <div>
@@ -236,11 +236,11 @@
           <div class="rung"><span class="lab"><code>xdelta3 -9</code></span><div class="bar-wrap"><div class="fill" style="width: 97.0%"></div></div><span class="val">15.2 MB</span></div>
           <div class="rung"><span class="lab"><code>zstd --patch-from</code></span><div class="bar-wrap"><div class="fill" style="width: 93.6%"></div></div><span class="val">8.5 MB</span></div>
           <div class="rung"><span class="lab">hdiffz / bsdiff</span><div class="bar-wrap"><div class="fill" style="width: 86.8%"></div></div><span class="val">2.72 / 2.69 MB</span></div>
-          <div class="rung pick"><span class="lab">binsync</span><div class="bar-wrap"><div class="fill" style="width: 67.2%"></div></div><span class="val">0.095 MB</span></div>
+          <div class="rung pick"><span class="lab">go-binsync</span><div class="bar-wrap"><div class="fill" style="width: 67.2%"></div></div><span class="val">0.095 MB</span></div>
         </div>
       </div>
     </div>
-    <p>Why the ladder looks like this: a Go code change that grows one function by a few bytes shifts every later function and rewrites every reference that crosses the shift, so the file changes almost everywhere while almost nothing changed. Whole-file compressors and chunk stores see only bytes — a one-liner rewrites 13 % of them and a real release 79–87 %, in runs a few bytes long, so no chunk survives and a chunk store re-sends more than a fresh archive. Exact-match delta coders (zstd <code>--patch-from</code>, xdelta3) find the moved code but pay for every shifted operand. Approximate matchers (bsdiff, hdiffz) absorb the shifted operands as cheap byte differences and are several times better, at the price of a suffix array over the whole file. binsync reads the function table the Go linker leaves in a stripped binary and predicts the shift instead of encoding it. Go 1.27 makes the gap wider: its new sorted type-descriptor section is full of code offsets, which makes generic deltas of a one-liner 2.5× larger than on Go 1.26 and leaves binsync's patch unchanged.</p>
+    <p>Why the ladder looks like this: a Go code change that grows one function by a few bytes shifts every later function and rewrites every reference that crosses the shift, so the file changes almost everywhere while almost nothing changed. Whole-file compressors and chunk stores see only bytes — a one-liner rewrites 13 % of them and a real release 79–87 %, in runs a few bytes long, so no chunk survives and a chunk store re-sends more than a fresh archive. Exact-match delta coders (zstd <code>--patch-from</code>, xdelta3) find the moved code but pay for every shifted operand. Approximate matchers (bsdiff, hdiffz) absorb the shifted operands as cheap byte differences and are several times better, at the price of a suffix array over the whole file. go-binsync reads the function table the Go linker leaves in a stripped binary and predicts the shift instead of encoding it. Go 1.27 makes the gap wider: its new sorted type-descriptor section is full of code offsets, which makes generic deltas of a one-liner 2.5× larger than on Go 1.26 and leaves go-binsync's patch unchanged.</p>
   </section>
 
   <section>
@@ -253,7 +253,7 @@
             └─ predicted new binary ──▶ correction = new ⊖ predicted, positional, brotli/zstd  ← sent</pre>
     <div class="tbl">
       <table>
-        <thead><tr><th>Pair (all built with Go 1.27)</th><th class="num">bsdiff</th><th class="num">hdiffz</th><th class="num pick">binsync</th><th class="num">vs bsdiff</th></tr></thead>
+        <thead><tr><th>Pair (all built with Go 1.27)</th><th class="num">bsdiff</th><th class="num">hdiffz</th><th class="num pick">go-binsync</th><th class="num">vs bsdiff</th></tr></thead>
         <tbody>
           <tr class="pick"><td>one-line change, 30 MB</td><td class="num">150,475</td><td class="num">176,929</td><td class="num pick">2,262</td><td class="num">67×</td></tr>
           <tr><td>+3-byte string literal, 30 MB</td><td class="num">24,874</td><td class="num">33,713</td><td class="num pick">438</td><td class="num">57×</td></tr>
@@ -326,12 +326,12 @@ up.OnShutdown(func() { srv.Shutdown(ctx) })
 go srv.Serve(ln)
 up.Ready()
 &lt;-up.Done()</pre>
-        <p class="note">Or, without linking: <code>binsync agent s3://b/releases/app /srv/app --restart 'systemctl restart app' --healthy http://127.0.0.1:8080/healthz</code>. Build releases with <code>CGO_ENABLED=0 go build -trimpath -buildvcs=false -ldflags="-s -w -buildid="</code>.</p>
+        <p class="note">Or, without linking: <code>go-binsync agent s3://b/releases/app /srv/app --restart 'systemctl restart app' --healthy http://127.0.0.1:8080/healthz</code>. Build releases with <code>CGO_ENABLED=0 go build -trimpath -buildvcs=false -ldflags="-s -w -buildid="</code>.</p>
       </div>
     </div>
   </section>
 
   <footer>
-    Open: the decoder's 7.6× memory footprint (§11.3), the <code>.go.type</code> residual, arm64. Not in v1: signed manifests, push notifications, channels, direct patches, arm64/PIE/older-toolchain Go-aware codec (plain codec meanwhile), Windows, multi-file bundles, P2P fan-out. Sources: <code>README.md</code> · <code>docs/DESIGN.md</code> · <code>docs/DEMO.md</code> · <code>docs/research/</code> · the demo at <a href="https://binsync-demo.fly.dev">binsync-demo.fly.dev</a>.
+    Open: the decoder's 7.6× memory footprint (§11.3), the <code>.go.type</code> residual, arm64. Not in v1: signed manifests, push notifications, channels, direct patches, arm64/PIE/older-toolchain Go-aware codec (plain codec meanwhile), Windows, multi-file bundles, P2P fan-out. Sources: <code>README.md</code> · <code>docs/DESIGN.md</code> · <code>docs/DEMO.md</code> · <code>docs/research/</code> · the demo at <a href="https://go-binsync-demo.fly.dev">go-binsync-demo.fly.dev</a>.
   </footer>
 </div>

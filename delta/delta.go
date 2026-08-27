@@ -1,8 +1,8 @@
-// Package delta is binsync's patch codec.
+// Package delta is go-binsync's patch codec.
 //
 // A patch turns the bytes of one binary into the bytes of another. Two
 // transforms share one container (docs/DESIGN.md 3.5): a Go-aware
-// predict-then-correct codec for the binaries binsync exists for, and a
+// predict-then-correct codec for the binaries go-binsync exists for, and a
 // bsdiff-class codec for everything else. Both are verified by hash before
 // their output is used, so a mispredicting encoder costs bytes, never
 // correctness.
@@ -23,7 +23,7 @@ type Options struct {
 	MaxTransform int
 
 	// PlainOnly skips the Go-aware codec even for a supported binary. It
-	// exists for the self-check corpus and for `binsync diff --plain`.
+	// exists for the self-check corpus and for `go-binsync diff --plain`.
 	PlainOnly bool
 
 	// Workers bounds the encoder's parallelism. Zero means GOMAXPROCS.
@@ -35,7 +35,7 @@ type Options struct {
 }
 
 // Stats is an accounting of one encode, for the benchmark harness and for
-// `binsync diff -v`.
+// `go-binsync diff -v`.
 //
 // The per-stream sizes are the streams as the codec produced them, before
 // compression: the body is compressed as one piece, because the streams

@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"sort"
 
-	"binsync/delta/gobin"
+	"github.com/wjordan/go-binsync/delta/gobin"
 )
 
 // Stage 1 is the part of .gopclntab that cannot be predicted from the old

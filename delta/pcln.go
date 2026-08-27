@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"sort"
 
-	"binsync/delta/gobin"
+	"github.com/wjordan/go-binsync/delta/gobin"
 )
 
 // gfBlock and gfTol are the content-map parameters for the stage-1b tables.

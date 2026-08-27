@@ -3,8 +3,8 @@ package delta
 import (
 	"fmt"
 
-	"binsync/delta/gobin"
-	"binsync/delta/x86"
+	"github.com/wjordan/go-binsync/delta/gobin"
+	"github.com/wjordan/go-binsync/delta/x86"
 )
 
 // The Go-aware transform. The patch body is four streams:

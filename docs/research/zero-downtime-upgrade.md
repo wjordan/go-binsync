@@ -1,6 +1,6 @@
 # Zero-downtime process upgrade and self-update lifecycle
 
-Research notes for binsync's "swap the binary, re-exec, hand off sockets, health-check, roll back" phase.
+Research notes for go-binsync's "swap the binary, re-exec, hand off sockets, health-check, roll back" phase.
 Scope: Linux, Go web servers, one host at a time. Sources are primary where possible (source code, man
 pages, kernel docs, vendor docs); URLs inline. Where a claim is my inference rather than a citation it is
 marked *(inference)*.
@@ -94,7 +94,7 @@ i.e. it dups, so the parent can close its `net.Listener` after exec without affe
 O_NONBLOCK from the underlying open file descriptor", shared by all dups of that open file description;
 this "can lead to hard to diagnose hangs … Even more troubling, File.Close doesn't interrupt these syscalls
 anymore." tableflip replaced `exec.Cmd` with a thin `syscall.StartProcess` wrapper
-(https://github.com/cloudflare/tableflip/pull/60). binsync must do the same or set `O_NONBLOCK` back on
+(https://github.com/cloudflare/tableflip/pull/60). go-binsync must do the same or set `O_NONBLOCK` back on
 the dup before wrapping it.
 
 **tableflip wire protocol** (https://raw.githubusercontent.com/cloudflare/tableflip/master/child.go,
@@ -143,7 +143,7 @@ enabled." Default 0. (https://www.kernel.org/doc/html/latest/networking/ip-sysct
 `f9ac779f881c` "net: Introduce net.ipv4.tcp_migrate_req." by Kuniyuki Iwashima, 2021-06-12; the entry is in
 `Documentation/networking/ip-sysctl.rst` at tag v5.14 and absent at v5.13; KernelNewbies lists it under
 5.14 (https://kernelnewbies.org/Linux_5.14, https://lwn.net/Articles/853637/). Practical rule: REUSEPORT
-handoff is acceptable only on ≥5.14 with the sysctl on, and binsync cannot assume either on a remote host.
+handoff is acceptable only on ≥5.14 with the sysctl on, and go-binsync cannot assume either on a remote host.
 Related: `tcp_abort_on_overflow` (reset instead of retransmit when the accept queue is full; leave off).
 
 ### 2c. `SCM_RIGHTS` over a Unix socket
@@ -193,7 +193,7 @@ limiting: `StartLimitIntervalSec=`/`StartLimitBurst=` default 10 s / 5, applies 
 `pidfd_open` (5.3) returns an fd that becomes readable "when the process terminates", usable with
 `poll/epoll`, and is immune to PID reuse (`pidfd_send_signal` targets the fd)
 (https://man7.org/linux/man-pages/man2/pidfd_open.2.html). systemd now exports `$LISTEN_PIDFDID`. For
-binsync: watch the child with a pidfd rather than `waitpid` polling when the orchestrator is not the parent;
+go-binsync: watch the child with a pidfd rather than `waitpid` polling when the orchestrator is not the parent;
 authenticate a control socket peer with `SO_PEERCRED` rather than a pid file.
 
 ## 3. Implementations
@@ -256,7 +256,7 @@ and `WaitForParent` returns. Limitations, from the issue tracker
   `ExecReload=/bin/kill -HUP $MAINPID`, `PIDFile=/path/to/pid-file`; journald could lose logs before
   v244 (systemd/systemd#13708).
 - `Upgrade()` execs `os.Args[0]` verbatim: whatever path the shell/systemd used, resolved against the
-  initial cwd. binsync must ensure that path is the installed path it swaps.
+  initial cwd. go-binsync must ensure that path is the installed path it swaps.
 
 ### 3.2 jpillora/overseer
 
@@ -316,7 +316,7 @@ abnormal child exit.
 
 - **Caddy** reloads config in-process; binary upgrades are `caddy upgrade` + restart (not zero-downtime).
 - **Kubernetes** rolling update replaces pods (`maxSurge`/`maxUnavailable`, readiness-gated) — the LB
-  layer does the overlap; in-place upgrade is the single-host analogue where binsync must be the LB.
+  layer does the overlap; in-place upgrade is the single-host analogue where go-binsync must be the LB.
 - **Nomad** `update` stanza: `max_parallel`, `health_check` (`checks`/`task_states`/`manual`),
   `min_healthy_time` 10 s, `healthy_deadline` 5 m, `progress_deadline` 10 m, `auto_revert`, `canary`,
   `auto_promote` (https://developer.hashicorp.com/nomad/docs/job-specification/update). The
@@ -403,7 +403,7 @@ inconsistent state". Note the window between 5 and 6 with no file at `target`, a
 
 - **Health = Ready + probe.** tableflip's `Ready()` is self-reported by the child after it has started
   serving; it says "initialised", not "healthy". Nomad/Teleport add an external probe with a minimum
-  healthy time and a deadline. binsync should require both: child readiness (pipe byte or `sd_notify`
+  healthy time and a deadline. go-binsync should require both: child readiness (pipe byte or `sd_notify`
   style) *and* N consecutive successful probes over `min_healthy_time`, all inside `healthy_deadline`.
 - **Abort while old still runs** (child failed to exec, crashed pre-Ready, timed out, or failed probation):
   kill the child (tableflip: SIGKILL; better: SIGTERM, grace, SIGKILL because the child may already have
@@ -419,7 +419,7 @@ inconsistent state". Note the window between 5 and 6 with no file at `target`, a
   read `$EXIT_STATUS`.
 - **Two generations**: `.old` is overwritten each time (go-update, nginx `.oldbin`, Erlang old/current).
   Teleport keeps "the current version and last working version" and marks completeness with a `sha256`
-  file. binsync should refuse to overwrite `app.old` until the new build has passed probation.
+  file. go-binsync should refuse to overwrite `app.old` until the new build has passed probation.
 - **ETXTBSY** (https://lwn.net/Articles/866493/): `execve` takes a deny-write reference on the inode
   (`i_writecount < 0`), so `open(O_WRONLY)` on a running binary fails; this survived the 5.15 removal of
   `MAP_DENYWRITE` ("retains the ETXTBSY behavior for the main executable file"). `rename(2)` replaces the
@@ -433,7 +433,7 @@ inconsistent state". Note the window between 5 and 6 with no file at `target`, a
 - **ETXTBSY race in Go** (https://github.com/golang/go/issues/22315, open): a write fd with `O_CLOEXEC`
   "can leak into the forked child of a second thread … until that child calls exec", so a process that
   writes a binary and then execs it while other goroutines fork gets flaky ETXTBSY. Retry with backoff
-  (Go's own toolchain did this for years), or write and exec in different processes (binsync's transfer
+  (Go's own toolchain did this for years), or write and exec in different processes (go-binsync's transfer
   step vs. the app's re-exec naturally separates them).
 - **Atomic install** (https://man7.org/linux/man-pages/man2/fsync.2.html): "Calling fsync() does not
   necessarily ensure that the entry in the directory containing the file has also reached disk. For that
@@ -487,14 +487,14 @@ not need four roles, but it needs the *properties*:
    record `created` and refuse older-than-last-seen. **Endless data**: enforce `size` while reading.
 3. **Verify the bytes you exec**: hash the staged file after `fsync`, from an fd you keep open, in a
    directory writable only by the upgrade user; or memfd+seals to remove the TOCTOU entirely.
-4. **Delta transfers**: go-update verifies the checksum of the *patched result*, not the patch — binsync's
+4. **Delta transfers**: go-update verifies the checksum of the *patched result*, not the patch — go-binsync's
    sync step should be treated the same way: whatever the transfer did, the staged file must hash to the
    manifest's `sha256` before it is linked into place.
-5. Public key pinned in the binsync agent; rotation via a signed "root" list is TUF's job if ever needed.
+5. Public key pinned in the go-binsync agent; rotation via a signed "root" list is TUF's job if ever needed.
 
 ## 8. Failure-mode catalogue
 
-| Failure | tableflip | nginx | HAProxy (master-worker) | Envoy | binsync should |
+| Failure | tableflip | nginx | HAProxy (master-worker) | Envoy | go-binsync should |
 |---|---|---|---|---|---|
 | New binary won't exec (ENOENT/EACCES/ETXTBSY) | `can't start process` error, old continues | `execve() failed`, pid file renamed back | master re-exec fails; old workers keep running | new process never registers; parent keeps serving | abort, restore `app.old`, retry ETXTBSY with backoff |
 | New process crashes before Ready | `child %s exited`, old continues | new master dies; old master drops `.oldbin`, respawns workers if needed | new fails to bind → old workers "restart listening" | parent unaffected until sockets are handed over | abort as above; `on-abort` hook with exit status |
@@ -511,18 +511,18 @@ not need four roles, but it needs the *properties*:
 | Bad signature / downgrade / expired manifest | n/a | n/a | n/a | n/a | refuse before any file is touched |
 | Hook fails | n/a | n/a | n/a | n/a | pre-* abort; post-* log unless `fail_on_error` |
 
-## 9. Implications for binsync
+## 9. Implications for go-binsync
 
 **Choose the holder of the sockets.** Three viable modes, in order of preference:
 
 1. **In-app (tableflip-style) library** for Go services that link it: exec by path, fds by inheritance,
    readiness over a pipe. Full overlap, per-connection zero loss, rollback while the old process is still
-   serving. binsync's agent triggers it (signal or control socket) and runs the probe.
-2. **systemd fd store mode** for services that only add `sd_notify`/`sd_listen_fds`: binsync swaps the
+   serving. go-binsync's agent triggers it (signal or control socket) and runs the probe.
+2. **systemd fd store mode** for services that only add `sd_notify`/`sd_listen_fds`: go-binsync swaps the
    file and runs `systemctl restart`; kernel backlog covers the gap; rollback = restore file + restart.
-   Simpler, no overlap, and crash-looping is bounded by systemd not by binsync.
+   Simpler, no overlap, and crash-looping is bounded by systemd not by go-binsync.
 3. **External socket-holder (overseer/HAProxy master style)**: only if the app cannot be modified at all.
-   It puts binsync in the data path and makes binsync itself the thing that cannot be upgraded live.
+   It puts go-binsync in the data path and makes go-binsync itself the thing that cannot be upgraded live.
 
 **Lifecycle state machine (mode 1):**
 

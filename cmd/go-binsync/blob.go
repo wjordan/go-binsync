@@ -7,8 +7,8 @@ import (
 	"io"
 	"sync"
 
-	"binsync/release"
-	"binsync/store"
+	"github.com/wjordan/go-binsync/release"
+	"github.com/wjordan/go-binsync/store"
 )
 
 // blobParallel is how many ranged requests a blob is fetched with. One TCP

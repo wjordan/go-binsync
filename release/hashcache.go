@@ -25,7 +25,7 @@ func statID(fi fs.FileInfo) (fileID, bool) {
 }
 
 // CachedHash returns the BLAKE3 of the file at path, hashing it only when
-// the cache in <path>.binsync/hash was written for a different file. A
+// the cache in <path>.go-binsync/hash was written for a different file. A
 // target must know its own release before every update (README guarantee 4),
 // and re-reading a 100 MB binary every poll is the one cost that would make
 // a 5 s poll interval expensive.

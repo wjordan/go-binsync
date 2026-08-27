@@ -3,7 +3,7 @@ package delta
 import (
 	"fmt"
 
-	"binsync/delta/internal/lz"
+	"github.com/wjordan/go-binsync/delta/internal/lz"
 )
 
 // The plain codec (transform 0) is what everything that is not a supported

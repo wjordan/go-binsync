@@ -18,7 +18,7 @@ func StoreSuite(t *testing.T, s Store) {
 	t.Helper()
 	ctx := context.Background()
 	prefix := fmt.Sprintf("storesuite/%016x/", rand.Uint64())
-	body := bytes.Repeat([]byte("binsync"), 300) // 2100 B
+	body := bytes.Repeat([]byte("payload"), 300) // 2100 B
 
 	put := func(t *testing.T, key string, b []byte, o PutOptions) error {
 		t.Helper()

@@ -5,7 +5,7 @@ import (
 	"sort"
 	"sync"
 
-	"binsync/delta/gobin"
+	"github.com/wjordan/go-binsync/delta/gobin"
 )
 
 // A dataMap says where each block of an old data section ended up in the new

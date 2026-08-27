@@ -322,7 +322,7 @@ func TestFailedMarker(t *testing.T) {
 	if h, ok := i.Failed(); !ok || h != bad {
 		t.Fatalf("Failed = %v, %v; want %v, true", h, ok, bad)
 	}
-	if dir := i.StateDir(); dir != i.Path+".binsync" {
+	if dir := i.StateDir(); dir != i.Path+".go-binsync" {
 		t.Fatalf("StateDir = %q", dir)
 	}
 

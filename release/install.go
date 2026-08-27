@@ -15,7 +15,7 @@ const wOK, xOK = 0x2, 0x1
 
 // Installer replaces the binary at Path atomically and can put the previous
 // one back (docs/DESIGN.md 6.2). It touches only Path, Path+".old",
-// Path+".pending", Path+".binsync/" and its own temp files, all of which
+// Path+".pending", Path+".go-binsync/" and its own temp files, all of which
 // live in Path's directory.
 type Installer struct{ Path string }
 
@@ -29,7 +29,7 @@ func (i *Installer) PendingPath() string { return i.Path + ".pending" }
 
 // StateDir is the directory for state that outlives one update: the hash
 // cache and the failed marker.
-func (i *Installer) StateDir() string { return i.Path + ".binsync" }
+func (i *Installer) StateDir() string { return i.Path + ".go-binsync" }
 
 func (i *Installer) failedPath() string { return filepath.Join(i.StateDir(), "failed") }
 

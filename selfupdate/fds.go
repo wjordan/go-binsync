@@ -45,13 +45,13 @@ func encodeFDs(specs []fdSpec) string {
 func parseFDs(s string) ([]fdSpec, error) {
 	var specs []fdSpec
 	if err := json.Unmarshal([]byte(s), &specs); err != nil {
-		return nil, fmt.Errorf("binsync: %s=%q: %w", envFDs, s, err)
+		return nil, fmt.Errorf("go-binsync: %s=%q: %w", envFDs, s, err)
 	}
 	for _, sp := range specs {
 		// 0-2 are stdio: a listener never lands there, so a table naming one
-		// is a table from something other than a binsync handoff.
+		// is a table from something other than a go-binsync handoff.
 		if sp.FD < 3 || sp.Network == "" {
-			return nil, fmt.Errorf("binsync: %s=%q: %q on fd %d is not an inherited listener", envFDs, s, sp.Network, sp.FD)
+			return nil, fmt.Errorf("go-binsync: %s=%q: %q on fd %d is not an inherited listener", envFDs, s, sp.Network, sp.FD)
 		}
 	}
 	return specs, nil

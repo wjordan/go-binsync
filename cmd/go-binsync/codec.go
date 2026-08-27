@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"binsync/delta"
-	"binsync/release"
+	"github.com/wjordan/go-binsync/delta"
+	"github.com/wjordan/go-binsync/release"
 )
 
 // diff and patch are offline access to the codec, for development and for the
@@ -42,15 +42,15 @@ func diff(log *slog.Logger, args []string) error {
 	if err := os.WriteFile(*out, patch, 0o644); err != nil {
 		return err
 	}
-	log.Info("binsync: encoded", "patch", hbytes(int64(len(patch))), "of", hbytes(int64(len(next))),
+	log.Info("go-binsync: encoded", "patch", hbytes(int64(len(patch))), "of", hbytes(int64(len(next))),
 		"transform", st.Transform, "took", hdur(time.Since(start)))
 	if *verbose {
-		log.Info("binsync: patch bytes", "header", hbytes(int64(st.Header)), "layout", hbytes(int64(st.Layout)),
+		log.Info("go-binsync: patch bytes", "header", hbytes(int64(st.Header)), "layout", hbytes(int64(st.Layout)),
 			"stage1a", hbytes(int64(st.Stage1a)), "stage1b", hbytes(int64(st.Stage1b)), "stage2", hbytes(int64(st.Stage2)))
-		log.Info("binsync: functions", "total", st.Funcs, "matched", st.Matched, "new", st.NewFuncs,
+		log.Info("go-binsync: functions", "total", st.Funcs, "matched", st.Matched, "new", st.NewFuncs,
 			"mispredicted", hbytes(int64(st.PredictErr)))
 		for _, n := range st.Notes {
-			log.Info("binsync: " + n)
+			log.Info("go-binsync: " + n)
 		}
 	}
 	return nil
@@ -89,7 +89,7 @@ func patchCmd(log *slog.Logger, args []string) error {
 	if err := os.WriteFile(*out, buf.Bytes(), 0o755); err != nil {
 		return err
 	}
-	log.Info("binsync: applied", "release", release.HashBytes(buf.Bytes()),
+	log.Info("go-binsync: applied", "release", release.HashBytes(buf.Bytes()),
 		"size", hbytes(int64(buf.Len())), "took", hdur(time.Since(start)))
 	return nil
 }

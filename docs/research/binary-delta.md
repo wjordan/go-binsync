@@ -1,4 +1,4 @@
-# Binary delta / patch encoders — research notes for binsync
+# Binary delta / patch encoders — research notes for go-binsync
 
 Scope: updating a deployed Go web server binary (~30–100 MB, ELF, linux/amd64
 assumed) on remote hosts over a high-latency link. Typical change is one line of
@@ -176,7 +176,7 @@ of the paper (Alpha binaries, sizes in bytes):
 | apache 1.3.0→1.3.1 | 679,936 | 111,421 | 48,033 | 40,460 | 38,278 |
 | average (19 pairs) | 100% | 19.4% | 9.8% | 7.3% | 8.6% |
 
-The "extra printf" row is the closest analogue to binsync's typical change:
+The "extra printf" row is the closest analogue to go-binsync's typical change:
 bsdiff 1.35% of the binary, a platform-specific disassembler only 1% better.
 Percival's thesis claims a further ~20% via a more sophisticated algorithm
 (https://www.daemonology.net/bsdiff/).
@@ -276,7 +276,7 @@ bsdiff+lzma 3.5 M, 13.7 s vs 24.3 s, https://github.com/eerimoq/detools).
   Same idea as Google's archive-patcher (File-by-File v1 for APK/JAR:
   uncompress changed entries, bsdiff, recompress with recorded settings;
   archived June 2024, https://github.com/google/archive-patcher). Irrelevant
-  unless binsync ever ships compressed bundles; a lesson nonetheless: never
+  unless go-binsync ever ships compressed bundles; a lesson nonetheless: never
   diff compressed bytes.
 - Microsoft PatchAPI / MSDelta: file-type "Transforms" preprocess the source
   "to make it more similar to the target at the byte level"; PatchAPI has
@@ -403,7 +403,7 @@ non-PIE Go binary the abs32 path vanishes entirely (see §2.5).
 
 Nothing published on delta-encoding Go binaries was found; the points below
 are from Go toolchain sources and my inference, and should be measured on
-real binsync inputs.
+real go-binsync inputs.
 
 - Layout mechanics of a one-line change (inference from cmd/link behaviour):
   functions are laid out in `.text` in the linker's symbol order, so growing
@@ -435,7 +435,7 @@ real binsync inputs.
 - Reproducibility: Go 1.21+ is "perfectly reproducible" given `-trimpath`,
   `CGO_ENABLED=0` and the same toolchain (https://go.dev/blog/rebuild). This
   is what makes "identify the old binary by content hash" robust across build
-  boxes, and it lets binsync regenerate any historical version from source if
+  boxes, and it lets go-binsync regenerate any historical version from source if
   a patch base is missing.
 - Feasibility of a Go-aware transform: a Zucchini-style pass for Go would need
   (a) x64 rel32 finding (heuristic, Zucchini has it), (b) a pclntab-aware
@@ -496,7 +496,7 @@ Options and who uses them:
    hdiffz 6.74%).
 6. On-demand pairwise generation keyed by the client's reported old-binary
    hash, cached. Nobody does this at browser scale (millions of clients), but
-   binsync's source is a build box talking to a fleet; the encoder runs once
+   go-binsync's source is a build box talking to a fleet; the encoder runs once
    per distinct (old, new) pair (hdiffz ~14–34 MB/s → a few seconds for
    100 MB; bsdiff 4.3 ~2.5 MB/s → ~40 s; bidiff-style hashing ~0.5 s). Given
    Go's reproducible builds the box can regenerate any old version if it lacks
@@ -514,7 +514,7 @@ one encode per distinct old hash and guarantees a direct patch.
   and CRC of the *existing* file and the updater refuses on mismatch; Zucchini
   stores CRC32 of old and new; Chrome OS re-reads and hashes the whole
   partition after writing; Sparkle verifies a checksum and falls back to the
-  full download. For binsync: SHA-256 of old (pre-check) and new (post-check)
+  full download. For go-binsync: SHA-256 of old (pre-check) and new (post-check)
   in the patch manifest; refuse to rename on mismatch.
 - Fallback is mandatory in every surveyed protocol ("fall back to a full
   package if the differential patch fails to apply" — Omaha 3.1).
@@ -538,11 +538,11 @@ one encode per distinct old hash and guarantees a direct patch.
   rather than the raw patch, so the same signature covers verification of the
   result. Sparkle signs each `.delta` with EdDSA; MAR headers hold up to 8
   signatures; Omaha ships SHA-256 of both diff and full packages. Ed25519 over
-  a canonical manifest is the obvious choice for binsync; go-update-style
+  a canonical manifest is the obvious choice for go-binsync; go-update-style
   tooling (https://github.com/inconshreveable/go-update) already does
   SHA-256 + ECDSA verification plus rename-based replacement.
 
-## 6. Implications for binsync
+## 6. Implications for go-binsync
 
 ### Comparison matrix
 
@@ -572,7 +572,7 @@ from the sources above; "impl" is effort to integrate into a Go tool.
   experiment, ideally targeting pclntab `entryOff` deltas which no existing
   tool models.
 - The weak part of classic bsdiff is the container: bzip2, three separately
-  compressed streams, no header hashes. The obvious binsync design is bsdiff's
+  compressed streams, no header hashes. The obvious go-binsync design is bsdiff's
   matcher (suffix array + 50% extension) with the control/diff/extra streams
   compressed by zstd (or xz if the ~5% size matters more than decode speed),
   an authenticated manifest, and hpatchz-style streaming apply so the target

@@ -14,8 +14,8 @@ import (
 	"sync"
 	"time"
 
-	"binsync/delta"
-	"binsync/release"
+	"github.com/wjordan/go-binsync/delta"
+	"github.com/wjordan/go-binsync/release"
 )
 
 type server struct {

@@ -65,7 +65,7 @@ func sshTemps(t *testing.T, s *sshStore) []string {
 	t.Helper()
 	var left []string
 	err := filepath.WalkDir(s.dir, func(p string, d os.DirEntry, err error) error {
-		if err == nil && !d.IsDir() && strings.HasPrefix(d.Name(), ".binsync.tmp.") {
+		if err == nil && !d.IsDir() && strings.HasPrefix(d.Name(), ".go-binsync.tmp.") {
 			left = append(left, p)
 		}
 		return err
@@ -189,7 +189,7 @@ func TestSSHCheckKey(t *testing.T) {
 		"latest.json",
 		"patches/aabbccdd-11223344.bsz",
 		"blobs/" + strings.Repeat("ab", 32) + ".zst",
-		".binsync.tmp.0011223344556677",
+		".go-binsync.tmp.0011223344556677",
 	}
 	bad := []string{
 		"",
@@ -306,7 +306,7 @@ func TestSSHQuote(t *testing.T) {
 
 func TestSSHCommands(t *testing.T) {
 	t.Parallel()
-	const tmp = ".binsync.tmp.0011223344556677"
+	const tmp = ".go-binsync.tmp.0011223344556677"
 	got := sshPutCmd("/srv/app", "patches/aa-bb.bsz", "patches/"+tmp, 42)
 	want := `mkdir -p '/srv/app/patches' && cat > '/srv/app/patches/` + tmp + `'` +
 		` && [ "$(wc -c < '/srv/app/patches/` + tmp + `')" -eq 42 ]` +

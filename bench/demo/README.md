@@ -3,8 +3,8 @@
 The public demo specified in `docs/DEMO.md`: one page that updates a deployed
 Go binary in front of you, from the region you pick, and verifies the result.
 
-Everything it serves is real. The assets are binsync stores built by
-`binsync publish`; the page fetches the pointer, plans the update from the
+Everything it serves is real. The assets are go-binsync stores built by
+`go-binsync publish`; the page fetches the pointer, plans the update from the
 chain exactly as `release.MakePlan` does, fetches the patch, and the server
 applies it with `delta.Apply` against its own copy of the old release and
 hashes what comes out. If the page says the release verifies, a target would
@@ -23,8 +23,8 @@ go run ./bench/demo -addr :8080 -assets bench/out/demo-assets
 ## Container
 
 ```sh
-docker build -f bench/demo/Dockerfile -t binsync-demo .   # from the repository root
-docker run --rm -p 8080:8080 binsync-demo
+docker build -f bench/demo/Dockerfile -t go-binsync-demo .   # from the repository root
+docker run --rm -p 8080:8080 go-binsync-demo
 ```
 
 The image is `scratch` plus one static binary and the assets: 240 MB, almost
@@ -33,7 +33,7 @@ all of it the three old binaries and the blobs.
 ## Deploy
 
 ```sh
-bench/demo/deploy.sh          # APP=binsync-demo REGIONS="ord jnb nrt gru syd"
+bench/demo/deploy.sh          # APP=go-binsync-demo REGIONS="ord jnb nrt gru syd"
 ```
 
 One Machine per region, suspended when idle. The page sets `fly-force-region`

@@ -1,6 +1,6 @@
 # Update / artifact-distribution systems: transport, storage, fan-out and latency
 
-Research notes for binsync (2026-08-26). Scope: the *system* level of existing
+Research notes for go-binsync (2026-08-26). Scope: the *system* level of existing
 software-update and artifact-distribution designs - how a release is described,
 how a target discovers it, how the server decides which patch to serve, how many
 "from" versions are kept, how fallback and drift are handled, and what the hot
@@ -28,7 +28,7 @@ are marked *(snippet)*.
 11. **Hashing cost is not negligible at a 100 ms budget.** 100 MB at SHA-256 without SHA-NI (~484 MiB/s) is ~200 ms; Go SHA-NI "3-4x" faster (Go 1.21 notes); Go BLAKE3 ports reach ~4 GB/s single-thread (lukechampine 4034 MB/s AVX-512, zeebo 4.00 GB/s AVX2), not the 6.9 GB/s Rust figure; xxh3 25-149 GB/s. Cache the base hash on the target.
 12. **The only production Go-binary deploy tools do full copies.** gokrazy streams whole root/boot images with no compression or delta; Kamal/fly/Capistrano move OCI images or git trees; `sup`/`imployer` tar over SSH. The common `rsync -avz bin && ssh systemctl restart` pattern works only because rsync writes a temp file and renames (`--inplace` is documented as unsafe for in-use binaries).
 13. **P2P fan-out only pays at thousands of hosts.** Kraken: 3 GB to 2,600 hosts p50 10 s / p99 18 s; Spegel: 17 GB image on 56 GPU nodes median 348 s -> 307 s (~12%), and its DHT lookup has a 20 ms timeout with fallback to upstream. Below ~1000 hosts, request/egress cost is irrelevant (1000 hosts polling every 60 s ~ $0.58/day on S3) and the workstation uplink or the per-host RTT budget dominates.
-14. **Riot's League patcher is the closest analogue to what binsync wants on the transport side**: 64 KB FastCDC chunks, zstd-19 per chunk, >300,000 chunks packed into <5,000 content-addressed bundles, >85% bundle reuse between versions, ~8 MB signed FlatBuffers manifest, 8 HTTP/1.1 connections, whole-bundle GET or multipart ranges; patch time >8 min -> <40 s even though bytes went *up* (68 MB -> 83 MB) versus their prior bsdiff chain. Latency was won on round trips and parallelism, not bytes.
+14. **Riot's League patcher is the closest analogue to what go-binsync wants on the transport side**: 64 KB FastCDC chunks, zstd-19 per chunk, >300,000 chunks packed into <5,000 content-addressed bundles, >85% bundle reuse between versions, ~8 MB signed FlatBuffers manifest, 8 HTTP/1.1 connections, whole-bundle GET or multipart ranges; patch time >8 min -> <40 s even though bytes went *up* (68 MB -> 83 MB) versus their prior bsdiff chain. Latency was won on round trips and parallelism, not bytes.
 15. **rsync's block size for a 50 MB file is ~7 KB** (sqrt(len), rounded to 8, clamped to [700 B, 128 KiB] - verified in upstream `rsync.h`); wharf uses 64 KiB, Octodiff 2 KiB, zsync 2-4 KiB, casync/desync/bita/Riot/zstd:chunked ~64 KiB average CDC.
 
 ---
@@ -174,9 +174,9 @@ Standalone delta/combo macOS updaters ended with Big Sur (https://9to5mac.com/20
 Decision framework, in terms of a 30-100 MB Go binary with one-line deltas:
 
 - **Storage cost is not the constraint**: a bsdiff-class patch for a one-line change is tens of KB to a few hundred KB (Firefox point releases 1.94-2.15 MB for a whole browser; Courgette 78 KB for Chrome). Even K=20 patches per release is under 10 MB.
-- **Generation cost is**: bsdiff needs `max(17n, 9n+m)` memory and is O(n log n) in the suffix sort (https://www.daemonology.net/bsdiff/); Zucchini takes "15-20 min" for Chrome; wharf's partitioned bsdiff cut 14.84 s -> 2.84 s with 11 partitions. A K-wide matrix multiplies this by K on the release hot path, which is exactly the "new release build finished -> targets reloaded" latency binsync cares about. Windows' UUP argument was precisely that Express's per-baseline diffs were "only feasible ... for the most common baselines".
+- **Generation cost is**: bsdiff needs `max(17n, 9n+m)` memory and is O(n log n) in the suffix sort (https://www.daemonology.net/bsdiff/); Zucchini takes "15-20 min" for Chrome; wharf's partitioned bsdiff cut 14.84 s -> 2.84 s with 11 partitions. A K-wide matrix multiplies this by K on the release hot path, which is exactly the "new release build finished -> targets reloaded" latency go-binsync cares about. Windows' UUP argument was precisely that Express's per-baseline diffs were "only feasible ... for the most common baselines".
 - **Miss cost is a full download** (~1 s+ at S3 single-connection rates for 50 MB, plus the RTTs). Fedora's deltarpm data shows a K=1 policy wastes more than it saves once misses and failed applies are counted.
-- **The (c) model dominates (b) for a single-binary product**: one reverse+forward pair per release, generated once, gives O(1) generation cost and any-version coverage, at the price of two applies on the target and a base that must be periodically re-chosen (Windows re-bases at feature updates; binsync can re-base when the forward delta from base exceeds a threshold, and re-basing is just "ship a full object and start a new base").
+- **The (c) model dominates (b) for a single-binary product**: one reverse+forward pair per release, generated once, gives O(1) generation cost and any-version coverage, at the price of two applies on the target and a base that must be periodically re-chosen (Windows re-bases at feature updates; go-binsync can re-base when the forward delta from base exceeds a threshold, and re-basing is just "ship a full object and start a new base").
 - **(d) is the wrong primary delta for executables but the right transport shape**: chunk-level reuse means the *unchanged* 95% of the binary never crosses the wire and the target can verify per chunk; the *changed* region should still be a bsdiff/zstd-patch-from delta, not a chunk fetch. Riot's numbers show that the transport shape (few, parallel, contiguous requests) mattered more than bytes.
 
 ---
@@ -209,7 +209,7 @@ Decision framework, in terms of a 30-100 MB Go binary with one-line deltas:
 | Riot League patcher | FastCDC avg 64 KB ("ends with 16 zero bits"), zstd-19 per chunk, chunks packed into <5,000 content-addressed bundles | ~8 MB signed FlatBuffers manifest; whole-bundle GET or multipart ranges; 8 HTTP/1.1 connections; <= 128 MB in flight; 64 MB write slices; SQLite bookkeeping (https://www.riotgames.com/en/news/supercharging-data-delivery-new-league-patcher) | proprietary | rechunk local files, refetch inconsistent | 1 + bundle GETs |
 | Blizzard NGDP/CASC | content-addressed archives (<2 MB files packed into <= 256 MB archives) + ZBSDIFF1 patch archives keyed old-ekey -> new-ekey | versions/cdns/config/encoding/index/archive files | proprietary | full ekey fallback | many |
 
-Observations: no Go deploy tool does deltas; wharf is the only Go library with the full sig/patch/verify/heal loop and a bsdiff second pass; its rediff design (ship a fast rsync patch immediately, replace with a bsdiff patch later) is a latency trick binsync could invert (ship the bsdiff-class patch for the hot pair only, chunk-fallback for everything else).
+Observations: no Go deploy tool does deltas; wharf is the only Go library with the full sig/patch/verify/heal loop and a bsdiff second pass; its rediff design (ship a fast rsync patch immediately, replace with a bsdiff patch later) is a latency trick go-binsync could invert (ship the bsdiff-class patch for the hot pair only, chunk-fallback for everything else).
 
 ---
 
@@ -238,7 +238,7 @@ Observations: no Go deploy tool does deltas; wharf is the only Go library with t
 
 ---
 
-## 9. Implications for binsync
+## 9. Implications for go-binsync
 
 The target is one Go binary, 30-100 MB, typically a one-line change, on N hosts, over ~100 ms RTT to S3/GCS/R2 or over SSH, with end-to-end latency (build done -> every target reloaded) as the objective. The evidence above points to the following.
 

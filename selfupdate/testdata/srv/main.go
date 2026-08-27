@@ -1,5 +1,5 @@
 // Command srv is the service half of the handoff integration test: it takes
-// its listener from binsync, answers every request with the version it was
+// its listener from go-binsync, answers every request with the version it was
 // built with, and reports ready.
 package main
 
@@ -12,7 +12,7 @@ import (
 	"os"
 	"strconv"
 
-	"binsync/selfupdate"
+	"github.com/wjordan/go-binsync/selfupdate"
 )
 
 // version is stamped by the test's go build; addr is the pair both builds ask

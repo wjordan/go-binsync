@@ -7,7 +7,7 @@
 #   bench/demo/deploy.sh
 set -euo pipefail
 
-APP=${APP:-binsync-demo}
+APP=${APP:-go-binsync-demo}
 REGIONS=${REGIONS:-"ord jnb nrt gru syd"}
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && cd .. && pwd)
 cd "$ROOT"

@@ -51,9 +51,14 @@ func TestRoundTrip(t *testing.T) {
 }
 
 func TestApplyRejectsCorruptStreams(t *testing.T) {
-	src := bytes.Repeat([]byte("binsync"), 1000)
+	src := bytes.Repeat([]byte("payload"), 1000)
 	dst := append(append([]byte(nil), src[500:]...), src[:500]...)
 	ctrl, lit := Emit(src, dst, nil, nil)
+	// Truncating an empty literal stream truncates nothing, so the case
+	// below would pass without testing anything.
+	if len(ctrl) == 0 || len(lit) == 0 {
+		t.Fatalf("nothing to corrupt: %d ctrl bytes, %d literal bytes", len(ctrl), len(lit))
+	}
 	out := make([]byte, len(dst))
 	for _, bad := range []struct {
 		name string

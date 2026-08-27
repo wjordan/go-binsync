@@ -10,9 +10,9 @@ import (
 	"sync"
 	"time"
 
-	"binsync/delta"
-	"binsync/release"
-	"binsync/store"
+	"github.com/wjordan/go-binsync/delta"
+	"github.com/wjordan/go-binsync/release"
+	"github.com/wjordan/go-binsync/store"
 )
 
 // errVerify marks the failures that mean the bytes were not what the pointer

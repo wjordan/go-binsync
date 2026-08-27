@@ -12,7 +12,7 @@ import (
 	"syscall"
 	"time"
 
-	"binsync/release"
+	"github.com/wjordan/go-binsync/release"
 )
 
 // restart hands the service over to the release installed at Path: it starts
@@ -25,10 +25,10 @@ func (u *Updater) restart(h release.Hash) error {
 	switch {
 	case u.superseded || u.upgrading:
 		u.mu.Unlock()
-		return errors.New("binsync: an upgrade is already in flight")
+		return errors.New("go-binsync: an upgrade is already in flight")
 	case u.ctx.Err() != nil:
 		u.mu.Unlock()
-		return fmt.Errorf("binsync: not upgrading: %w", u.ctx.Err())
+		return fmt.Errorf("go-binsync: not upgrading: %w", u.ctx.Err())
 	}
 	u.upgrading = true
 	u.mu.Unlock()
@@ -55,7 +55,7 @@ func (u *Updater) handoff(h release.Hash) error {
 
 	pr, pw, err := os.Pipe()
 	if err != nil {
-		return fmt.Errorf("binsync: ready pipe: %w", err)
+		return fmt.Errorf("go-binsync: ready pipe: %w", err)
 	}
 	defer pr.Close()
 
@@ -77,7 +77,7 @@ func (u *Updater) handoff(h release.Hash) error {
 	// The write end must not stay open here, or the read below never sees
 	// the EOF that means the new process died.
 	pw.Close()
-	u.log.Info("binsync: started the new release", "release", h, "path", u.path, "pid", cmd.Process.Pid, "listeners", len(files))
+	u.log.Info("go-binsync: started the new release", "release", h, "path", u.path, "pid", cmd.Process.Pid, "listeners", len(files))
 
 	var exitErr error
 	waited := make(chan struct{})
@@ -178,10 +178,10 @@ func (u *Updater) supersede() error {
 	select {
 	case <-drained:
 	case <-timer.C:
-		u.log.Warn("binsync: shutdown callbacks did not finish", "after", u.drainTimeout)
+		u.log.Warn("go-binsync: shutdown callbacks did not finish", "after", u.drainTimeout)
 	}
 
-	u.log.Info("binsync: superseded")
+	u.log.Info("go-binsync: superseded")
 	u.closeDone()
 	u.exit(0)
 	return nil
@@ -191,16 +191,16 @@ func (u *Updater) supersede() error {
 // and records the release, so the loop skips it until the pointer names a
 // different head (README guarantee 7).
 func (u *Updater) rollback(h release.Hash, why error) error {
-	u.log.Error("binsync: the new release did not come up; rolling back", "release", h, "err", why)
+	u.log.Error("go-binsync: the new release did not come up; rolling back", "release", h, "err", why)
 	// Record before reverting: a crash between the two must leave the release
 	// skipped, not fetched and installed again.
 	if err := u.inst.MarkFailed(h); err != nil {
-		u.log.Error("binsync: recording the failed release", "err", err)
+		u.log.Error("go-binsync: recording the failed release", "err", err)
 	}
 	if err := u.inst.Revert(); err != nil {
-		return fmt.Errorf("binsync: upgrade to %s failed: %w, and the revert failed: %w", h, why, err)
+		return fmt.Errorf("go-binsync: upgrade to %s failed: %w, and the revert failed: %w", h, why, err)
 	}
-	return fmt.Errorf("binsync: upgrade to %s rolled back: %w", h, why)
+	return fmt.Errorf("go-binsync: upgrade to %s rolled back: %w", h, why)
 }
 
 // listenerFiles duplicates every listener this process serves on, in Listen
@@ -213,10 +213,10 @@ func (u *Updater) listenerFiles() ([]*os.File, []fdSpec, error) {
 	files := make([]*os.File, 0, len(serving))
 	specs := make([]fdSpec, 0, len(serving))
 	for i, s := range serving {
-		f, err := dupListener(s.ln, fmt.Sprintf("binsync %s %s", s.network, s.addr))
+		f, err := dupListener(s.ln, fmt.Sprintf("go-binsync %s %s", s.network, s.addr))
 		if err != nil {
 			closeAll(files)
-			return nil, nil, fmt.Errorf("binsync: handing over the %s listener on %s: %w", s.network, s.addr, err)
+			return nil, nil, fmt.Errorf("go-binsync: handing over the %s listener on %s: %w", s.network, s.addr, err)
 		}
 		files = append(files, f)
 		specs = append(specs, fdSpec{FD: 3 + i, Network: s.network, Addr: s.addr})

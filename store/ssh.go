@@ -289,7 +289,7 @@ func sshETag(b []byte) string {
 // sshTempKey is a hidden sibling of key, so the temp file and its
 // destination are in the same directory and the rename is atomic.
 func sshTempKey(key string) string {
-	return path.Join(path.Dir(key), ".binsync.tmp."+rand.Text())
+	return path.Join(path.Dir(key), ".go-binsync.tmp."+rand.Text())
 }
 
 // sshCheckKey rejects any key that could escape the store directory or reach

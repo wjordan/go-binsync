@@ -1,7 +1,7 @@
-// Package s3 is the s3:// backend for binsync/store. It registers itself from
+// Package s3 is the s3:// backend for go-binsync/store. It registers itself from
 // init, so only a program that imports it links the AWS SDK:
 //
-//	import _ "binsync/store/s3"
+//	import _ "github.com/wjordan/go-binsync/store/s3"
 //
 // A store URL is s3://bucket/prefix; an object key k lives at prefix + "/" + k.
 // Region and credentials come from the ambient environment (AWS_REGION,
@@ -23,7 +23,7 @@ import (
 	"strconv"
 	"strings"
 
-	"binsync/store"
+	"github.com/wjordan/go-binsync/store"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -75,7 +75,7 @@ func open(u *url.URL) (store.Store, error) {
 
 func loadConfig(ctx context.Context) (aws.Config, error) {
 	return config.LoadDefaultConfig(ctx,
-		// Everything binsync reads is BLAKE3-verified against the pointer, and
+		// Everything go-binsync reads is BLAKE3-verified against the pointer, and
 		// the SDK's default checksums put an aws-chunked trailer on a streamed
 		// upload that GCS's S3 interop endpoint rejects.
 		config.WithRequestChecksumCalculation(aws.RequestChecksumCalculationWhenRequired),

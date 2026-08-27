@@ -5,8 +5,8 @@ import (
 	"regexp"
 	"sync"
 
-	"binsync/delta/gobin"
-	"binsync/delta/x86"
+	"github.com/wjordan/go-binsync/delta/gobin"
+	"github.com/wjordan/go-binsync/delta/x86"
 )
 
 // match is the correspondence between the old release's functions and the

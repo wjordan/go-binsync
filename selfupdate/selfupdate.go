@@ -1,4 +1,4 @@
-// Package selfupdate is the embedded half of binsync: a service links it,
+// Package selfupdate is the embedded half of go-binsync: a service links it,
 // takes its listening sockets from it, and is replaced by the next release
 // without dropping a connection (README 7, docs/DESIGN.md 6.3).
 package selfupdate
@@ -17,8 +17,8 @@ import (
 	"syscall"
 	"time"
 
-	"binsync/agent"
-	"binsync/release"
+	"github.com/wjordan/go-binsync/agent"
+	"github.com/wjordan/go-binsync/release"
 )
 
 // The bounds README 7 and docs/DESIGN.md 6.3 fix on a handoff.
@@ -46,7 +46,7 @@ type Config struct {
 }
 
 // updateSource is the poll -> fetch -> apply -> install half of an update,
-// which is binsync/agent. Run drives cycles until ctx is done, calling
+// which is go-binsync/agent. Run drives cycles until ctx is done, calling
 // restart once a release is installed at Path; restart hands the sockets
 // over and does not return when the new process takes the service over.
 type updateSource interface {
@@ -101,7 +101,7 @@ type servedListener struct {
 func Start(cfg Config) *Updater {
 	u := newUpdater(cfg, nil)
 	if cfg.Store == "" {
-		u.log.Warn("binsync: no store configured; running the lifecycle only")
+		u.log.Warn("go-binsync: no store configured; running the lifecycle only")
 	} else {
 		u.src = &agentSource{agent.Config{Store: cfg.Store, Path: u.path, Poll: cfg.Poll, Logger: u.log}, u.inst}
 	}
@@ -158,25 +158,25 @@ func (u *Updater) start() {
 	// Before anything is opened or served: this binary may be a release that
 	// crashed on its first run.
 	if err := u.selfCheck(fdsEnv != ""); err != nil {
-		u.log.Error("binsync: start-up check", "err", err)
+		u.log.Error("go-binsync: start-up check", "err", err)
 	}
 
 	if fdsEnv != "" {
 		specs, err := parseFDs(fdsEnv)
 		if err != nil {
-			u.log.Error("binsync: reading the inherited listeners", "err", err)
+			u.log.Error("go-binsync: reading the inherited listeners", "err", err)
 		}
 		for _, s := range specs {
-			name := fmt.Sprintf("binsync %s %s", s.Network, s.Addr)
+			name := fmt.Sprintf("go-binsync %s %s", s.Network, s.Addr)
 			u.inherited = append(u.inherited, &inheritedFile{spec: s, f: os.NewFile(uintptr(s.FD), name)})
 		}
 	}
 	if readyEnv != "" {
 		fd, err := strconv.Atoi(readyEnv)
 		if err != nil {
-			u.log.Error("binsync: reading the ready descriptor", "value", readyEnv, "err", err)
+			u.log.Error("go-binsync: reading the ready descriptor", "value", readyEnv, "err", err)
 		} else {
-			u.readyPipe = os.NewFile(uintptr(fd), "binsync ready")
+			u.readyPipe = os.NewFile(uintptr(fd), "go-binsync ready")
 		}
 	}
 
@@ -206,11 +206,11 @@ func (u *Updater) selfCheck(inherited bool) error {
 		// drop it rather than test it again on every start.
 		return errors.Join(err, u.inst.ClearPending())
 	}
-	u.log.Warn("binsync: the installed release did not come up; reverting", "release", h)
+	u.log.Warn("go-binsync: the installed release did not come up; reverting", "release", h)
 	// Record before reverting: a crash between the two must leave the
 	// release skipped, not fetched and installed again.
 	if merr := u.inst.MarkFailed(h); merr != nil {
-		u.log.Error("binsync: recording the failed release", "err", merr)
+		u.log.Error("go-binsync: recording the failed release", "err", merr)
 	}
 	if rerr := u.inst.Revert(); rerr != nil {
 		return errors.Join(err, rerr)
@@ -231,7 +231,7 @@ func (u *Updater) poll() {
 		return
 	}
 	if err := u.src.Run(u.ctx, u.restart); err != nil && u.ctx.Err() == nil {
-		u.log.Error("binsync: the update loop stopped", "err", err)
+		u.log.Error("go-binsync: the update loop stopped", "err", err)
 	}
 }
 
@@ -249,14 +249,14 @@ func (u *Updater) Listen(network, addr string) (net.Listener, error) {
 		}
 		ln, err := net.FileListener(in.f)
 		if err != nil {
-			return nil, fmt.Errorf("binsync: inheriting the %s listener on %s: %w", network, addr, err)
+			return nil, fmt.Errorf("go-binsync: inheriting the %s listener on %s: %w", network, addr, err)
 		}
 		// FileListener duplicates the socket; the descriptor it arrived on
 		// has no further use in this process.
 		in.used = true
 		in.f.Close()
 		u.serving = append(u.serving, servedListener{ln, network, addr})
-		u.log.Info("binsync: inherited a listener", "network", network, "addr", addr)
+		u.log.Info("go-binsync: inherited a listener", "network", network, "addr", addr)
 		return ln, nil
 	}
 	ln, err := net.Listen(network, addr)
@@ -285,7 +285,7 @@ func (u *Updater) OnShutdown(fn func()) {
 func (u *Updater) Ready() {
 	u.readyOnce.Do(func() {
 		if err := u.inst.ClearPending(); err != nil {
-			u.log.Error("binsync: clearing the pending marker", "err", err)
+			u.log.Error("go-binsync: clearing the pending marker", "err", err)
 		}
 		u.mu.Lock()
 		for _, in := range u.inherited {
@@ -300,7 +300,7 @@ func (u *Updater) Ready() {
 
 		if pipe != nil {
 			if _, err := pipe.Write([]byte{1}); err != nil {
-				u.log.Error("binsync: reporting ready to the previous process", "err", err)
+				u.log.Error("go-binsync: reporting ready to the previous process", "err", err)
 			}
 			pipe.Close()
 		}

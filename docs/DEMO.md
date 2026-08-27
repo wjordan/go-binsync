@@ -1,9 +1,9 @@
 # Public demo: the patch explorer (phase 1)
 
-Live at <https://binsync-demo.fly.dev> (five Fly regions: ord, jnb, nrt, gru,
+Live at <https://go-binsync-demo.fly.dev> (five Fly regions: ord, jnb, nrt, gru,
 syd; Machines suspend when idle).
 
-A deployed, browser-usable proof of concept for the one idea binsync exists
+A deployed, browser-usable proof of concept for the one idea go-binsync exists
 for: **an incremental release of a Go binary is a tiny patch that really does
 reconstruct the new binary, and it crosses the world in about a second**.
 Scope is the binary update only — no service lifecycle, no agent. One page,
@@ -34,7 +34,7 @@ reading it: **generic delta** (`hdiffz -m-6 -p-8 -c-zstd-21-24`, 2.7 MB for
 the prometheus pair) and **full download** (the store's own blob, 20.3 MB —
 what a drifted target really fetches). The static ladder from the design
 brief (whole file / chunk store / xdelta3 / `--patch-from` / bsdiff /
-binsync) sits under the buttons for the numbers a viewer does not want to
+go-binsync) sits under the buttons for the numbers a viewer does not want to
 wait for, and the netem numbers from `benchmark-scale.md` §6 stand in for the
 lossy-link case the real path cannot show (§3). Rows the page does not
 actually serve are starred, because a table that mixes "we just sent you
@@ -69,13 +69,13 @@ Three pairs, all built with Go 1.27 (`-trimpath -ldflags="-s -w -buildid="`),
 precomputed by `bench/demo/build-assets.sh` and baked into the image. Sizes
 are the bytes actually served, measured:
 
-| Pair | Old | Patch (binsync) | hdiffz | Full download (blob) |
+| Pair | Old | Patch (go-binsync) | hdiffz | Full download (blob) |
 |---|---:|---:|---:|---:|
 | one-line change, `testsrv` | 29,995,235 | **2,262** | 176,199 | 8,555,312 |
 | multi-package edit, `testsrv` | 29,995,235 | **2,745** | 172,002 | 8,556,056 |
 | prometheus 3.13.1 → 3.13.2 | 93,741,283 | **95,366** | 2,719,152 | 20,336,968 |
 
-Each pair is a **real binsync store**, built by publishing the old release
+Each pair is a **real go-binsync store**, built by publishing the old release
 into an empty `file://` store and then publishing the new one: the page fetches
 the same `latest.json`, `patches/<from8>-<to8>.bsz` and `blobs/<hash>.blob` a
 real fleet would, and the four steps it shows are the four steps the agent
@@ -87,7 +87,7 @@ viewer (see §1).
 ## 3. Deployment: one Fly app, one Machine per region
 
 ```
-fly.toml       app = binsync-demo; [http_service] internal_port 8080, force_https,
+fly.toml       app = go-binsync-demo; [http_service] internal_port 8080, force_https,
                auto_stop_machines = "suspend", min_machines_running = 0
 regions        jnb, nrt, gru, syd  (+ ord as the nearby control)
 machine        shared-cpu-2x, 2 GB (the decoder peaks at ≈ 0.92 GB on the 94 MB pair,
@@ -133,7 +133,7 @@ hour) and the page says so; server-side apply is one at a time per Machine.
 No uploads, no user-supplied binaries, no parameters beyond pair and region;
 the worst a visitor can do is press buttons.
 
-**Server.** One Go program (`bench/demo`), no dependencies beyond the binsync
+**Server.** One Go program (`bench/demo`), no dependencies beyond the go-binsync
 module: the page, `GET /api/pairs`, the store objects under
 `/s/<pair>/<key>` with `Cache-Control: no-store`, `/s/<pair>/compare/hdiff`,
 and `POST /api/apply?pair=…` which calls `delta.Apply` in process against its
@@ -145,11 +145,11 @@ is kept between requests. The same routes are the demo's API.
 
 | | Needs | Status |
 |---|---|---|
-| **1a** server-side apply | the shipped `binsync` CLI builds the asset stores; `binsync/delta.Apply` runs in the server | ready |
-| **1b** in-browser apply | `binsync/delta` already builds for `GOOS=js GOARCH=wasm` (pure Go, no `os/exec`, no cgo), so what is left is the decoder's footprint: 7.6× the binary is 0.7 GB for the prometheus pair, which no tab will give you. Blocked on `docs/DESIGN.md` §11.3 | after the decoder's memory |
+| **1a** server-side apply | the shipped `go-binsync` CLI builds the asset stores; `go-binsync/delta.Apply` runs in the server | ready |
+| **1b** in-browser apply | `go-binsync/delta` already builds for `GOOS=js GOARCH=wasm` (pure Go, no `os/exec`, no cgo), so what is left is the decoder's footprint: 7.6× the binary is 0.7 GB for the prometheus pair, which no tab will give you. Blocked on `docs/DESIGN.md` §11.3 | after the decoder's memory |
 | **2** release board | a real **Publish** button cycling through a ring of releases, real targets (behind netem links, now that the kernel is known to support it) running the agent, the lifecycle path | separate spec |
 
-Phase 1a serves the real patch format: the assets are produced by `binsync
+Phase 1a serves the real patch format: the assets are produced by `go-binsync
 publish` and the page applies them with the same `delta.Apply` a target
 runs, so what the demo proves is what the product does.
 

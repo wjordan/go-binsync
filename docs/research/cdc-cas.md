@@ -1,6 +1,6 @@
 # Content-defined chunking + content-addressed storage for binary sync
 
-Research notes for binsync. Scope: can CDC/CAS (casync/desync/bita/Xet-style
+Research notes for go-binsync. Scope: can CDC/CAS (casync/desync/bita/Xet-style
 "chunk the file, fetch only missing chunks by hash") efficiently update a
 30-100 MB Go server binary over a high-latency link when the typical change is
 one line of code or one string constant? Sources are cited inline; numbers are
@@ -108,7 +108,7 @@ Date: 2026-08-26.
     stripped for the same one-line change). Ship `-ldflags="-s -w"` and pin
     `-buildid=` (the build id alone is ~80 of the 98 bytes that differ in the
     same-length-edit case).
-15. Bottom line for binsync: CDC/CAS alone will move roughly half the binary
+15. Bottom line for go-binsync: CDC/CAS alone will move roughly half the binary
     per release for the stated workload. It is still useful as (a) the storage
     substrate that makes an old version available as a *base* without keeping
     every version, (b) a fallback when no similar base exists, and (c) a way to
@@ -198,7 +198,7 @@ There are two distinct designs, and the trade-off is *not* "CDC vs fixed":
 rsync needs no shared chunking parameters and matches at any byte offset, so
 it wins on reuse at equal block size (see 8.2: 26% vs 49% unmatched). The
 cost is one extra round trip (or a precomputed signature file, zsync style)
-and that the *sender* must run the search — fine for binsync where the sender
+and that the *sender* must run the search — fine for go-binsync where the sender
 is the release pipeline. CDC's advantage is that chunks are addressable across
 files and versions without any pairwise computation, which is what makes a
 CAS possible. Dropbox uses fixed 4 MB SHA-256 blocks for dedup plus rsync-style
@@ -281,7 +281,7 @@ Sources: [casync](https://github.com/systemd/casync), [casync blog](https://0poi
 [HF upload protocol](https://huggingface.co/docs/xet/upload-protocol), [BuildBuddy](https://www.buildbuddy.io/blog/content-defined-chunking/),
 [REAPI PR #282](https://github.com/bazelbuild/remote-apis/pull/282), [Dropbox](https://dropbox.tech/infrastructure/streaming-file-synchronization).
 
-Notes on the ones that matter most for binsync:
+Notes on the ones that matter most for go-binsync:
 
 - **casync** was designed for OS images with explicit goals: bounded server
   space (no N^2 deltas), CDN-friendly object sizes, no history relationship
@@ -295,7 +295,7 @@ Notes on the ones that matter most for binsync:
   `--seed` and self-seed mechanism reuse an existing local file plus its
   `.caibx`; missing chunks fail over to remote stores. Verification is
   SHA-512/256 of the *uncompressed* chunk on read.
-- **bita** is the design closest to what binsync needs on the fetch side: one
+- **bita** is the design closest to what go-binsync needs on the fetch side: one
   archive file on any range-capable HTTP server, a dictionary that records
   each chunk's offset/size in both source and archive, the target file itself
   used as seed with chunks moved in place, and "all adjacent chunks are
@@ -365,7 +365,7 @@ Compressing each chunk independently discards cross-chunk context. Evidence:
 - Mitigations in the wild:
   - **Shared dictionary** (zchunk): dictionary stored once in the archive,
     must be frozen across releases; zstd `--train` on the previous release is
-    the obvious binsync analogue but it ties every chunk to that dictionary.
+    the obvious go-binsync analogue but it ties every chunk to that dictionary.
   - **Compress the concatenation** (git packs with per-object zlib but
     delta-chained; restic packs; "chunk packs"): loses random access per chunk
     unless the pack is framed (zstd frames / seekable format).
@@ -374,7 +374,7 @@ Compressing each chunk independently discards cross-chunk context. Evidence:
   - **Rsyncable compression** (`zstd --rsyncable`, `gzip --rsyncable`) keeps a
     compressed stream chunk-stable at "negligible" (zstd) / ~1% (gzip) ratio
     cost, relevant only if the artifact must itself be a compressed stream.
-- Framing for binsync: the missing-chunk *runs* are few (9-15), so compressing
+- Framing for go-binsync: the missing-chunk *runs* are few (9-15), so compressing
   each run as one zstd frame rather than each chunk captures most of the
   concatenation benefit while still allowing range fetch per run. Better: the
   delta path in section 7 makes all of this moot for the common case.
@@ -432,7 +432,7 @@ Compressing each chunk independently discards cross-chunk context. Evidence:
 | BLAKE3 + Bao | 1 KiB leaves, Merkle tree | root hash | verified streaming/slicing; encoded 1 MB → ~1.06 MB, outboard ~62 KB ([bao](https://github.com/oconnor663/bao)) |
 | bup / git | SHA-1 per object | tree/commit hash | Merkle by construction |
 
-For binsync: per-chunk hashes are needed only to *select* and *verify fetched*
+For go-binsync: per-chunk hashes are needed only to *select* and *verify fetched*
 data; the correctness guarantee should be a whole-file hash of the assembled
 binary (BLAKE3 at multiple GB/s or SHA-256; 100 MB is well under 100 ms), signed
 in the manifest. A Merkle root (BLAKE3/Bao) additionally allows verifying
@@ -493,7 +493,7 @@ trivial: the base for missing chunk *i* is the old chunk at the same position
 
 ---
 
-## 7. Implications for binsync
+## 7. Implications for go-binsync
 
 **Where CDC does badly, stated plainly.** For a Go server binary, any change
 that alters the size of `.text` or `.rodata` — which is every change except a

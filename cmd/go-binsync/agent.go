@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
-	"binsync/agent"
-	"binsync/release"
+	"github.com/wjordan/go-binsync/agent"
+	"github.com/wjordan/go-binsync/release"
 )
 
 // restartTimeout is README.md 5's bound on --restart. The loop imposes none,
@@ -41,7 +41,7 @@ func agentCmd(ctx context.Context, log *slog.Logger, args []string) error {
 	// Before the first poll: this agent may have died between installing a
 	// release and seeing it healthy (docs/DESIGN.md 6.5).
 	if err := h.recover(ctx); err != nil {
-		log.Error("binsync: start-up check", "err", err)
+		log.Error("go-binsync: start-up check", "err", err)
 	}
 	cfg := agent.Config{Store: fs.Arg(0), Path: h.path, Poll: *poll, Logger: log}
 	if !*once {
@@ -134,11 +134,11 @@ func (h *hooks) recover(ctx context.Context) error {
 		// rather than test it again on every start.
 		return errors.Join(err, h.inst.ClearPending())
 	}
-	h.log.Warn("binsync: the installed release was never confirmed healthy; reverting", "release", rel)
+	h.log.Warn("go-binsync: the installed release was never confirmed healthy; reverting", "release", rel)
 	// Record before reverting: a crash between the two must leave the release
 	// skipped, not fetched and installed again.
 	if merr := h.inst.MarkFailed(rel); merr != nil {
-		h.log.Error("binsync: recording the failed release", "err", merr)
+		h.log.Error("go-binsync: recording the failed release", "err", merr)
 	}
 	if rerr := h.inst.Revert(); rerr != nil {
 		return errors.Join(err, rerr)

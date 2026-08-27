@@ -1,4 +1,4 @@
-# binsync — system design
+# go-binsync — system design
 
 Status: authoritative design, v1 (2026-08-26). `README.md` specifies *behaviour*;
 this document records *why* and *how*: requirements, evidence, decisions,
@@ -38,7 +38,7 @@ rollback, and support for targets that skipped releases or drifted.
 **Latency budget (50 MB binary, 100 ms RTT, 100 Mbit/s).** The components, with
 the design target for each:
 
-| Stage | Naive (scp + restart) | binsync target | Note |
+| Stage | Naive (scp + restart) | go-binsync target | Note |
 |---|---|---|---|
 | Hash new release | — | 5 ms | BLAKE3 in Go: 9.6 GB/s single-thread on this box (`benchmark-local.md`) |
 | Encode delta | — | ≤ 1 s warm, ≤ 5 s cold | warm = base index precomputed (D3) |
@@ -48,7 +48,7 @@ the design target for each:
 | Apply + verify | — | ≤ 0.3 s | linear apply, ~150–700 MB/s |
 | Install | rename | 3 syscalls + 2 fsync (≤ 50 ms) | D13 |
 | Exec + ready + probe | restart gap (connections dropped) | app start time; zero-loss overlap | D12 |
-| **Total (binsync-controlled)** | **≈ 8–10 s + dropped connections** | **≈ 1.5–2.5 s** | dominated by encode and 2–3 RTTs |
+| **Total (go-binsync-controlled)** | **≈ 8–10 s + dropped connections** | **≈ 1.5–2.5 s** | dominated by encode and 2–3 RTTs |
 
 Bytes barely matter at this bandwidth once the patch is < 1 MB (10 ms per
 100 KB); round trips and encode time dominate. The design therefore spends its
@@ -87,15 +87,15 @@ tables: `docs/research/benchmark-local.md`, `cdc-cas.md` §8,
 ```
  build box / workstation                 store (S3/GCS/R2/file/https)            target host
  ┌───────────────────────┐   PUT/CAS     ┌──────────────────────────────┐  GET   ┌─────────────────────────────┐
- │ binsync publish        │ ────────────►│ channels/<ch>/latest (BSYP)  │◄──────│ binsync agent  (or agent pkg │
+ │ go-binsync publish        │ ────────────►│ channels/<ch>/latest (BSYP)  │◄──────│ go-binsync agent  (or agent pkg │
  │  hash · encode · sign  │              │ releases/<hash>.json          │       │  embedded in the service)    │
  │  cache: bins + indexes │              │ patches/<from>-<to>.bsz       │       │  poll · verify · plan ·      │
  └──────────┬────────────┘              │ blobs/<hash>.zst (seekable)   │       │  fetch · apply · install     │
             │ POST /poke (optional)      └──────────────────────────────┘       └──────────┬──────────────────┘
             └───────────────────────────────────────────────────────────────────────────────┤ control socket
                                                                                              ▼
- workstation ── ssh host binsync recv ── stdio framed protocol ──────────────────► ┌─────────────────────────────┐
- (binsync push: same code path, no store)                                          │ service (binsync/upgrade)    │
+ workstation ── ssh host go-binsync recv ── stdio framed protocol ──────────────────► ┌─────────────────────────────┐
+ (go-binsync push: same code path, no store)                                          │ service (go-binsync/upgrade)    │
                                                                                    │ old proc: exec new, pass fds,│
                                                                                    │ wait ready, probe, commit /  │
                                                                                    │ abort; child: Ready(), serve │
@@ -105,7 +105,7 @@ tables: `docs/research/benchmark-local.md`, `cdc-cas.md` §8,
 Packages and their dependencies (arrows = imports):
 
 ```
-cmd/binsync ─► agent ─► release, store, delta, install, hooks
+cmd/go-binsync ─► agent ─► release, store, delta, install, hooks
               upgrade (no dependency on the network packages; importable by any service)
               delta   ─► klauspost/compress/zstd, index/suffixarray, lukechampine.com/blake3
               release ─► crypto/ed25519, blake3, canonical JSON
@@ -315,7 +315,7 @@ off  size  field
 ```
 
 - `key_id` = first 8 bytes of BLAKE3(public key bytes).
-- `signature` = Ed25519 over `"binsync/manifest/v1\n" || manifest` (domain
+- `signature` = Ed25519 over `"github.com/wjordan/go-binsync/manifest/v1\n" || manifest` (domain
   separated; no prehash — Ed25519 handles long messages).
 - Verifiers parse nothing in `manifest` until at least one signature verifies
   against a pinned key. `inline_len` and the inline bytes are covered by the
@@ -343,7 +343,7 @@ off  size  field
     "edges": [ { "from": "b3:…", "to": "b3:…", "codec": "bsz", "size": 61234, "hash": "b3:…", "key": "patches/b3:…-b3:….bsz" }, … ]
   },
   "inline": { "from": "b3:…", "to": "b3:…", "codec": "bsz", "size": 61234, "hash": "b3:…" },   // or null
-  "publisher": { "key_id": "0123456789abcdef", "tool": "binsync/0.1.0", "host": "ci-42" }
+  "publisher": { "key_id": "0123456789abcdef", "tool": "github.com/wjordan/go-binsync/0.1.0", "host": "ci-42" }
 }
 ```
 
@@ -413,7 +413,7 @@ first (one ranged GET), then frames in parallel ranges.
 
 | Key | Mutability | Headers |
 |---|---|---|
-| `channels/<ch>/latest` | mutable, CAS (`If-Match` ETag; `If-None-Match: *` on first create) | `Cache-Control: no-store`, `Content-Type: application/vnd.binsync.pointer` |
+| `channels/<ch>/latest` | mutable, CAS (`If-Match` ETag; `If-None-Match: *` on first create) | `Cache-Control: no-store`, `Content-Type: application/vnd.go-binsync.pointer` |
 | `releases/<hash>.json` (BSYP) | immutable | `public, max-age=31536000, immutable` |
 | `patches/<from>-<to>.<codec>` | immutable | same |
 | `blobs/<hash>.zst` | immutable | same |
@@ -428,7 +428,7 @@ objects with `If-None-Match: *` and treats "already exists" as success.
 <state>/upgrade.pending   { "old_hash","new_hash","started","attempt","crashes" }  — exists from INSTALLED until COMMITTED/ABORTED
 <state>/lock              flock(2) held by the running agent/sync
 <path>.old                previous binary (hard link), one generation
-<path>.binsync-tmp.<rand> staging file (same directory; removed on failure)
+<path>.go-binsync-tmp.<rand> staging file (same directory; removed on failure)
 ```
 
 ### 5.7 Control socket protocol (agent ↔ service)
@@ -464,7 +464,7 @@ fd 3           ready pipe (write end); child writes one byte 0x2A after Ready()
 fd 4           parent-alive pipe (read end); EOF ⇒ parent exited
 fd 5..         inherited listeners, in the order given by BINSYNC_FDS
 env BINSYNC_UPGRADE_CHILD=1
-env BINSYNC_FDS=[{"name":"http","network":"tcp","addr":"[::]:8080","fd":5}, {"name":"control","network":"unix","addr":"/run/app/binsync.sock","fd":6}]
+env BINSYNC_FDS=[{"name":"http","network":"tcp","addr":"[::]:8080","fd":5}, {"name":"control","network":"unix","addr":"/run/app/go-binsync.sock","fd":6}]
 ```
 
 The child sets `O_NONBLOCK` on every inherited fd before `os.NewFile`. Unix
@@ -543,9 +543,9 @@ recomputed after every install.
 The state machine and hook contract are in `README.md` §7. Additional
 mechanics:
 
-- **Who runs what.** `binsync/upgrade` (in the service) owns processes: exec,
-  fd passing, readiness, probation, drain, abort/kill. `binsync/install` owns
-  files: stage, link, rename, marker, revert. `binsync/agent` sequences them and
+- **Who runs what.** `go-binsync/upgrade` (in the service) owns processes: exec,
+  fd passing, readiness, probation, drain, abort/kill. `go-binsync/install` owns
+  files: stage, link, rename, marker, revert. `go-binsync/agent` sequences them and
   runs hooks. In self-updating services all three run in-process.
 - **Exec.** `syscall.ForkExec` via `os.StartProcess` with `Files = [stdin,
   stdout, stderr, readyW, aliveR, listeners…]`, `Env` extended as §5.8, `Dir`

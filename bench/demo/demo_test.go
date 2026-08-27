@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"binsync/delta"
-	"binsync/release"
+	"github.com/wjordan/go-binsync/delta"
+	"github.com/wjordan/go-binsync/release"
 )
 
 // buildAssets writes the smallest possible version of what

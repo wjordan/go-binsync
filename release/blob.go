@@ -5,7 +5,7 @@ import (
 	"runtime"
 	"sync"
 
-	"binsync/internal/cz"
+	"github.com/wjordan/go-binsync/internal/cz"
 )
 
 // A blob is the whole binary, compressed in independent frames of FrameSize

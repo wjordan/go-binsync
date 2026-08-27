@@ -1,4 +1,4 @@
-// Command binsync publishes a Go binary release to a store and keeps a
+// Command go-binsync publishes a Go binary release to a store and keeps a
 // deployed copy of it up to date. README.md 5 specifies its behaviour.
 package main
 
@@ -15,7 +15,7 @@ import (
 
 	// s3:// is a heavy dependency and registers itself; the CLI documents
 	// the scheme, so the CLI is what imports it (docs/DESIGN.md 7).
-	_ "binsync/store/s3"
+	_ "github.com/wjordan/go-binsync/store/s3"
 )
 
 // Exit codes (README.md 5).
@@ -61,7 +61,7 @@ func main() {
 	if code != codeUsage {
 		log.Error(err.Error())
 	} else {
-		fmt.Fprintf(os.Stderr, "binsync: %s\n\n", err)
+		fmt.Fprintf(os.Stderr, "go-binsync: %s\n\n", err)
 		usage(os.Stderr)
 	}
 	os.Exit(code)
@@ -90,15 +90,15 @@ func run(ctx context.Context, log *slog.Logger, args []string) error {
 }
 
 func usage(w io.Writer) {
-	fmt.Fprint(w, `binsync — small, fast, verified updates of a deployed Go binary
+	fmt.Fprint(w, `go-binsync — small, fast, verified updates of a deployed Go binary
 
-  binsync publish <binary> <store>         publish a release
-  binsync agent <store> <path>             keep a target's binary at the store's head
-  binsync diff <old> <new> -o <patch>      encode a patch
-  binsync patch <old> <patch> -o <new>     apply one, verifying the result
+  go-binsync publish <binary> <store>         publish a release
+  go-binsync agent <store> <path>             keep a target's binary at the store's head
+  go-binsync diff <old> <new> -o <patch>      encode a patch
+  go-binsync patch <old> <patch> -o <new>     apply one, verifying the result
 
 Stores: s3://bucket/prefix  https://host/prefix  file:///dir  ssh://host/dir
-Run "binsync <command> -h" for one command's flags.
+Run "go-binsync <command> -h" for one command's flags.
 `)
 }
 
@@ -106,9 +106,9 @@ Run "binsync <command> -h" for one command's flags.
 // stdlib flag's ExitOnError, whose exit code 2 is already the one README.md 5
 // reserves for usage.
 func newFlags(name, args string) *flag.FlagSet {
-	fs := flag.NewFlagSet("binsync "+name, flag.ExitOnError)
+	fs := flag.NewFlagSet("go-binsync "+name, flag.ExitOnError)
 	fs.Usage = func() {
-		fmt.Fprintf(os.Stderr, "usage: binsync %s %s\n", name, args)
+		fmt.Fprintf(os.Stderr, "usage: go-binsync %s %s\n", name, args)
 		fs.PrintDefaults()
 	}
 	return fs

@@ -1,11 +1,11 @@
-// Package agent is binsync's update loop: poll the pointer, work out the
+// Package agent is go-binsync's update loop: poll the pointer, work out the
 // cheapest way to reach the head release, fetch and apply it, install it
 // atomically, restart the service and check that it came up — or put the
 // previous binary back if it did not.
 //
 // One loop drives both target shapes (docs/DESIGN.md 2). For the external
-// `binsync agent` the hooks are the user's --restart and --healthy commands;
-// for the embedded binsync/selfupdate, Restart is the exec handoff.
+// `go-binsync agent` the hooks are the user's --restart and --healthy commands;
+// for the embedded go-binsync/selfupdate, Restart is the exec handoff.
 package agent
 
 import (
@@ -19,8 +19,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"binsync/release"
-	"binsync/store"
+	"github.com/wjordan/go-binsync/release"
+	"github.com/wjordan/go-binsync/store"
 )
 
 // DefaultMaxSize bounds the release a target is willing to allocate for. The
@@ -44,7 +44,7 @@ type Config struct {
 	// Store is the release stream URL: s3://, https://, file:// (README 2).
 	Store string
 	// Path is the binary to update. State that outlives one update — the
-	// hash cache and the failed marker — lives in <Path>.binsync/.
+	// hash cache and the failed marker — lives in <Path>.go-binsync/.
 	Path string
 	// Poll is how often the pointer is fetched. 0 takes the default for the
 	// store's scheme: 1s for file://, 5s for anything remote (README 5).
@@ -72,7 +72,7 @@ type Hooks struct {
 	Check func(ctx context.Context) error
 }
 
-// Outcome is how one cycle ended. ExitCode is what `binsync agent --once`
+// Outcome is how one cycle ended. ExitCode is what `go-binsync agent --once`
 // returns (README 5).
 type Outcome int
 
@@ -148,7 +148,7 @@ func Loop(ctx context.Context, cfg Config, h Hooks) error {
 	return nil
 }
 
-// Once runs a single cycle. It is `binsync agent --once`, and the error
+// Once runs a single cycle. It is `go-binsync agent --once`, and the error
 // explains any Outcome that is not AtHead or Updated.
 func Once(ctx context.Context, cfg Config, h Hooks) (Outcome, error) {
 	a, err := newAgent(cfg, h)

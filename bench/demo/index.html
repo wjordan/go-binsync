@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>binsync — patch explorer</title>
+<title>go-binsync — patch explorer</title>
 <style>
 :root {
   --bg: #0b0d10; --panel: #12161b; --line: #232a33; --dim: #7c8794;
@@ -86,10 +86,10 @@ footer { margin-top: 44px; color: var(--dim); font-size: 12.5px; }
 </head>
 <body>
 <main>
-  <h1>binsync <span>— patch explorer</span></h1>
+  <h1>go-binsync <span>— patch explorer</span></h1>
   <p class="lede">
     A deployed Go binary is updated for real, in front of you. The page fetches the
-    same pointer, the same patch and the same blob a binsync agent would, from a
+    same pointer, the same patch and the same blob a go-binsync agent would, from a
     machine in the region you pick, and the machine applies the patch with the same
     decoder a target runs. Nothing here is cached, simulated or pre-recorded.
   </p>
@@ -301,15 +301,15 @@ function renderLadder() {
      "zstd --patch-from, xdelta3 — pays for every shifted operand", 0],
     ["approximate delta", p.hdiff_size,
      "bsdiff / hdiffz — absorbs the shifts, at the price of a suffix array", 1],
-    ["full download", p.blob_size, "binsync's own blob: what a drifted target fetches", 1],
-    ["binsync patch", p.patch_size,
+    ["full download", p.blob_size, "go-binsync's own blob: what a drifted target fetches", 1],
+    ["go-binsync patch", p.patch_size,
      "predicts the relayout from .gopclntab and sends the correction", 1],
   ];
   const t = $("ladder");
   t.innerHTML = "";
   for (const [name, n, why, served] of rows) {
     const tr = document.createElement("tr");
-    if (name === "binsync patch") tr.className = "us";
+    if (name === "go-binsync patch") tr.className = "us";
     tr.innerHTML = `<td>${name}${served ? "" : " *"}</td><td class="r">${bytes(n)}</td>` +
       `<td style="color:var(--dim)">${why}</td>`;
     t.appendChild(tr);
@@ -428,8 +428,8 @@ async function probe() {
     state.region = d.region;
     $("foot").innerHTML =
       `served by <span class="mono">${d.machine}</span> in <span class="mono">${d.region}</span> · ` +
-      `<a href="/api/pairs">/api/pairs</a> · the assets are real binsync stores, ` +
-      `built by <span class="mono">binsync publish</span>`;
+      `<a href="/api/pairs">/api/pairs</a> · the assets are real go-binsync stores, ` +
+      `built by <span class="mono">go-binsync publish</span>`;
     renderPills();
     reset();
     $("go").disabled = false;

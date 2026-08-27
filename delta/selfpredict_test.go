@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"binsync/delta/gobin"
+	"github.com/wjordan/go-binsync/delta/gobin"
 )
 
 // The self-prediction gate (docs/DESIGN.md 3.6, D14). Encoding a binary

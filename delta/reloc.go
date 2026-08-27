@@ -4,8 +4,8 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"binsync/delta/gobin"
-	"binsync/delta/x86"
+	"github.com/wjordan/go-binsync/delta/gobin"
+	"github.com/wjordan/go-binsync/delta/x86"
 )
 
 // predictWorkers is the fan-out of every prediction pass. It is a constant

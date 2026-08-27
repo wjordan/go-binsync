@@ -1,4 +1,4 @@
-# binsync
+# go-binsync
 
 Small, fast, verified, zero-downtime updates of a deployed Go binary.
 
@@ -13,18 +13,18 @@ Internet is not always that smooth: packet loss, congestion and saturated links
 make a large download trickle to a crawl in a remote region.
 
 The way out is to ship only what changed: a minimal incremental patch for each
-release. binsync is an experiment in pushing that idea further than the standard
+release. go-binsync is an experiment in pushing that idea further than the standard
 tools — a compressed archive of every release, a content-defined-chunk store,
 or a general-purpose binary diff. It borrows an idea from
 [Courgette](https://www.chromium.org/developers/design-documents/software-updates-courgette/),
 the technique Google uses to ship Chrome updates: instead of diffing bytes, read
 the structure the compiler left behind and predict where everything moved. A
-stripped Go binary still carries its function table; binsync uses it to work
+stripped Go binary still carries its function table; go-binsync uses it to work
 out where every function, data block and metadata entry landed in the new
 release, and sends only the correction. The result is Go-binary patches many
 times smaller than a byte-level diff can produce.
 
-`binsync` makes a remote copy of a service binary identical to an authoritative
+`go-binsync` makes a remote copy of a service binary identical to an authoritative
 release: it sends that patch against the version already on disk, verifies the
 result by hash, installs it atomically, and re-executes the running service
 with its listening sockets handed over — reverting to the previous binary if
@@ -37,7 +37,7 @@ public demo.
 
 **Status: the library, the CLI and the public demo are implemented, and the
 numbers below are measured on them.** The demo is live at
-<https://binsync-demo.fly.dev> — pick a region, watch a real 94 MB release
+<https://go-binsync-demo.fly.dev> — pick a region, watch a real 94 MB release
 arrive as a 95 KB patch and verify (`bench/demo` builds and serves it;
 `docs/DEMO.md` specifies it). What is not done: the decoder's memory
 footprint, `docs/DESIGN.md` §11.3.
@@ -52,7 +52,7 @@ bytes take on a realistic link. Measured on a real incremental release —
 prometheus 3.13.1 → 3.13.2, a 94 MB stripped binary built with Go 1.27 —
 fetched over a medium-quality link: 20 Mbit/s, 200 ms RTT, 1 % packet loss.
 
-| | Full download | Generic delta (hdiffz) | binsync (Go-aware delta) |
+| | Full download | Generic delta (hdiffz) | go-binsync (Go-aware delta) |
 |---|---:|---:|---:|
 | Bytes sent | 20.6 MB | 2.7 MB | **0.095 MB** |
 | Encode time · peak memory | 9 s · 0.36 GB | 7 s · 0.39 GB | **2.4 s** · 0.90 GB |
@@ -62,8 +62,8 @@ fetched over a medium-quality link: 20 Mbit/s, 200 ms RTT, 1 % packet loss.
 Bytes are the thing that cannot be optimised away, and they dominate as the
 link degrades: with 1 % loss a single TCP stream carries about 1.2 Mbit/s
 whatever the link rate, so the full download takes minutes and the generic
-patch a quarter of a minute, while binsync's patch fits in a couple of round
-trips. (binsync fetches full blobs with parallel ranged requests, which
+patch a quarter of a minute, while go-binsync's patch fits in a couple of round
+trips. (go-binsync fetches full blobs with parallel ranged requests, which
 recovers most of the loss penalty; a small patch simply never pays it.) The
 encoder is faster than the generic tools because it never builds a suffix
 array over the file. Memory is the one number that is not yet where it should
@@ -74,7 +74,7 @@ set rather than the file buffers, and getting that to ≈ 2× is the open item
 The same codec turns a one-line change of a 30 MB binary into a 2.3 KB patch
 (bsdiff: 150 KB — 67× smaller), and a multi-package edit into 2.7 KB (bsdiff:
 145 KB). On a minor release with thousands of new functions the patch is
-content-dominated and the gain is modest (1.6×) — the right outcome: binsync
+content-dominated and the gain is modest (1.6×) — the right outcome: go-binsync
 removes *layout* churn, not code.
 
 ### 1.1 Why a Go-aware delta
@@ -90,13 +90,13 @@ whole file (`xz -9`, `zstd -19`) sends 7.9–8.7 MB; a chunk store
 of that because almost no chunk survives; exact-match delta coders (`zstd
 --patch-from`, xdelta3) get to 0.5–1.9 MB but pay for every shifted
 operand; approximate matchers (bsdiff, hdiffz) absorb the shifts and reach
-150–177 KB, at the price of a suffix array over the whole file. binsync sends
+150–177 KB, at the price of a suffix array over the whole file. go-binsync sends
 2.3 KB. For the prometheus release the same ladder reads 18.4–20.6 MB (whole file),
 25.7 MB (chunk store — worse than a fresh archive, because chunks compress
 alone), 8.5–15.2 MB (exact-match), 2.7 MB (bsdiff/hdiffz) and 0.095 MB.
 
 A stripped Go binary still carries the function table, with names and sizes.
-binsync uses it to align the old and new releases *by function name*, predict
+go-binsync uses it to align the old and new releases *by function name*, predict
 where everything landed in the new binary, and send only the correction. The
 prediction is deterministic and the result is hash-verified, so a wrong guess
 costs bytes, never correctness. Because the predicted layout is exact, the
@@ -127,7 +127,7 @@ Build delta-friendly (`-s -w` is required; see §8), publish, run:
 
 ```sh
 CGO_ENABLED=0 go build -trimpath -buildvcs=false -ldflags="-s -w -buildid=" -o out/server ./cmd/server
-binsync publish out/server s3://my-bucket/releases/server
+go-binsync publish out/server s3://my-bucket/releases/server
 ```
 
 **Embedded (recommended):** the service updates itself — no agent process.
@@ -147,14 +147,14 @@ func main() {
 **External:** for a service that cannot link the library.
 
 ```sh
-binsync agent s3://my-bucket/releases/server /srv/app/server \
+go-binsync agent s3://my-bucket/releases/server /srv/app/server \
     --restart 'systemctl restart app' --healthy http://127.0.0.1:8080/healthz
 ```
 
 **Workstation → server over SSH**, no object store:
 
 ```sh
-binsync publish out/server ssh://host/var/lib/app/releases      # remote service polls file:///var/lib/app/releases
+go-binsync publish out/server ssh://host/var/lib/app/releases      # remote service polls file:///var/lib/app/releases
 ```
 
 ## 4. Guarantees
@@ -191,7 +191,7 @@ binsync publish out/server ssh://host/var/lib/app/releases      # remote service
    next start finds the `.pending` marker and reverts to `.old` before
    starting. External mode: if `--healthy` fails after `--restart`, the file is
    reverted and `--restart` runs again. A release that was reverted is recorded
-   in `<path>.binsync/failed` and skipped until the pointer changes, so a broken
+   in `<path>.go-binsync/failed` and skipped until the pointer changes, so a broken
    release cannot crash-loop a target.
 8. **One update at a time.** Updates are serialised per target; a newer pointer
    observed mid-update is picked up on the next cycle.
@@ -201,9 +201,9 @@ binsync publish out/server ssh://host/var/lib/app/releases      # remote service
 Defaults are chosen so that the commands below need no flags; the few flags
 that exist are listed.
 
-### `binsync publish <binary> <store>`
+### `go-binsync publish <binary> <store>`
 Hashes the binary, encodes the patch from the current head (kept in the local
-release cache, `$XDG_CACHE_HOME/binsync`), uploads the patch, replaces the
+release cache, `$XDG_CACHE_HOME/go-binsync`), uploads the patch, replaces the
 pointer with a compare-and-swap, then uploads the blob in parallel frames, so
 targets on the chain see the release as soon as the patch is up. Exits 0
 without changes if the head already has this hash; finishes a blob upload a
@@ -212,16 +212,16 @@ Warns if the binary contains DWARF or a symbol table, is PIE, or was built from
 a modified VCS tree; `--force` publishes anyway.
 Flags: `--force`, `--cache DIR`.
 
-### `binsync agent <store> <path>`
+### `go-binsync agent <store> <path>`
 Polls the pointer (conditional GET, every 5 s for remote stores, 1 s for
 `file://`), and when the head changes: fetches, applies, verifies, installs,
 then runs `--restart CMD`, then `--healthy URL|CMD` (if given; up to 60 s); on
 failure reverts and restarts again. Errors are logged and retried with backoff.
 Flags: `--restart CMD` (required), `--healthy URL|CMD`, `--once` (one cycle,
 exit 0 if at head), `--poll DURATION`. State (hash cache, the `failed` marker)
-lives in `<path>.binsync/` next to the binary.
+lives in `<path>.go-binsync/` next to the binary.
 
-### `binsync diff <old> <new> -o <patch>` / `binsync patch <old> <patch> -o <new>`
+### `go-binsync diff <old> <new> -o <patch>` / `go-binsync patch <old> <patch> -o <new>`
 Offline codec access for development and benchmarking; `patch` verifies the
 result hash.
 Flags: `diff -v` (report where the patch bytes went), `diff --plain` (skip the
@@ -232,15 +232,15 @@ head · 5 rolled back.
 
 ## 6. Library
 
-Module path `binsync` (placeholder). Pure Go, no cgo.
+Module path `go-binsync` (placeholder). Pure Go, no cgo.
 
 | Package | Role |
 |---|---|
-| `binsync/delta` | The codec: `Encode(old, new) → patch`, `Apply(old, patch) → new`, bounds-checked, hash-verified per frame. Go-aware transform for stripped linux/amd64 Go binaries; generic delta for anything else (see §9). |
-| `binsync/release` | Pointer/manifest types, chain planning, hash cache, atomic install and revert. |
-| `binsync/store` | `Get` (with range and conditional headers), `Put` (with CAS) for `s3://`, `https://`, `file://`, `ssh://`. |
-| `binsync/selfupdate` | Embedded lifecycle: `Start`, `Listen`, `OnShutdown`, `Ready`, `Done`; the `.pending` self-check runs inside `Start`. |
-| `binsync/agent` | The poll → apply → install → restart → check loop used by the CLI and by `selfupdate`. |
+| `go-binsync/delta` | The codec: `Encode(old, new) → patch`, `Apply(old, patch) → new`, bounds-checked, hash-verified per frame. Go-aware transform for stripped linux/amd64 Go binaries; generic delta for anything else (see §9). |
+| `go-binsync/release` | Pointer/manifest types, chain planning, hash cache, atomic install and revert. |
+| `go-binsync/store` | `Get` (with range and conditional headers), `Put` (with CAS) for `s3://`, `https://`, `file://`, `ssh://`. |
+| `go-binsync/selfupdate` | Embedded lifecycle: `Start`, `Listen`, `OnShutdown`, `Ready`, `Done`; the `.pending` self-check runs inside `Start`. |
+| `go-binsync/agent` | The poll → apply → install → restart → check loop used by the CLI and by `selfupdate`. |
 
 ## 7. Upgrade lifecycle (embedded)
 

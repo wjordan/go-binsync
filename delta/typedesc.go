@@ -3,7 +3,7 @@ package delta
 import (
 	"encoding/binary"
 
-	"binsync/delta/gobin"
+	"github.com/wjordan/go-binsync/delta/gobin"
 )
 
 // Type descriptors hold three kinds of 32-bit relative field that a content

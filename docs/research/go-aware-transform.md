@@ -1,6 +1,6 @@
 # Go-aware predict-then-correct delta transform: prototype results
 
-Research notes for binsync. Scope: a decoder-side *prediction* of the new Go
+Research notes for go-binsync. Scope: a decoder-side *prediction* of the new Go
 binary from the old one plus a small transmitted layout table, followed by a
 generic delta (bsdiff / hdiffz / `zstd --patch-from`) that corrects the
 prediction. The numbers of interest are the residual correction sizes against

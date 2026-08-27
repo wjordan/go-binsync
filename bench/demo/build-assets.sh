@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Build the patch explorer's assets (docs/DEMO.md 2).
 #
-# Each pair becomes a real binsync store -- the same latest.json, patches/ and
+# Each pair becomes a real go-binsync store -- the same latest.json, patches/ and
 # blobs/ a real fleet would poll -- built by publishing the old release and
 # then the new one. Next to it go the two comparisons the page offers: the
 # generic delta (hdiffz) and the full download (the store's own blob, which is
@@ -19,9 +19,9 @@ COR=$ROOT/bench/out/corpus127
 
 command -v hdiffz >/dev/null || { echo "hdiffz not on PATH (bench/scale/fetch_corpus.sh builds it)" >&2; exit 1; }
 
-BS=$(mktemp -d)/binsync
+BS=$(mktemp -d)/go-binsync
 trap 'rm -rf "$(dirname "$BS")"' EXIT
-(cd "$ROOT" && go build -o "$BS" ./cmd/binsync)
+(cd "$ROOT" && go build -o "$BS" ./cmd/go-binsync)
 
 # pair <id> <title> <blurb> <old file> <new file>
 pair() {

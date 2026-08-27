@@ -1,6 +1,6 @@
 # The patch explorer (docs/DEMO.md). Build from the repository root:
 #   bench/demo/build-assets.sh                       # writes bench/out/demo-assets
-#   docker build -f bench/demo/Dockerfile -t binsync-demo .
+#   docker build -f bench/demo/Dockerfile -t go-binsync-demo .
 FROM golang:1.27 AS build
 WORKDIR /src
 COPY go.mod go.sum ./

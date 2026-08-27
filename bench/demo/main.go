@@ -1,7 +1,7 @@
-// Command demo serves the binsync patch explorer (docs/DEMO.md).
+// Command demo serves the go-binsync patch explorer (docs/DEMO.md).
 //
-// It is a normal binsync target with a browser attached: the assets it serves
-// are real stores built by `binsync publish` (bench/demo/build-assets.sh), the
+// It is a normal go-binsync target with a browser attached: the assets it serves
+// are real stores built by `go-binsync publish` (bench/demo/build-assets.sh), the
 // objects the page fetches are the objects an agent fetches, and the apply is
 // delta.Apply against the same old binary. Nothing about the demo is a
 // re-implementation of the product for demonstration purposes; if the page

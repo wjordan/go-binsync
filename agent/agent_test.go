@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"binsync/release"
+	"github.com/wjordan/go-binsync/release"
 )
 
 // TestOnceFollowsTheChain is the whole loop over a file:// store: two
@@ -259,7 +259,7 @@ func TestFailedCheckRollsBackAndIsSkipped(t *testing.T) {
 		}
 	}
 
-	// A fresh agent, as a restarted `binsync agent` would be: the marker,
+	// A fresh agent, as a restarted `go-binsync agent` would be: the marker,
 	// not memory, is what stops the crash loop.
 	h2 := &hooks{}
 	o, err = f.agent(h2.Hooks()).cycle(t.Context())

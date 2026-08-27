@@ -19,7 +19,7 @@ func init() { Register("file", openFile) }
 
 // lockName is the compare-and-swap lock, in the store root. It is not a key:
 // keys never start with a dot.
-const lockName = ".binsync.lock"
+const lockName = ".go-binsync.lock"
 
 // fileStore is a directory. Publishing is write-temp, fsync, rename, fsync
 // dir, so a target polling the directory never observes a partial object.

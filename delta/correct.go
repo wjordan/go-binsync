@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"binsync/delta/internal/lz"
+	"github.com/wjordan/go-binsync/delta/internal/lz"
 )
 
 // The correction turns a prediction into the real file (docs/DESIGN.md 3.4).

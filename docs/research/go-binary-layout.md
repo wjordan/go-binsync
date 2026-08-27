@@ -1,6 +1,6 @@
 # Go binary layout, build determinism, and what a one-line change does to the ELF
 
-Research notes for binsync. Scope: Go-compiled linux/amd64 web-server binaries
+Research notes for go-binsync. Scope: Go-compiled linux/amd64 web-server binaries
 (30–100 MB), internal linking, updated over a high-latency link where the typical
 release delta is one line of code or one text constant.
 
@@ -537,7 +537,7 @@ Verified with a small Go program (`scratchpad/exp/exec`):
   one thread can leak into another thread's fork child and make `execve` fail
   with `ETXTBSY` until that child execs. Russ Cox: "This race is going to happen
   every time anyone writes a program that both writes and executes a program."
-  Mitigation for binsync: write, `fsync`, **close**, then exec in a context
+  Mitigation for go-binsync: write, `fsync`, **close**, then exec in a context
   without concurrent forks (or retry on `ETXTBSY` with backoff, as `cmd/go` once
   did).
 * Signature verification, short notes: `aead.dev/minisign` (pure Go, compatible
@@ -546,7 +546,7 @@ Verified with a small Go program (`scratchpad/exp/exec`):
   Fulcio/Rekor); `crypto/ed25519` in the stdlib if we control both ends. Verify
   on the assembled image (hash of the full file) before rename.
 
-## 6. Stdlib pieces binsync can rely on
+## 6. Stdlib pieces go-binsync can rely on
 
 * `debug/elf`: section table, program headers, `SHF_COMPRESSED` decompression
   via `Section.Data()`, symbols, relocations. Pure Go, no cgo.
@@ -572,7 +572,7 @@ Verified with a small Go program (`scratchpad/exp/exec`):
   lead to inaccurate results"; has a diff mode), `github.com/bradfitz/shotizam`
   for analysis; none are runtime dependencies.
 
-## 7. Implications for binsync
+## 7. Implications for go-binsync
 
 Ranked by expected payoff per unit of effort, with honest uncertainty.
 

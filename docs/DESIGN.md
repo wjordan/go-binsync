@@ -1,4 +1,4 @@
-# binsync — design
+# go-binsync — design
 
 Architecture and reasoning behind the behaviour specified in `README.md`.
 Measurements are in `docs/research/` (index: `docs/research/README.md`).
@@ -69,7 +69,7 @@ Three roles, one store:
 
 ```
 publisher (CI or workstation)            store (S3 / HTTPS / file / SSH dir)          targets (fleet)
-  binsync publish bin s3://…   ──put──▶   blobs/<hash>.blob       (immutable)  ◀─get──  poll latest.json (conditional GET)
+  go-binsync publish bin s3://…   ──put──▶   blobs/<hash>.blob       (immutable)  ◀─get──  poll latest.json (conditional GET)
                                           patches/<from>-<to>.bsz (immutable)          fetch chain or blob, apply, verify
                                           latest.json             (CAS-replaced)       install, restart, check, or revert
 ```
@@ -79,7 +79,7 @@ Two target shapes share the same `agent` package:
 - **Embedded** (`selfupdate`): the service links the library; the old process
   polls, installs and execs the new binary with its listening sockets
   inherited. Zero downtime, no external process, one writable directory.
-- **External** (`binsync agent`): a sidecar polls and installs, then runs a
+- **External** (`go-binsync agent`): a sidecar polls and installs, then runs a
   user command (`--restart`) and optionally a health check (`--healthy`). For
   services that cannot link the library.
 
@@ -404,7 +404,7 @@ The decoder that applies a patch is **the old binary's** embedded library (or
 the deployed agent). The publisher therefore chooses the transform per patch:
 
 - Embedded: the publisher reads the old binary's `debug/buildinfo` for the
-  `binsync` module version, and uses the newest transform that version
+  `go-binsync` module version, and uses the newest transform that version
   supports. (The old binary is in the publisher's cache; it produced the
   chain's `from` hash.)
 - External: the agent version is not visible to the publisher; the current
@@ -554,7 +554,7 @@ scheme inside the container (§3.4).
 ### 4.4 Publisher flow
 
 ```
-binsync publish <bin> <store>:
+go-binsync publish <bin> <store>:
   hash bin; warn (or refuse without --force) on DWARF/symtab/PIE/modified VCS tree
   read store pointer (or none) → prev = head
   if prev == hash: exit 0 ("already published")
@@ -564,7 +564,7 @@ binsync publish <bin> <store>:
   cache[hash] = bin
 ```
 
-Cache: `$XDG_CACHE_HOME/binsync/<hash>` with an LRU cap of 10 releases; a
+Cache: `$XDG_CACHE_HOME/go-binsync/<hash>` with an LRU cap of 10 releases; a
 cold cache means the first publish from a new machine fetches the previous
 blob (or publishes blob-only).
 
@@ -646,7 +646,7 @@ old process (agent loop)                          new process
             callbacks (drain, ≤ 30 s), exit 0
   exit / timeout → SIGTERM, 5 s, SIGKILL;
             revert (§6.2); record head in
-            <path>.binsync/failed; keep serving
+            <path>.go-binsync/failed; keep serving
 ```
 
 - `Listen(network, addr)` returns an inherited listener when one with the
@@ -664,7 +664,7 @@ old process (agent loop)                          new process
   pointer changes, so a broken release cannot crash-loop the fleet; the
   publisher's next release clears it.
 
-### 6.4 External (`binsync agent`)
+### 6.4 External (`go-binsync agent`)
 
 ```
 install (§6.2) → run --restart CMD (sh -c; must exit 0 within 60 s)
@@ -684,7 +684,7 @@ If the new binary crashes after `Ready()` was never called but the old
 process already exited (possible in external mode, or if the embedded old
 process was killed by the supervisor after `ready`), the supervisor restarts
 `<path>`, which is still the new file. `selfupdate.Start()` (and
-`binsync agent` on start-up) checks: `<path>.pending` exists **and**
+`go-binsync agent` on start-up) checks: `<path>.pending` exists **and**
 `BINSYNC_FDS` is unset (so this is not an upgrade launch) **and**
 `<path>.old` exists → revert, record `failed`, and `exec` `<path>` (now the
 old release). That is the whole recovery protocol; no state machine, no
@@ -701,24 +701,24 @@ verification failed, 4 no path to head, 5 rolled back.
 ## 7. Library layout
 
 ```
-binsync/delta          Encode(old, new []byte, o Options) ([]byte, error); Apply(old, patch []byte, w io.Writer) error
+go-binsync/delta          Encode(old, new []byte, o Options) ([]byte, error); Apply(old, patch []byte, w io.Writer) error
                        transform selection, .bsz container and frames (§3.5), plain codec (§3.8)
-binsync/delta/gobin    ELF + pclntab + moduledata parsing for the supported Go release; functab
+go-binsync/delta/gobin    ELF + pclntab + moduledata parsing for the supported Go release; functab
                        and findfunctab regeneration; type-descriptor walking (§3.2)
-binsync/delta/x86      operand relocation and content hashing over x/arch/x86asm
-binsync/delta/internal/lz    the one exact-match engine: a content index ordered by position,
+go-binsync/delta/x86      operand relocation and content hashing over x/arch/x86asm
+go-binsync/delta/internal/lz    the one exact-match engine: a content index ordered by position,
                              plus a (lit, copy, seek) op stream; drives stage 1a, stage 1b,
                              the stage-2 regions (§3.4) and the plain codec (§3.8)
-binsync/internal/cz    frame compression: raw / zstd / brotli, smallest-wins (§3.5)
-binsync/release        Pointer, Edge, Frame, Blob types; MakePlan(pointer, current)
+go-binsync/internal/cz    frame compression: raw / zstd / brotli, smallest-wins (§3.5)
+go-binsync/release        Pointer, Edge, Frame, Blob types; MakePlan(pointer, current)
                        (chain | blob | none); Installer.Install/Revert and the pending and
                        failed markers (§6.2, §6.5); hash cache keyed by (dev, inode, size, mtime)
-binsync/store          Store interface { Get(key, opts{range, ifNoneMatch}) ; Put(key, r, opts{ifMatch}) }
-                       file, https, ssh in-package; s3 registered from binsync/store/s3;
+go-binsync/store          Store interface { Get(key, opts{range, ifNoneMatch}) ; Put(key, r, opts{ifMatch}) }
+                       file, https, ssh in-package; s3 registered from go-binsync/store/s3;
                        StoreSuite is the conformance suite every backend runs
-binsync/agent          Loop(ctx, Config, Hooks): poll → plan → fetch → apply → install → hooks.Restart → hooks.Check
-binsync/selfupdate     Start/Listen/OnShutdown/Ready/Done built on agent with the exec handoff as Restart
-cmd/binsync            publish, agent, diff, patch
+go-binsync/agent          Loop(ctx, Config, Hooks): poll → plan → fetch → apply → install → hooks.Restart → hooks.Check
+go-binsync/selfupdate     Start/Listen/OnShutdown/Ready/Done built on agent with the exec handoff as Restart
+cmd/go-binsync            publish, agent, diff, patch
 ```
 
 The s3 backend lives in its own package and registers itself in `store`'s
@@ -729,7 +729,7 @@ an import.
 
 Dependencies: `golang.org/x/arch` (x86 decoder), `github.com/klauspost/compress/zstd`,
 `github.com/andybalholm/brotli`, `github.com/zeebo/blake3`, AWS SDK v2
-(`binsync/store/s3` only), `golang.org/x/crypto/ssh`.
+(`go-binsync/store/s3` only), `golang.org/x/crypto/ssh`.
 
 ## 8. Security model
 
