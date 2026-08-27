@@ -2,11 +2,19 @@
 
 Small, fast, verified, zero-downtime updates of a deployed Go binary.
 
-One string literal changed, in one handler of a 30 MB Go service. Nothing else
-in the source moved — but the linker moved 13 % of the bytes in the file,
-because every function after the edit shifted and every reference that crossed
-the shift was rewritten. That is what a byte-level differ has to encode, and
-what a Go-aware one can predict:
+go-binsync keeps the binary on a remote host identical to an authoritative
+release. It sends a patch against the version already on disk, verifies the
+result by hash, installs it atomically, and re-executes the running service with
+its listening sockets handed over — reverting to the previous binary if the new
+one does not come up. It ships as a Go library and a CLI.
+
+## The headline number
+
+Change one string literal, in one handler, in a 30 MB Go service. Nothing else
+in the source moves, but the linker moves 13 % of the bytes in the file: every
+function after the edit shifts, and every reference that crosses the shift is
+rewritten. That is what a byte-level differ has to encode, and what a Go-aware
+one can predict.
 
 ```
 one-line change to a 30 MB Go binary — patch bytes on the wire, linear scale
@@ -16,61 +24,61 @@ one-line change to a 30 MB Go binary — patch bytes on the wire, linear scale
   go-binsync   ▌                                                   2,262   ← 67× smaller than bsdiff
 ```
 
-bsdiff and hdiffz are the strongest general-purpose binary differs there are.
-The gap is not compression; it is knowing that the two files are the same
-program.
+bsdiff and hdiffz are the strongest general-purpose binary differs available.
+They compare the two files as strings of bytes, so they have to encode every
+function that moved and every reference that was rewritten. go-binsync reads the
+function table the Go linker leaves in the binary, matches functions between the
+two builds by name, and works out where each one landed, so most of those bytes
+never go on the wire.
 
-Software often needs to fly across the world. Say you run a large fleet of
-servers that all run the same binary — a web application, a telemetry
-pipeline, it doesn't matter; call it one big monolithic Go binary. You want to
-iterate quickly on it, rolling new releases out across the whole fleet as fast
-and as reliably as you can. But the monolith is huge and sprawling — hundreds of
-MB and growing, as coding agents churn out features faster than you can release
-them. Bits can cross the planet at nearly the speed of light, but the global
-Internet is not always that smooth: packet loss, congestion and saturated links
-make a large download trickle to a crawl in a remote region.
+## Why patch size matters
 
-The way out is to ship only what changed: a minimal incremental patch for each
-release. go-binsync is an experiment in pushing that idea further than the standard
-tools — a compressed archive of every release, a content-defined-chunk store,
-or a general-purpose binary diff. It borrows an idea from
+Say you run a large fleet of servers that all run the same binary — a web
+application, a telemetry pipeline, it doesn't matter; call it one big monolithic
+Go binary. You want to iterate on it quickly, rolling new releases out across
+the whole fleet as fast and as reliably as you can. The binary is large:
+hundreds of MB is ordinary, and it grows with every release.
+
+Sending a full copy to every host is slowest exactly where you can least afford
+it. A link with congestion or packet loss delivers a fraction of its nominal
+rate, so a download that takes seconds inside a datacentre trickles for minutes
+in a remote region. A patch of a few tens of KB fits in a couple of round trips
+and is done; §1 puts numbers on the difference.
+
+The usual ways to send less are a compressed archive of each release, a
+content-defined chunk store, or a general-purpose binary diff — §1.1 measures
+all three. go-binsync goes a step further, borrowing the idea behind
 [Courgette](https://www.chromium.org/developers/design-documents/software-updates-courgette/),
-the technique Google uses to ship Chrome updates: instead of diffing bytes, read
-the structure the compiler left behind and predict where everything moved. A
-stripped Go binary still carries its function table; go-binsync uses it to work
-out where every function, data block and metadata entry landed in the new
-release, and sends only the correction. The result is Go-binary patches many
-times smaller than a byte-level diff can produce.
+the technique Google uses to ship Chrome updates: read the structure the
+compiler left behind, predict where everything moved, and send only the
+correction. Courgette gets that structure by disassembling; go-binsync gets it
+from Go's own function table, which a stripped binary still carries.
 
-`go-binsync` makes a remote copy of a service binary identical to an authoritative
-release: it sends that patch against the version already on disk, verifies the
-result by hash, installs it atomically, and re-executes the running service
-with its listening sockets handed over — reverting to the previous binary if
-the new one does not come up.
+## Status
 
-It is a Go library and a CLI. This README is the behavioural specification;
-`docs/DESIGN.md` records the architecture and the reasoning; `docs/research/`
-holds the measurements the design rests on; `docs/DEMO.md` specifies the
-public demo; `docs/design-brief.html` condenses all four onto one page.
-
-**Status: the library, the CLI and the public demo are implemented, and the
-numbers below are measured on them.** The demo is live at
+The library, the CLI and the public demo are implemented, and every number in
+this README is measured on them. The demo is live at
 <https://go-binsync-demo.fly.dev> — pick a region, watch a real 94 MB release
-arrive as a 95 KB patch and verify (`bench/demo` builds and serves it;
-`docs/DEMO.md` specifies it). What is not done: the decoder's memory
-footprint, `docs/DESIGN.md` §11.3.
+arrive as a 95 KB patch and verify (`bench/demo` builds and serves it). The one
+piece that is not done is the decoder's memory footprint (`docs/DESIGN.md`
+§11.3).
+
+This README is the behavioural specification; `docs/DESIGN.md` records the
+architecture and the reasoning; `docs/research/` holds the measurements the
+design rests on; `docs/DEMO.md` specifies the public demo;
+`docs/design-brief.html` condenses all four onto one page.
 
 ---
 
 ## 1. What it costs
 
-The one-line pair at the top of this page isolates the effect. A real
-incremental release carries genuinely new code as well, and is the honest
-case. Three things decide how fast one lands: how long the publisher takes to
+The one-line change above isolates the layout effect. A real incremental
+release carries genuinely new code as well, so it is the more honest case to
+quote. Three things decide how fast one lands: how long the publisher takes to
 encode it, how many bytes cross the link, and how long those bytes take on a
-realistic link. Measured on
-prometheus 3.13.1 → 3.13.2, a 94 MB stripped binary built with Go 1.27,
-fetched over a medium-quality link: 20 Mbit/s, 200 ms RTT, 1 % packet loss.
+realistic link. Measured on prometheus 3.13.1 → 3.13.2, a 94 MB stripped binary
+built with Go 1.27, fetched over a medium-quality link: 20 Mbit/s, 200 ms RTT,
+1 % packet loss.
 
 | | Full download (`zstd -19`) | Generic delta (hdiffz) | go-binsync (Go-aware delta) |
 |---|---:|---:|---:|
@@ -79,18 +87,17 @@ fetched over a medium-quality link: 20 Mbit/s, 200 ms RTT, 1 % packet loss.
 | Apply on the target | 0.1 s · 13 MB | 0.1 s · 25 MB | 0.9 s · 0.92 GB |
 | Transfer on that link | ≈ 2.4 min (≈ 20 s with 8 parallel ranges) | ≈ 15 s | **≈ 1.0 s** |
 
-Bytes are the thing that cannot be optimised away, and they dominate as the
-link degrades: with 1 % loss a single TCP stream carries about 1.2 Mbit/s
-whatever the link rate, so the full download takes minutes and the generic
-patch a quarter of a minute, while go-binsync's patch fits in a couple of round
-trips — 213× less than the 20.3 MB blob a cold target would take, and 28×
-less than the best generic delta. (go-binsync fetches that blob with parallel
-ranged requests, which recovers most of the loss penalty; a small patch simply
-never pays it.) The encoder is faster than the generic tools because it never
-builds a suffix array over the file. Memory is the one number that is not yet
-where it should be: the decoder peaks at 7.6× the binary, most of it the
-prediction's working set rather than the file buffers, and getting that to
-≈ 2× is the open item (`docs/DESIGN.md` §11.3).
+Bytes dominate as the link degrades: with 1 % loss a single TCP stream carries
+about 1.2 Mbit/s whatever the link rate, so the full download takes minutes and
+the generic patch a quarter of a minute, while go-binsync's patch fits in a
+couple of round trips — 213× less than the 20.3 MB blob a cold target would
+take, and 28× less than the best generic delta. (go-binsync fetches that blob
+with parallel ranged requests, which recovers most of the loss penalty; a small
+patch never pays it in the first place.) The encoder is faster than the generic
+tools because it never builds a suffix array over the file. Memory is the weak
+number: the decoder peaks at 7.6× the size of the binary, most of it the
+prediction's working set rather than the file buffers, and getting that to ≈ 2×
+is the open item (`docs/DESIGN.md` §11.3).
 
 Every pair the codec is measured on, in bytes. Each row is encode → patch →
 decode → byte-exact compare, with every table counted inside the patch:
@@ -103,9 +110,10 @@ decode → byte-exact compare, with every table counted inside the patch:
 | second multi-package step (v3 → v4), 30 MB | 30,196 | 40,523 | **440** | 69× |
 | prometheus 3.13.1 → 3.13.2, 94 MB | 2,691,644 | 2,719,152 | **95,366** | 28× |
 
-On a minor release with thousands of new functions the patch is
-content-dominated and the gain is modest (1.6×) — the right outcome: go-binsync
-removes *layout* churn, not code.
+On a minor release with thousands of new functions the patch is dominated by
+the new content and the gain drops to about 1.6×. That is the expected result:
+prediction removes the cost of the layout shift, and genuinely new code still
+has to be sent.
 
 ### 1.1 Why a Go-aware delta
 
@@ -113,9 +121,8 @@ When a Go function grows by a few bytes, every function after it moves, every
 reference that crosses the move is rewritten, and the third of the file that
 is offset tables (`.gopclntab`) changes with it. A one-line edit rewrites 13 %
 of the bytes; a change touching several packages rewrites 70 %; a real release
-79–87 %, in runs a few bytes long. Every technique that looks only at bytes
-pays for that. Each rung below understands more of the binary than the one
-above it:
+79–87 %, in runs a few bytes long. Any technique that looks only at bytes pays
+for that. Each rung below understands more of the binary than the one above it:
 
 | | one-line change, 30 MB | prometheus 3.13.1 → 3.13.2, 94 MB |
 |---|---:|---:|
@@ -132,23 +139,23 @@ than one on the real release, because almost no chunk survives the shift and
 the ones that do compress alone. Exact-match delta coders (`zstd
 --patch-from`, xdelta3) find the moved code but pay for every shifted operand.
 Approximate matchers (bsdiff, hdiffz) absorb the shifted operands as cheap
-byte differences and are several times better, at the price of a suffix array
-over the whole file. go-binsync predicts the shift instead of encoding it.
+byte differences and do several times better, at the price of a suffix array
+over the whole file. go-binsync predicts the shift rather than encoding it.
 
 A stripped Go binary still carries the function table, with names and sizes.
 go-binsync uses it to align the old and new releases *by function name*, predict
 where everything landed in the new binary, and send only the correction. The
-prediction is deterministic and the result is hash-verified, so a wrong guess
-costs bytes, never correctness. Because the predicted layout is exact, the
-encoder never builds a whole-file suffix array — the step that makes bsdiff
-need 9–12× the input in RAM and minutes above 100 MB.
+prediction is deterministic and the output is hash-verified, so a bad prediction
+costs patch bytes and nothing else. Because the predicted layout is exact, the
+encoder never builds a whole-file suffix array — the step that makes bsdiff need
+9–12× the input in RAM and minutes of CPU above 100 MB.
 
 The prediction covers code, data, the pclntab with its pc tables, and the type
-descriptors. On the prometheus release it is wrong in 120,852 bytes — 0.13 %
-of the file — and what the patch carries is mostly real change: 63,179 B of
-changed code, 45,170 B of type descriptors (two-thirds of them genuinely new),
-17,441 B of pc tables for the functions that changed, and 10,379 B of layout
-tables. Design and measurements: `docs/DESIGN.md` §3; the research behind it:
+descriptors. On the prometheus release it is wrong in 120,852 bytes — 0.13 % of
+the file — and what the patch carries is mostly real change: 63,179 B of changed
+code, 45,170 B of type descriptors (two-thirds of them genuinely new), 17,441 B
+of pc tables for the functions that changed, and 10,379 B of layout tables.
+Design and measurements: `docs/DESIGN.md` §3; the research behind it:
 `docs/research/go-aware-transform.md`.
 
 ## 2. Concepts
@@ -163,6 +170,10 @@ tables. Design and measurements: `docs/DESIGN.md` §3; the research behind it:
 | **Target** | A host holding the binary at a fixed path; its current release is whatever hashes to a known release. |
 
 ## 3. Quick start
+
+```sh
+go install github.com/wjordan/go-binsync/cmd/go-binsync@latest
+```
 
 Build delta-friendly (`-s -w` is required; see §8), publish, run:
 
@@ -273,15 +284,15 @@ head · 5 rolled back.
 
 ## 6. Library
 
-Module path `go-binsync` (placeholder). Pure Go, no cgo.
+Module path `github.com/wjordan/go-binsync`. Pure Go, no cgo.
 
 | Package | Role |
 |---|---|
-| `go-binsync/delta` | The codec: `Encode(old, new) → patch`, `Apply(old, patch) → new`, bounds-checked, hash-verified per frame. Go-aware transform for stripped linux/amd64 Go binaries; generic delta for anything else (see §9). |
-| `go-binsync/release` | Pointer/manifest types, chain planning, hash cache, atomic install and revert. |
-| `go-binsync/store` | `Get` (with range and conditional headers), `Put` (with CAS) for `s3://`, `https://`, `file://`, `ssh://`. |
-| `go-binsync/selfupdate` | Embedded lifecycle: `Start`, `Listen`, `OnShutdown`, `Ready`, `Done`; the `.pending` self-check runs inside `Start`. |
-| `go-binsync/agent` | The poll → apply → install → restart → check loop used by the CLI and by `selfupdate`. |
+| `delta` | The codec: `Encode(old, new) → patch`, `Apply(old, patch) → new`, bounds-checked, hash-verified per frame. Go-aware transform for stripped linux/amd64 Go binaries; generic delta for anything else (see §9). |
+| `release` | Pointer/manifest types, chain planning, hash cache, atomic install and revert. |
+| `store` | `Get` (with range and conditional headers), `Put` (with CAS) for `s3://`, `https://`, `file://`, `ssh://`. |
+| `selfupdate` | Embedded lifecycle: `Start`, `Listen`, `OnShutdown`, `Ready`, `Done`; the `.pending` self-check runs inside `Start`. |
+| `agent` | The poll → apply → install → restart → check loop used by the CLI and by `selfupdate`. |
 
 ## 7. Upgrade lifecycle (embedded)
 
