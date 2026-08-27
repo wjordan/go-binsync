@@ -1,0 +1,6 @@
+# The build context is the repository root, and bench/out is ~10 GB of
+# corpora and benchmark output. Only the demo's assets belong in the image.
+.git
+bench/out
+!bench/out/demo-assets
+bench/gotransform/gotransform*

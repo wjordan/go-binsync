@@ -22,14 +22,15 @@ const MaxChain = 8
 const FrameSize = 8 << 20
 
 // Frame is one independently fetchable, independently verified piece of a
-// blob: [Off, Off+Len) of the plain binary, stored as ZLen compressed bytes
-// at the same relative position in the object.
+// blob: [Off, Off+Len) of the plain binary, stored as ZLen bytes at the same
+// relative position in the object, compressed with Codec (a cz tag).
 type Frame struct {
-	Off  int64 `json:"off"`
-	Len  int64 `json:"len"`
-	ZOff int64 `json:"zoff"`
-	ZLen int64 `json:"zlen"`
-	B3   Hash  `json:"b3"`
+	Off   int64 `json:"off"`
+	Len   int64 `json:"len"`
+	ZOff  int64 `json:"zoff"`
+	ZLen  int64 `json:"zlen"`
+	Codec byte  `json:"codec"`
+	B3    Hash  `json:"b3"`
 }
 
 // Blob locates the full compressed binary of a release.
@@ -73,8 +74,11 @@ func PatchKey(from, to Hash) string {
 	return "patches/" + from.Short() + "-" + to.Short() + ".bsz"
 }
 
-// BlobKey is the object key of the blob of h.
-func BlobKey(h Hash) string { return "blobs/" + hex.EncodeToString(h[:]) + ".zst" }
+// BlobKey is the object key of the blob of h. The extension is deliberately
+// not a codec's: a blob is a sequence of independently compressed frames,
+// each of which may use a different one, so it is not a file any single
+// decompressor reads.
+func BlobKey(h Hash) string { return "blobs/" + hex.EncodeToString(h[:]) + ".blob" }
 
 // NewSeq returns a pointer sequence number for now: wall clock in ms.
 func NewSeq() int64 { return time.Now().UnixMilli() }

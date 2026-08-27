@@ -2,6 +2,8 @@ package release
 
 import (
 	"fmt"
+	"runtime"
+	"sync"
 
 	"binsync/internal/cz"
 )
@@ -10,25 +12,47 @@ import (
 // input bytes each. Independence is what makes a blob fetchable with eight
 // parallel range requests and resumable at a frame boundary, which is worth
 // far more on a lossy link than the compression ratio a single stream would
-// gain (docs/DESIGN.md 5).
+// gain (docs/DESIGN.md 5). Each frame takes whichever codec is smallest for
+// it, so a blob is not a file any single decompressor reads.
 
 // EncodeBlob compresses data into blob frames and returns the object bytes
-// and the frame table to publish with them.
+// and the frame table to publish with them. Frames are compressed in
+// parallel -- each is independent, so the result does not depend on how many
+// workers ran, and compressing a 94 MB binary is 10 s rather than 70 s.
 func EncodeBlob(h Hash, data []byte) ([]byte, *Blob) {
+	return encodeBlob(h, data, FrameSize)
+}
+
+// encodeBlob is EncodeBlob with the frame size as a parameter, so that the
+// tests can cover the frame-boundary cases without compressing tens of
+// megabytes to do it.
+func encodeBlob(h Hash, data []byte, frame int) ([]byte, *Blob) {
 	b := &Blob{Key: BlobKey(h), Size: int64(len(data))}
+	n := max((len(data)+frame-1)/frame, 1)
+	b.Frames = make([]Frame, n)
+	zs := make([][]byte, n)
+
+	var wg sync.WaitGroup
+	sem := make(chan struct{}, runtime.GOMAXPROCS(0))
+	for i := range n {
+		off := i * frame
+		end := min(off+frame, len(data))
+		wg.Add(1)
+		sem <- struct{}{}
+		go func() {
+			defer func() { <-sem; wg.Done() }()
+			codec, z := cz.Compress(data[off:end])
+			zs[i] = z
+			b.Frames[i] = Frame{Off: int64(off), Len: int64(end - off), ZLen: int64(len(z)),
+				Codec: codec, B3: HashBytes(z)}
+		}()
+	}
+	wg.Wait()
+
 	var out []byte
-	for off := 0; off < len(data) || off == 0; off += FrameSize {
-		end := min(off+FrameSize, len(data))
-		z := cz.CompressZstd(data[off:end])
-		b.Frames = append(b.Frames, Frame{
-			Off: int64(off), Len: int64(end - off),
-			ZOff: int64(len(out)), ZLen: int64(len(z)),
-			B3: HashBytes(z),
-		})
-		out = append(out, z...)
-		if end == len(data) {
-			break
-		}
+	for i := range n {
+		b.Frames[i].ZOff = int64(len(out))
+		out = append(out, zs[i]...)
 	}
 	b.Size = int64(len(out))
 	return out, b
@@ -42,7 +66,7 @@ func DecodeFrame(f Frame, z []byte) ([]byte, error) {
 	if HashBytes(z) != f.B3 {
 		return nil, fmt.Errorf("release: blob frame at %d fails its hash", f.Off)
 	}
-	return cz.Decompress(cz.Zstd, z, int(f.Len))
+	return cz.Decompress(f.Codec, z, int(f.Len))
 }
 
 // PlainSize is the uncompressed length the frame table describes, and the

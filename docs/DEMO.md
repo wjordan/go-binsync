@@ -12,23 +12,35 @@ Requirements it satisfies: usable immediately in a browser or via plain HTTP
 ## 1. The interaction
 
 The viewer picks a **release pair** and a **region**, presses **Update**, and
-watches four steps happen for real, timed by the browser:
+watches four steps happen for real, timed by the browser. On load the page
+measures one round trip to every region (twice, keeping the second: a
+suspended Machine's first request is paying for the resume, not for the
+distance), puts the number on each region button, and selects the farthest —
+the demo is about distance, so the default should not be next door.
 
 ```
 1. fetch pointer    latest.json                                        1 round trip     0.28 s  (jnb)
-2. fetch patch      patches/<from>-<to>.bsz     112 KB   ── measured ──▶                 0.9 s
-3. apply            old + patch → new           on the Machine (1a) / in the browser (1b) 1.0 s
-4. verify           BLAKE3(new) == pointer.head.hash                   ✔ b3:41ac80f4…
+2. fetch patch      patches/<from8>-<to8>.bsz    95 KB   ── measured ──▶                 0.9 s
+3. apply            old + patch → new           on the Machine (1a) / in the browser (1b) 0.9 s
+4. verify           BLAKE3(new) == pointer.head.hash                   ✔ b3:9e207efb…
 ```
 
 Below the timeline, two comparison buttons fetch the *same release* the naive
 ways from the same region, so the viewer measures the difference rather than
-reading it: **generic delta** (`hdiffz`, 2.7 MB for the prometheus pair) and
-**full download** (`zstd -19`, 20.6 MB). The static ladder from the design
+reading it: **generic delta** (`hdiffz -m-6 -p-8 -c-zstd-21-24`, 2.7 MB for
+the prometheus pair) and **full download** (the store's own blob, 20.3 MB —
+what a drifted target really fetches). The static ladder from the design
 brief (whole file / chunk store / xdelta3 / `--patch-from` / bsdiff /
 binsync) sits under the buttons for the numbers a viewer does not want to
-wait for, and the netem table from `benchmark-scale.md` §6 is linked for the
-lossy-link case the real path cannot show (§3).
+wait for, and the netem numbers from `benchmark-scale.md` §6 stand in for the
+lossy-link case the real path cannot show (§3). Rows the page does not
+actually serve are starred, because a table that mixes "we just sent you
+this" with "we measured this once" and marks neither is not a comparison, it
+is an advertisement.
+
+The transfer bars under the patch and the two comparisons share one scale —
+the slowest transfer of the visit — so pressing all three renders the
+difference at the size it actually is.
 
 Nothing is cached: every press re-fetches the patch (`Cache-Control:
 no-store` plus a nonce in the query string), so every run is a real transfer.
@@ -41,25 +53,33 @@ Machine runs the decoder against its local copy of the old binary and returns
 apply time, hash and verification result. The bytes the viewer watched cross
 the world are exactly the bytes a real target would fetch. **Phase 1b** moves
 the apply into the browser (WASM) as a trust upgrade — "the 112 KB you just
-watched download, plus the old binary, is the new binary" — once the pure-Go
-codec exists (§4).
+watched download, plus the old binary, is the new binary" — once the decoder
+fits a tab (§4).
+
+The apply is serialised, one at a time per Machine, and the pages go back to
+the kernel as soon as it is done: the decoder's working set is 7.6× the
+binary (`docs/DESIGN.md` §11.3) and the Machine has 2 GB.
 
 ## 2. Sample data
 
 Three pairs, all built with Go 1.27 (`-trimpath -ldflags="-s -w -buildid="`),
-precomputed by `bench/demo/build-assets.sh` and baked into the image:
+precomputed by `bench/demo/build-assets.sh` and baked into the image. Sizes
+are the bytes actually served, measured:
 
-| Pair | Old | Patch (binsync) | hdiffz | Full (`zstd -19`) |
+| Pair | Old | Patch (binsync) | hdiffz | Full download (blob) |
 |---|---:|---:|---:|---:|
-| one-line change, `testsrv` | 30.0 MB | 2.2 KB | 177 KB | 8.7 MB |
-| multi-package edit, `testsrv` | 30.0 MB | 2.7 KB | 172 KB | 8.7 MB |
-| prometheus 3.13.1 → 3.13.2 | 93.7 MB | 112 KB | 2.7 MB | 20.6 MB |
+| one-line change, `testsrv` | 29,995,235 | **2,262** | 176,199 | 8,555,312 |
+| multi-package edit, `testsrv` | 29,995,235 | **2,745** | 172,002 | 8,556,056 |
+| prometheus 3.13.1 → 3.13.2 | 93,741,283 | **95,366** | 2,719,152 | 20,336,968 |
 
-Per pair the image holds `old.bin`, `latest.json` (the real pointer format),
-`patches/<from>-<to>.bsz`, `compare/patch.hdiff`, `compare/new.zst`, and
-`meta.json` (sizes, hashes, encode timings from the build box). Total ≈ 200 MB
-of assets. Default on page load: the prometheus pair from the region farthest
-from the viewer (the page picks it from the first pointer fetch's timings).
+Each pair is a **real binsync store**, built by publishing the old release
+into an empty `file://` store and then publishing the new one: the page fetches
+the same `latest.json`, `patches/<from8>-<to8>.bsz` and `blobs/<hash>.blob` a
+real fleet would, and the four steps it shows are the four steps the agent
+takes. Next to the store the image holds `old.bin` (what the Machine applies
+against), `compare/patch.hdiff` and `meta.json`. Total ≈ 222 MB of assets.
+Default on page load: the prometheus pair from the region farthest from the
+viewer (see §1).
 
 ## 3. Deployment: one Fly app, one Machine per region
 
@@ -67,8 +87,9 @@ from the viewer (the page picks it from the first pointer fetch's timings).
 fly.toml       app = binsync-demo; [http_service] internal_port 8080, force_https,
                auto_stop_machines = "suspend", min_machines_running = 0
 regions        jnb, nrt, gru, syd  (+ ord as the nearby control)
-machine        shared-cpu-2x, 2 GB (the prototype decoder peaks at ≈ 650 MB on the 94 MB pair)
-image          debian-slim + demo server (Go) + assets + zstd + hdiffz/hpatchz + bench/gotransform
+machine        shared-cpu-2x, 2 GB (the decoder peaks at ≈ 0.92 GB on the 94 MB pair,
+               so applies are serialised one at a time per Machine)
+image          scratch + the demo server (one static Go binary) + the assets
 ```
 
 **Routing.** Fly routes every request to the nearest Machine, the opposite
@@ -109,24 +130,25 @@ hour) and the page says so; server-side apply is one at a time per Machine.
 No uploads, no user-supplied binaries, no parameters beyond pair and region;
 the worst a visitor can do is press buttons.
 
-**Server.** One Go program: static page, `GET /api/pairs`, the asset routes
-above with `no-store`, and `POST /api/apply?pair=…` which runs `gotransform
-decode old patch out` (phase 1a; `delta.Apply` in-process later), hashes the
-output, deletes it, and returns `{apply_ms, hash, verified}`. The same routes
-are the demo's API.
+**Server.** One Go program (`bench/demo`), no dependencies beyond the binsync
+module: the page, `GET /api/pairs`, the store objects under
+`/s/<pair>/<key>` with `Cache-Control: no-store`, `/s/<pair>/compare/hdiff`,
+and `POST /api/apply?pair=…` which calls `delta.Apply` in process against its
+local `old.bin`, hashes the result with BLAKE3, drops it, and returns
+`{apply_ms, hash, verified, size}`. Nothing is written to disk and nothing
+is kept between requests. The same routes are the demo's API.
 
 ## 4. Phases and what each needs from the product
 
 | | Needs | Status |
 |---|---|---|
-| **1a** server-side apply | nothing beyond the prototype: `bench/gotransform` encodes the assets at build time and decodes on the Machine; `zstd`/`hdiffz` installed in the image | can ship now |
-| **1b** in-browser apply | `binsync/delta.Apply` in pure Go for `GOOS=js GOARCH=wasm` (no `os/exec`, no cgo; zstd via `klauspost/compress`; stage-1 blob delta in Go), BLAKE3 in WASM, and section-by-section apply so the 94 MB pair fits a tab (≈ 2× the file instead of ≈ 7×) | after the `delta` package |
-| **2** release board | a real **Publish** button cycling through a ring of releases, real targets (behind netem links, now that the kernel is known to support it) running the agent, the lifecycle path | separate spec, after the agent exists |
+| **1a** server-side apply | the shipped `binsync` CLI builds the asset stores; `binsync/delta.Apply` runs in the server | ready |
+| **1b** in-browser apply | `binsync/delta` already builds for `GOOS=js GOARCH=wasm` (pure Go, no `os/exec`, no cgo), so what is left is the decoder's footprint: 7.6× the binary is 0.7 GB for the prometheus pair, which no tab will give you. Blocked on `docs/DESIGN.md` §11.3 | after the decoder's memory |
+| **2** release board | a real **Publish** button cycling through a ring of releases, real targets (behind netem links, now that the kernel is known to support it) running the agent, the lifecycle path | separate spec |
 
-The prototype is a research tool, not the product codec: its container
-format will change when `delta` is written. Phase 1a therefore pins the
-image to one prototype build, and the `.bsz` files it serves are labelled as
-prototype patches in `meta.json`.
+Phase 1a serves the real patch format: the assets are produced by `binsync
+publish` and the page applies them with the same `delta.Apply` a target
+runs, so what the demo proves is what the product does.
 
 ## 5. Not in phase 1
 

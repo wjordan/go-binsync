@@ -1,0 +1,44 @@
+# The patch explorer (docs/DEMO.md 3). One app with one Machine per region;
+# the page steers each request with the fly-force-region header, so the
+# viewer measures the distance they picked rather than the distance Fly
+# would have chosen for them.
+#
+# Deploy with bench/demo/deploy.sh, from the repository root.
+app = "binsync-demo"
+primary_region = "ord"
+
+[build]
+  dockerfile = "bench/demo/Dockerfile"
+
+[env]
+  ADDR = ":8080"
+  ASSETS = "/assets"
+  # One apply of the 94 MB pair peaks at about 0.92 GB. The limit makes the
+  # collector work before the kernel does.
+  GOMEMLIMIT = "1400MiB"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_start_machines = true
+  auto_stop_machines = "suspend"
+  min_machines_running = 0
+
+  # An apply holds ~1 GB and runs one at a time, so a Machine that is already
+  # working should not be handed a queue it cannot serve.
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 12
+    hard_limit = 24
+
+  [[http_service.checks]]
+    method = "GET"
+    path = "/healthz"
+    interval = "30s"
+    timeout = "3s"
+    grace_period = "5s"
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 2
+  memory_mb = 2048

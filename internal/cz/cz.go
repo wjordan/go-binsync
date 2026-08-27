@@ -2,9 +2,12 @@
 // codec tag, and an encoder that picks the smallest of the candidates it is
 // willing to spend time on.
 //
-// Pure-Go zstd is 6-14 % worse than the zstd CLI at -19 on patch streams;
-// pure-Go brotli at quality 11 is 6-8 % better, and slow enough that it is
-// only worth it below BrotliMax. See docs/DESIGN.md 3.5.
+// Pure-Go zstd is 6-14 % worse than the zstd CLI at -19, and pure-Go brotli
+// beats both: 6-8 % under the CLI at quality 11, and still 14 % under
+// klauspost's zstd at quality 10, which is fast enough for whole binaries.
+// Quality is therefore chosen by size, and zstd is kept as a candidate
+// because it wins on streams that are already incompressible.
+// See docs/DESIGN.md 3.5.
 package cz
 
 import (
@@ -26,7 +29,8 @@ const (
 )
 
 // BrotliMax is the largest stream brotli-11 is tried on. Quality 11 runs at
-// roughly 0.4 MB/s, so above this the encode time stops being free.
+// roughly 0.4 MB/s; above this Compress drops to quality 10, which is 25x
+// faster and, on an 8 MiB frame of a Go binary, within 2 % of the same size.
 const BrotliMax = 4 << 20
 
 var (
@@ -53,8 +57,7 @@ func zstdDecoder() *zstd.Decoder {
 	return zDec
 }
 
-// CompressZstd compresses with zstd only. Blobs use this: they are tens of
-// MB and must stream at a sane rate.
+// CompressZstd compresses with zstd only.
 func CompressZstd(src []byte) []byte { return zstdEncoder().EncodeAll(src, nil) }
 
 // Compress returns the smallest of the codecs worth trying for src, and the
@@ -64,13 +67,15 @@ func Compress(src []byte) (codec byte, out []byte) {
 	if z := CompressZstd(src); len(z) < len(out) {
 		codec, out = Zstd, z
 	}
-	if len(src) <= BrotliMax {
-		var buf bytes.Buffer
-		buf.Grow(len(out))
-		w := brotli.NewWriterOptions(&buf, brotli.WriterOptions{Quality: 11, LGWin: 24})
-		if _, err := w.Write(src); err == nil && w.Close() == nil && buf.Len() < len(out) {
-			codec, out = Brotli, buf.Bytes()
-		}
+	q := 11
+	if len(src) > BrotliMax {
+		q = 10
+	}
+	var buf bytes.Buffer
+	buf.Grow(len(out))
+	w := brotli.NewWriterOptions(&buf, brotli.WriterOptions{Quality: q, LGWin: 24})
+	if _, err := w.Write(src); err == nil && w.Close() == nil && buf.Len() < len(out) {
+		codec, out = Brotli, buf.Bytes()
 	}
 	return codec, out
 }

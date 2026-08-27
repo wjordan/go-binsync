@@ -35,9 +35,10 @@ It is a Go library and a CLI. This README is the behavioural specification;
 holds the measurements the design rests on; `docs/DEMO.md` specifies the
 public demo.
 
-**Status: the library and CLI are implemented and the numbers below are
-measured on them.** What is not done: the public demo (`docs/DEMO.md`), and
-the decoder's memory footprint (`docs/DESIGN.md` §11.3).
+**Status: the library, the CLI and the public demo are implemented, and the
+numbers below are measured on them** (`bench/demo` builds and serves the
+demo; `docs/DEMO.md` specifies it). What is not done: the decoder's memory
+footprint, `docs/DESIGN.md` §11.3.
 
 ---
 
@@ -221,6 +222,8 @@ lives in `<path>.binsync/` next to the binary.
 ### `binsync diff <old> <new> -o <patch>` / `binsync patch <old> <patch> -o <new>`
 Offline codec access for development and benchmarking; `patch` verifies the
 result hash.
+Flags: `diff -v` (report where the patch bytes went), `diff --plain` (skip the
+Go-aware codec).
 
 Exit codes: 0 ok · 1 error · 2 usage · 3 verification failed · 4 no path to
 head · 5 rolled back.
@@ -292,7 +295,7 @@ CGO_ENABLED=0 go build -trimpath -buildvcs=false -ldflags="-s -w -buildid=" -o s
 ```
 <store>/latest.json                 pointer: head release, blob location, recent patch chain   (no-store)
 <store>/patches/<from>-<to>.bsz     immutable patch                                            (immutable)
-<store>/blobs/<hash>.zst            immutable full binary, in independently fetchable frames    (immutable)
+<store>/blobs/<hash>.blob           immutable full binary, in independently fetchable frames    (immutable)
 ```
 
 Formats are specified in `docs/DESIGN.md`.

@@ -7,6 +7,9 @@ bench/testsrv/testsrv
 bench/goprobe/goprobe
 *.test
 
+# demo build output
+/demo
+
 # editor / local agent settings
 .idea/
 .claude/settings.local.json

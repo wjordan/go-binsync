@@ -69,7 +69,7 @@ Three roles, one store:
 
 ```
 publisher (CI or workstation)            store (S3 / HTTPS / file / SSH dir)          targets (fleet)
-  binsync publish bin s3://…   ──put──▶   blobs/<hash>.zst        (immutable)  ◀─get──  poll latest.json (conditional GET)
+  binsync publish bin s3://…   ──put──▶   blobs/<hash>.blob       (immutable)  ◀─get──  poll latest.json (conditional GET)
                                           patches/<from>-<to>.bsz (immutable)          fetch chain or blob, apply, verify
                                           latest.json             (CAS-replaced)       install, restart, check, or revert
 ```
@@ -339,10 +339,32 @@ against the `zstd -19` CLI the prototype shelled out to):
 
 Pure-Go zstd is 6–14 % *worse* than the CLI the research numbers were taken
 with; pure-Go brotli at quality 11 is 6–8 % *better*. Since patch bytes are
-the product, v1 uses brotli-11 for streams up to 4 MiB (0.4 s for the
-162 KB stream above; it scales badly, hence the cap) and zstd above that,
-where the stream is content-dominated anyway and speed matters more. Blobs
-are always zstd — they are tens of MB and must stream.
+the product, streams take the smaller of zstd and brotli, and the brotli
+quality is chosen by size: 11 up to 4 MiB, 10 above.
+
+The quality-10 tier is what blobs get, and it is the reason they are no
+longer zstd. Measured on prometheus 3.13.2 (93.8 MB) in the 8 MiB frames a
+blob is cut into, encoding eight-way parallel and decoding sequentially:
+
+| frame codec | blob | encode | decode |
+|---|---:|---:|---:|
+| klauspost zstd, best | 23,838,795 | 2.5 s | 78 ms |
+| brotli-5 | 22,963,451 | 0.4 s | 312 ms |
+| brotli-9 | 22,335,195 | 1.9 s | 343 ms |
+| **brotli-10** | **20,336,968** | **13 s** | **269 ms** |
+| `zstd -19 -T0` (CLI, one stream, for reference) | 20,579,646 | 9.4 s | – |
+
+Brotli-10 in independent 8 MiB frames is 15 % smaller than the zstd blob and
+*smaller than a single `zstd -19` stream of the whole file*, which the frame
+split was expected to cost against. The publisher pays 13 s once per release
+and the target pays 269 ms; both are noise beside the 3.5 MB the target does
+not download. The first draft's "blobs are always zstd, they must stream"
+was an assumption about brotli's cost curve at quality 11, and quality 10 is
+a different curve (D22).
+
+Each blob frame therefore carries its own codec tag in the pointer, exactly
+as patch frames do, and a blob is not a file any single decompressor reads —
+hence the object key is `blobs/<hash>.blob`, not `.zst`.
 
 ```
 magic "BSZ1"  u8 transform (0 = plain, 1 = go-amd64-v1)  u8 flags
@@ -480,7 +502,7 @@ source, which is what makes "is the fleet on commit X" answerable.
 
 ### 4.2 Pointer: `latest.json`
 
-The only mutable object. Small enough to fetch on every poll (≈ 1 KB + 80 B
+The only mutable object. Small enough to fetch on every poll (≈ 1 KB + 190 B
 per frame; a 1 GB blob has 128 frames):
 
 ```json
@@ -488,8 +510,9 @@ per frame; a 1 GB blob has 128 frames):
   "format": 1,
   "seq": 1724700000123,
   "head": { "hash": "b3:…", "version": "v1.42.0-3-gabc123", "size": 88011776,
-            "blob": { "key": "blobs/b3-….zst", "size": 19072059,
-                      "frames": [ { "off": 0, "len": 8388608, "zlen": 1802331, "b3": "…" }, … ] } },
+            "blob": { "key": "blobs/….blob", "size": 19072059,
+                      "frames": [ { "off": 0, "len": 8388608, "zoff": 0, "zlen": 1802331,
+                                    "codec": 2, "b3": "b3:…" }, … ] } },
   "chain": [
     { "from": "b3:…prev",  "to": "b3:…head", "key": "patches/…prev-…head.bsz", "size": 358607, "b3": "…" },
     { "from": "b3:…prev2", "to": "b3:…prev", "key": "patches/…prev2-…prev.bsz", "size": 402113, "b3": "…" }
@@ -519,7 +542,7 @@ per frame; a 1 GB blob has 128 frames):
 ```
 <store>/latest.json
 <store>/patches/<from8>-<to8>.bsz      first 8 hex of each hash; immutable; Cache-Control: immutable
-<store>/blobs/<hash>.zst               immutable; independent zstd frames of 8 MiB input each
+<store>/blobs/<hash>.blob              immutable; independent frames of 8 MiB input each, per-frame codec
 ```
 
 Blobs are frame-split so that a target can fetch them with N parallel `Range`
@@ -772,12 +795,13 @@ functions; `go test ./...` is 1.7 s in total, and no package is over 0.7 s.
 | D13 | Publish order patch → pointer → blob; blob 404s are retried | the pointer goes live after hundreds of KB, not tens of MB — from a workstation over a lossy link that is ~5 s vs ~2 min (§4.4); steady-state targets never touch the blob |
 | D14 | Go-aware codec supports one Go release at a time (the current stable, 1.27); everything else takes the plain codec | pclntab/type layouts change per minor; one version + a self-prediction gate keeps the codec small and testable (§3.6) |
 | D15 | Correction = positional regions, each written as literals or as a bounded local match, whichever is smaller | recovers the bsdiff-quality bytes inside changed functions that purely positional runs re-send, at O(region) memory, and lets the decoder apply in place (§3.4) |
-| D16 | Payload streams compressed with the smallest of brotli-11 (≤ 4 MiB) and zstd; blobs always zstd | pure-Go zstd is 6–14 % worse than the `zstd -19` the research numbers used, pure-Go brotli-11 is 6–8 % better; patch bytes are the product (§3.5) |
+| D16 | Every stream takes the smaller of zstd and brotli; brotli quality 11 up to 4 MiB, 10 above | pure-Go zstd is 6–14 % worse than the `zstd -19` the research numbers used, pure-Go brotli is better at both qualities; patch bytes are the product (§3.5) |
 | D17 | Stages 1a and 1b use the plain codec, not the positional correction | their residual is *shifted*, not positional — one pc table that changed length moves every table after it. Positionally, stage 1b costs 66,372 B on prometheus against 17,441 B (§3.4) |
 | D18 | The source window of a correction region is derived (`min(256, fileLen − end)` past its end), not transmitted | both sides know the region's end and the file's length; a transmitted window is 2–4 varints per region and there are tens of thousands of them (§3.4) |
 | D19 | The patch body is one frame per 8 MiB, not one frame per stream | a frame costs a 32-byte hash and a table entry; the streams compressed separately came within 0.1 % of compressing them together (§3.5) |
 | D20 | The encoder transmits the BLAKE3 of its prediction, and every prediction worker count is a compile-time constant | encoder/decoder divergence becomes a named failure and a blob fallback instead of a wrong file caught by the release hash; a prediction that varies with `GOMAXPROCS` is one two hosts can disagree about (§3.7) |
 | D21 | The prediction fills the bytes no allocated section covers: gaps cleared, `.shstrtab` copied from the old file's tail | the base is a copy of the old file, so every section that moved left stale bytes behind in its gap — 3,780 mispredicted bytes on prometheus, 109 after (§3.2) |
+| D22 | Blob frames are brotli-10, not zstd, and carry a per-frame codec tag | 15 % smaller than the zstd blob and smaller than a single `zstd -19` stream, for 13 s of publisher CPU and 269 ms of target CPU on a 94 MB binary (§3.5). Supersedes the "blobs are always zstd" half of D16 |
 
 Cut from the first-round design (and why): private signing keys and key
 rotation (D6); the `poke` push endpoint and control socket (D12); inline

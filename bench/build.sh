@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # Build every variant of bench/testsrv in each flag config into bench/out/bin/.
 # Usage: build.sh            (all)      build.sh v1 v2c   (subset of variants)
+# Do not gofmt bench/testsrv/main.go: the corpus binaries are frozen and the
+# measurements in docs/ are byte counts against them. Moving one import line
+# into gofmt order changes 17.5 MB of the 43 MB binary.
 set -euo pipefail
 BENCH="$(cd "$(dirname "$0")" && pwd)"
 OUT="${BENCH_OUT_BIN:-$BENCH/out/bin}"; mkdir -p "$OUT"

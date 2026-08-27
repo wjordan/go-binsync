@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>binsync — patch explorer</title>
+<style>
+:root {
+  --bg: #0b0d10; --panel: #12161b; --line: #232a33; --dim: #7c8794;
+  --fg: #d8dee6; --hi: #f2f5f9; --ok: #6ee7a8; --warn: #f0b357; --cold: #7aa7ff;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+main { max-width: 880px; margin: 0 auto; padding: 40px 20px 80px; }
+h1 { font-size: 21px; margin: 0 0 4px; color: var(--hi); letter-spacing: -0.01em; }
+h1 span { color: var(--dim); font-weight: 400; }
+p.lede { margin: 0 0 28px; color: var(--dim); max-width: 62ch; }
+h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.09em;
+     color: var(--dim); margin: 32px 0 10px; font-weight: 600; }
+.mono { font-family: var(--mono); }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+.pills { display: flex; flex-wrap: wrap; gap: 8px; }
+button.pill {
+  background: var(--panel); color: var(--fg); border: 1px solid var(--line);
+  border-radius: 7px; padding: 7px 12px; font: inherit; font-size: 13px; cursor: pointer;
+}
+button.pill:hover { border-color: #3a4550; }
+button.pill[aria-pressed="true"] { background: #1d2a3a; border-color: #3f6ea8; color: var(--hi); }
+button.pill .sub { color: var(--dim); font-family: var(--mono); font-size: 12px; margin-left: 6px; }
+
+.go {
+  margin: 24px 0 4px; width: 100%; padding: 14px; border-radius: 9px; cursor: pointer;
+  background: #1b3a2b; border: 1px solid #2f6a4b; color: #d7f5e4;
+  font: 600 15px/1 system-ui, sans-serif; letter-spacing: 0.02em;
+}
+.go:hover:not(:disabled) { background: #23503a; }
+.go:disabled { opacity: 0.5; cursor: default; }
+
+table { width: 100%; border-collapse: collapse; }
+.steps td { padding: 9px 8px; border-top: 1px solid var(--line); vertical-align: baseline; }
+.steps tr:first-child td { border-top: none; }
+.steps .n { width: 18px; color: var(--dim); font-family: var(--mono); }
+.steps .what { width: 118px; color: var(--hi); }
+.steps .detail { color: var(--dim); font-family: var(--mono); font-size: 12.5px;
+                 word-break: normal; overflow-wrap: anywhere; }
+.steps .bytes, .steps .ms { text-align: right; font-family: var(--mono);
+                            font-variant-numeric: tabular-nums; white-space: nowrap; }
+.steps .bytes { width: 92px; }
+.steps .ms { width: 76px; color: var(--hi); }
+.steps tr.idle .what, .steps tr.idle .detail { opacity: 0.45; }
+.steps tr.run .what::after { content: " …"; color: var(--warn); }
+.ok { color: var(--ok); }
+.bad { color: #ff8080; }
+.total { border-top: 1px solid var(--line); padding: 11px 8px 0; display: flex;
+         justify-content: space-between; color: var(--dim); font-size: 13px; }
+.total b { color: var(--hi); font-family: var(--mono); font-weight: 600; }
+
+.bar { height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; margin-top: 5px; }
+.bar > i { display: block; height: 100%; background: var(--cold); width: 0; }
+.bar.ours > i { background: var(--ok); }
+.bar.warn > i { background: var(--warn); }
+
+.cmp td { padding: 9px 8px; border-top: 1px solid var(--line); }
+.cmp td.r { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums;
+            white-space: nowrap; }
+
+.ladder { font-size: 13px; }
+.ladder td, .ladder th { padding: 5px 8px; border-top: 1px solid var(--line); text-align: left; }
+.ladder th { color: var(--dim); font-weight: 500; border-top: none; }
+.ladder td.r, .ladder th.r { text-align: right; font-family: var(--mono);
+                             font-variant-numeric: tabular-nums; }
+.ladder tr.us td { color: var(--hi); }
+.ladder tr.us td.r { color: var(--ok); }
+
+.note { color: var(--dim); font-size: 13px; max-width: 70ch; }
+.note code, code { font-family: var(--mono); font-size: 12.5px; color: #b9c4d1; }
+a { color: var(--cold); }
+.err { color: #ff8080; font-family: var(--mono); font-size: 13px; min-height: 18px; }
+footer { margin-top: 44px; color: var(--dim); font-size: 12.5px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>binsync <span>— patch explorer</span></h1>
+  <p class="lede">
+    A deployed Go binary is updated for real, in front of you. The page fetches the
+    same pointer, the same patch and the same blob a binsync agent would, from a
+    machine in the region you pick, and the machine applies the patch with the same
+    decoder a target runs. Nothing here is cached, simulated or pre-recorded.
+  </p>
+
+  <h2>Release</h2>
+  <div class="pills" id="pairs"></div>
+
+  <h2>From region</h2>
+  <div class="pills" id="regions"></div>
+
+  <button class="go" id="go" disabled>Update</button>
+  <div class="err" id="err"></div>
+
+  <h2>What happens</h2>
+  <table class="steps"><tbody id="steps"></tbody></table>
+  <div class="total"><span id="totalNote">idle</span><span id="total"></span></div>
+
+  <h2>The same release, the other ways</h2>
+  <table class="cmp"><tbody id="cmp"></tbody></table>
+  <p class="note" id="cmpNote">
+    Both fetch the real bytes from the same machine, so the time is comparable with
+    step 2 above. They are capped at ten downloads per visitor — the demo pays for
+    the egress.
+  </p>
+
+  <h2>What every technique costs on this pair</h2>
+  <table class="ladder"><thead>
+    <tr><th>Approach</th><th class="r">Bytes</th><th>Why</th></tr>
+  </thead><tbody id="ladder"></tbody></table>
+  <p class="note">
+    Rows without a star are the bytes this page will actually serve you. Starred rows
+    are measured on the same pair in <code>docs/research/</code> and are not hosted
+    here — there is no point paying to ship 25 MB of chunk store to make a point that
+    a number makes.
+  </p>
+
+  <h2>Reading the numbers honestly</h2>
+  <p class="note">
+    The path from your browser to the chosen region is a real one and an uncontrolled
+    one: you reach the nearest edge and the request crosses a backbone from there. That
+    backbone has near-zero loss, so what you see is the cost of <em>distance</em> —
+    round trips and slow start on the big objects — not the collapse of a single TCP
+    stream under packet loss, which is where a small patch wins hardest. Measured under
+    <code>netem</code> at 20 Mbit/s, 200 ms RTT and 1 % loss, the full download of the
+    prometheus release takes about 2.4 minutes and the patch about a second.
+  </p>
+  <p class="note">
+    Step 3 runs on the machine, not in your browser: the decoder needs about 7.6× the
+    binary in memory, which is 0.7 GB for the 94 MB pair. Shrinking that is the open
+    item that moves the apply into a tab. The machine is a shared 2-vCPU box, so the
+    apply you see is two to four times what the same patch costs on a server with
+    cores to spare — 0.9 s for the prometheus pair.
+  </p>
+
+  <footer id="foot"></footer>
+</main>
+
+<script>
+"use strict";
+const REGIONS = [
+  ["jnb", "Johannesburg"], ["nrt", "Tokyo"], ["gru", "São Paulo"],
+  ["syd", "Sydney"], ["ord", "Chicago"],
+];
+const STEPS = [
+  ["fetch pointer", "latest.json"],
+  ["fetch patch", "the chain edge that ends at the head"],
+  ["apply", "old + patch → new, on the machine"],
+  ["verify", "BLAKE3(new) == pointer.head.hash"],
+];
+
+const $ = (id) => document.getElementById(id);
+const state = { pairs: [], pair: null, region: null, home: null, busy: false,
+                rtt: {}, bars: [] };
+
+// The three transfer bars are drawn to one scale -- the slowest transfer this
+// visit -- so the patch, the generic delta and the full download are directly
+// comparable once you have pressed all three.
+function addBar(el, dur) {
+  state.bars.push({ el, dur });
+  const max = Math.max(...state.bars.map((b) => b.dur));
+  for (const b of state.bars) b.el.style.width = Math.max(1.5, (100 * b.dur) / max) + "%";
+}
+
+function bytes(n) {
+  if (n === null || n === undefined) return "";
+  if (n < 1000) return n + " B";
+  if (n < 1000 * 1000) return (n / 1000).toFixed(n < 10000 ? 2 : 1) + " KB";
+  return (n / 1e6).toFixed(n < 1e7 ? 2 : 1) + " MB";
+}
+function ms(v) { return v === null ? "" : (v < 100 ? v.toFixed(1) : Math.round(v)) + " ms"; }
+function short(h) { return h ? h.slice(0, 11) + "…" : ""; }
+
+function url(path) {
+  return path + (path.includes("?") ? "&" : "?") + "n=" + Math.random().toString(36).slice(2);
+}
+function opts() {
+  const h = { "cache-control": "no-store" };
+  if (state.region && state.region !== state.home) h["fly-force-region"] = state.region;
+  return { cache: "no-store", headers: h };
+}
+
+// timed fetch: returns {ms, bytes, body, servedBy}
+async function timed(path, init) {
+  const t0 = performance.now();
+  const r = await fetch(url(path), { ...opts(), ...(init || {}) });
+  if (!r.ok) throw new Error(r.status + " " + (await r.text()).split("\n")[0]);
+  const buf = await r.arrayBuffer();
+  return {
+    ms: performance.now() - t0, bytes: buf.byteLength, buf,
+    servedBy: r.headers.get("x-served-by") || "",
+  };
+}
+
+function renderPills() {
+  $("pairs").innerHTML = "";
+  for (const p of state.pairs) {
+    const b = document.createElement("button");
+    b.className = "pill";
+    b.setAttribute("aria-pressed", String(p === state.pair));
+    b.innerHTML = `${p.title}<span class="sub">${bytes(p.patch_size)}</span>`;
+    b.title = p.blurb;
+    b.onclick = () => { if (!state.busy) { state.pair = p; renderPills(); reset(); } };
+    $("pairs").appendChild(b);
+  }
+  $("regions").innerHTML = "";
+  for (const [code, name] of REGIONS) {
+    const b = document.createElement("button");
+    b.className = "pill";
+    b.setAttribute("aria-pressed", String(code === state.region));
+    const rtt = state.rtt[code];
+    const tag = rtt === undefined ? "" : rtt === null ? " · unreachable" : ` · ${Math.round(rtt)} ms`;
+    b.innerHTML = `${code}<span class="sub">${name}${tag}</span>`;
+    b.disabled = rtt === null;
+    b.onclick = () => { if (!state.busy) { state.region = code; renderPills(); reset(); } };
+    $("regions").appendChild(b);
+  }
+}
+
+function reset() {
+  const t = $("steps");
+  t.innerHTML = "";
+  for (const [what, detail] of STEPS) {
+    const tr = document.createElement("tr");
+    tr.className = "idle";
+    tr.innerHTML =
+      `<td class="n"></td><td class="what">${what}</td>` +
+      `<td class="detail">${detail}</td><td class="bytes"></td><td class="ms"></td>`;
+    t.appendChild(tr);
+  }
+  [...t.children].forEach((tr, i) => (tr.children[0].textContent = i + 1));
+  $("total").textContent = "";
+  $("totalNote").textContent = "idle";
+  $("err").textContent = "";
+  renderCompare();
+  renderLadder();
+}
+
+function step(i, { state: st, detail, b, t, cls }) {
+  const tr = $("steps").children[i];
+  tr.className = st || "";
+  if (detail !== undefined) tr.children[2].innerHTML = detail;
+  if (b !== undefined) tr.children[3].textContent = bytes(b);
+  if (t !== undefined) tr.children[4].innerHTML = `<span class="${cls || ""}">${ms(t)}</span>`;
+}
+
+function renderCompare() {
+  const p = state.pair;
+  const rows = [
+    ["generic delta", "hdiffz -m-6 -p-8 -c-zstd-21-24", p.hdiff_size, "compare/patch.hdiff"],
+    ["full download", "the store's own blob, what a drifted target fetches", p.blob_size, p.blob_key],
+  ];
+  const t = $("cmp");
+  t.innerHTML = "";
+  for (const [name, why, size, key] of rows) {
+    const tr = document.createElement("tr");
+    tr.innerHTML =
+      `<td style="width:150px"><button class="pill">${name}</button></td>` +
+      `<td class="detail" style="color:var(--dim);font-size:13px">${why}` +
+      `<div class="bar warn"><i></i></div></td>` +
+      `<td class="r" style="width:92px">${bytes(size)}</td>` +
+      `<td class="r" style="width:120px"></td>`;
+    const btn = tr.querySelector("button");
+    const bar = tr.querySelector(".bar > i");
+    const out = tr.children[3];
+    btn.onclick = async () => {
+      if (state.busy) return;
+      state.busy = true; btn.disabled = true; out.textContent = "…"; $("err").textContent = "";
+      try {
+        const r = await timed(`/s/${p.id}/${key}`);
+        out.innerHTML = `${ms(r.ms)} · ${Math.round((r.bytes * 8) / r.ms / 1000)} Mbit/s`;
+        addBar(bar, r.ms);
+      } catch (e) {
+        out.innerHTML = `<span class="bad">failed</span>`;
+        $("err").textContent = String(e.message || e);
+      } finally { state.busy = false; btn.disabled = false; }
+    };
+    t.appendChild(tr);
+  }
+}
+
+function renderLadder() {
+  const p = state.pair;
+  const big = p.id === "prometheus";
+  const rows = [
+    ["whole file, recompressed", big ? 20579646 : 8700000, "zstd -19 of the new binary", 0],
+    ["content-defined chunks", big ? 25700000 : 8100000,
+     "casync/desync — almost no chunk survives a relayout", 0],
+    ["exact-match delta", big ? 8500000 : 520000,
+     "zstd --patch-from, xdelta3 — pays for every shifted operand", 0],
+    ["approximate delta", p.hdiff_size,
+     "bsdiff / hdiffz — absorbs the shifts, at the price of a suffix array", 1],
+    ["full download", p.blob_size, "binsync's own blob: what a drifted target fetches", 1],
+    ["binsync patch", p.patch_size,
+     "predicts the relayout from .gopclntab and sends the correction", 1],
+  ];
+  const t = $("ladder");
+  t.innerHTML = "";
+  for (const [name, n, why, served] of rows) {
+    const tr = document.createElement("tr");
+    if (name === "binsync patch") tr.className = "us";
+    tr.innerHTML = `<td>${name}${served ? "" : " *"}</td><td class="r">${bytes(n)}</td>` +
+      `<td style="color:var(--dim)">${why}</td>`;
+    t.appendChild(tr);
+  }
+}
+
+async function run() {
+  const p = state.pair;
+  state.busy = true;
+  $("go").disabled = true;
+  $("err").textContent = "";
+  reset();
+  state.bars = [];
+  const wall0 = performance.now();
+  let wire = 0;
+
+  try {
+    // 1. the pointer, exactly as a target polls it
+    step(0, { state: "run" });
+    const ptr = await timed(`/s/${p.id}/latest.json`);
+    wire += ptr.bytes;
+    const pointer = JSON.parse(new TextDecoder().decode(ptr.buf));
+    step(0, {
+      state: "", b: ptr.bytes, t: ptr.ms,
+      detail: `latest.json · head ${short(pointer.head.hash)} · seq ${pointer.seq}` +
+              ` · served by ${ptr.servedBy}`,
+    });
+
+    // 2. plan and fetch: the chain edge from what we have to the head
+    const edge = (pointer.chain || []).find((e) => e.from === p.from_hash);
+    if (!edge) throw new Error("no chain edge from " + short(p.from_hash));
+    step(1, { state: "run", detail: edge.key });
+    const patch = await timed(`/s/${p.id}/${edge.key}`);
+    wire += patch.bytes;
+    const mbit = (patch.bytes * 8) / patch.ms / 1000;
+    step(1, {
+      state: "", b: patch.bytes, t: patch.ms,
+      detail: `${edge.key}<div class="bar ours"><i></i></div>` +
+              `${mbit.toFixed(1)} Mbit/s · ${(100 * patch.bytes / p.new_size).toFixed(3)}% of the binary`,
+    });
+    addBar($("steps").children[1].querySelector(".bar > i"), patch.ms);
+
+    // 3. apply on the machine
+    step(2, { state: "run" });
+    const ap = await timed(`/api/apply?pair=${p.id}`, { method: "POST" });
+    const res = JSON.parse(new TextDecoder().decode(ap.buf));
+    step(2, {
+      state: "", b: res.size, t: res.apply_ms,
+      detail: `${bytes(p.old_size)} old + ${bytes(patch.bytes)} patch → ` +
+              `${bytes(res.size)} new, on ${ap.servedBy}` +
+              (res.queued ? " (queued behind another apply)" : ""),
+    });
+
+    // 4. verify
+    const good = res.verified && res.want === pointer.head.hash;
+    const seen = res.hash.slice(0, 14) + "…" + res.hash.slice(-6);
+    step(3, {
+      state: "", cls: good ? "ok" : "bad",
+      t: null, b: null,
+      detail: `<span class="${good ? "ok" : "bad"}">${good ? "✓" : "✗"}</span> ` +
+              `<span class="mono" title="${res.hash}">${seen}</span>` +
+              (good ? " is the hash the pointer names" : ` ≠ ${short(pointer.head.hash)}`),
+    });
+    $("steps").children[3].children[4].innerHTML =
+      good ? '<span class="ok">match</span>' : '<span class="bad">MISMATCH</span>';
+
+    const wall = performance.now() - wall0;
+    $("total").innerHTML = `<b>${bytes(wire)}</b> over the wire · <b>${ms(wall)}</b> end to end`;
+    $("totalNote").textContent = good
+      ? `${(p.new_size / wire).toFixed(0)}× less than the binary, verified byte for byte`
+      : "the result did not match the pointer";
+  } catch (e) {
+    $("err").textContent = String(e.message || e);
+    $("totalNote").textContent = "failed";
+  } finally {
+    state.busy = false;
+    $("go").disabled = false;
+  }
+}
+
+// probe measures one round trip to each region, so the buttons say what the
+// distance costs before anything large is fetched. It runs twice and keeps
+// the second: machines suspend when idle, and the first request to a cold
+// one is paying for the resume, not for the distance.
+async function probe() {
+  const once = async (code) => {
+    const t0 = performance.now();
+    try {
+      const r = await fetch(url("/healthz"), {
+        cache: "no-store",
+        headers: code === state.home ? {} : { "fly-force-region": code },
+      });
+      return r.ok ? performance.now() - t0 : null;
+    } catch { return null; }
+  };
+  await Promise.all(REGIONS.map(async ([code]) => {
+    if ((await once(code)) === null) { state.rtt[code] = null; return; }
+    state.rtt[code] = await once(code);
+  }));
+  const reachable = REGIONS.map((x) => x[0]).filter((c) => state.rtt[c] !== null);
+  if (reachable.length) {
+    state.region = reachable.reduce((a, b) => (state.rtt[a] >= state.rtt[b] ? a : b));
+  }
+  renderPills();
+}
+
+(async function init() {
+  try {
+    const r = await fetch(url("/api/pairs"), { cache: "no-store" });
+    const d = await r.json();
+    state.pairs = d.pairs;
+    state.home = d.region;
+    // Default: the biggest pair, from the region that is not the one nearest
+    // the viewer -- the demo is about distance.
+    state.pair = state.pairs[state.pairs.length - 1];
+    state.region = d.region;
+    $("foot").innerHTML =
+      `served by <span class="mono">${d.machine}</span> in <span class="mono">${d.region}</span> · ` +
+      `<a href="/api/pairs">/api/pairs</a> · the assets are real binsync stores, ` +
+      `built by <span class="mono">binsync publish</span>`;
+    renderPills();
+    reset();
+    $("go").disabled = false;
+    $("go").onclick = run;
+    await probe();
+  } catch (e) {
+    $("err").textContent = "could not load the pairs: " + (e.message || e);
+  }
+})();
+</script>
+</body>
+</html>
