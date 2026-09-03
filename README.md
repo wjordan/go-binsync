@@ -1,5 +1,16 @@
 # go-binsync
 
+> **Archived.** This repo is a two-day spike from August 2026, kept as-is for
+> the record. It tested two ideas: that reading the function table the Go
+> linker leaves in a stripped binary makes a patch orders of magnitude smaller
+> than a byte-level differ, and that a running service can replace its own
+> executable and hand over its sockets without dropping a connection. Both were
+> carried into separate projects and neither is developed here —
+> [presage](https://github.com/wjordan/presage) generalises the codec past Go
+> into a structure-aware patcher for ELF, x86-64 and DWARF, and
+> [succession](https://github.com/wjordan/succession) is the install-and-handoff
+> library. Everything below was measured on this code and is not being updated.
+
 Small, fast, verified, zero-downtime updates of a deployed Go binary.
 
 go-binsync keeps the binary on a remote host identical to an authoritative
